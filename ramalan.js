@@ -258,6 +258,52 @@
     9: "Tahun penutupan. Selesaikan urusan lama dan lepaskan yang tidak lagi berguna."
   };
 
+  // ---------- Segitiga Power of Number ----------
+  // baris atas: 8 angka tanggal lahir (DD MM YYYY), dijumlahkan berpasangan menjadi 4 angka, lalu turun 3, 2, sampai 1 angka inti.
+  function satuDigit(n) { while (n > 9) n = digitSum(n); return n; }
+  function segitiga(dt) {
+    var top = (String(dt.d).padStart(2, "0") + String(dt.m).padStart(2, "0") + String(dt.y).padStart(4, "0")).split("").map(Number);
+    var r1 = [0, 2, 4, 6].map(function (i) { return satuDigit(top[i] + top[i + 1]); });
+    var rows = [r1];
+    while (rows[rows.length - 1].length > 1) { var p = rows[rows.length - 1], n = []; for (var i = 0; i < p.length - 1; i++) n.push(satuDigit(p[i] + p[i + 1])); rows.push(n); }
+    var semua = [].concat.apply([], rows), hit = {};
+    for (var k = 1; k <= 9; k++) hit[k] = 0;
+    semua.forEach(function (x) { if (x) hit[x]++; });
+    var mx = Math.max.apply(null, Object.keys(hit).map(function (k) { return hit[k]; }));
+    var posisi = [
+      { id: "A", n: rows[0][0] }, { id: "B", n: rows[0][1] }, { id: "C", n: rows[0][2] }, { id: "D", n: rows[0][3] },
+      { id: "E", n: rows[1][0] }, { id: "F", n: rows[1][1] }, { id: "G", n: rows[1][2] },
+      { id: "H", n: rows[2][0] }, { id: "I", n: rows[2][1] }, { id: "J", n: rows[3][0] }
+    ].map(function (p) { return { id: p.id, n: p.n, makna: POSISI_SEG[p.id], sifat: SIFAT_DIGIT[p.n] }; });
+    return { top: top, rows: rows, inti: rows[3][0], posisi: posisi, hitung: hit,
+      dominan: Object.keys(hit).filter(function (k) { return hit[k] === mx; }).map(Number),
+      hilang: Object.keys(hit).filter(function (k) { return hit[k] === 0; }).map(Number) };
+  }
+  var POSISI_SEG = {
+    A: "Dari tanggal lahir: karakter dasar dan cara Anda memandang diri sendiri.",
+    B: "Dari bulan lahir: sisi perasaan, keluarga, dan hubungan dekat.",
+    C: "Dari dua angka awal tahun: pengaruh lingkungan dan generasi.",
+    D: "Dari dua angka akhir tahun: bakat bawaan yang dibawa dari keluarga.",
+    E: "Gabungan diri dan perasaan: kepribadian di masa muda.",
+    F: "Gabungan perasaan dan lingkungan: cara Anda bergaul dan bekerja sama.",
+    G: "Gabungan lingkungan dan bakat: arah karier dan rezeki.",
+    H: "Sisi dalam: kekuatan batin dan dorongan tersembunyi.",
+    I: "Sisi luar: kesan yang Anda tampilkan kepada dunia.",
+    J: "Angka inti: kunci hidup dan misi utama Anda."
+  };
+  var SIFAT_DIGIT = {
+    0: "Angka 0: potensi terbuka yang bisa diarahkan ke mana saja, tetapi perlu tujuan yang jelas.",
+    1: "Angka 1: mandiri, pemimpin, berani memulai, dan berkemauan keras.",
+    2: "Angka 2: peka, kooperatif, sabar, dan pandai menjaga hubungan.",
+    3: "Angka 3: kreatif, komunikatif, ceria, dan ekspresif.",
+    4: "Angka 4: disiplin, teratur, pekerja keras, dan bisa dipercaya.",
+    5: "Angka 5: bebas, mudah beradaptasi, suka tantangan dan hal baru.",
+    6: "Angka 6: penyayang, bertanggung jawab, dan peduli keluarga.",
+    7: "Angka 7: analitis, intuitif, spiritual, dan suka mendalami.",
+    8: "Angka 8: ambisius, berwibawa, dan berbakat mengelola uang serta kekuasaan.",
+    9: "Angka 9: bijak, murah hati, dan peduli pada sesama."
+  };
+
   // ---------- Bagan kelahiran Pythagoras (kotak 3×3 dari angka tanggal lahir) ----------
   // tata letak:  3 6 9  (pikiran)
   //              2 5 8  (perasaan)
@@ -770,12 +816,12 @@
     JODOH: JODOH, SHIO: SHIO, EL_TAHUN: EL_TAHUN, S: S,
     LP_DETAIL: LP_DETAIL, PUNCAK: PUNCAK, TANTANGAN: TANTANGAN, BULAN_PERSONAL: BULAN_PERSONAL, SIKAP: SIKAP, KATA_KUNCI: KATA_KUNCI,
     HURUF: HURUF, HURUF_AKHIR: HURUF_AKHIR, KARMA: KARMA, GAIRAH: GAIRAH, DEWASA: DEWASA, PASARAN_DETAIL: PASARAN_DETAIL, HARI_DETAIL: HARI_DETAIL, SHIO_DETAIL: SHIO_DETAIL, HUB_SHIO: HUB_SHIO, RAMAL_TAHUN: RAMAL_TAHUN, EL_TAHUN_ARTI: EL_TAHUN_ARTI,
-    DM_DETAIL: DM_DETAIL, BZ_TEKS: BZ_TEKS, BZ_PERAN: BZ_PERAN, PILAR_MAKNA: PILAR_MAKNA, PASANGAN_EL: PASANGAN_EL, GARIS_TEKS: GARIS_TEKS, GRID_ANGKA: GRID_ANGKA };
+    DM_DETAIL: DM_DETAIL, BZ_TEKS: BZ_TEKS, BZ_PERAN: BZ_PERAN, PILAR_MAKNA: PILAR_MAKNA, PASANGAN_EL: PASANGAN_EL, GARIS_TEKS: GARIS_TEKS, GRID_ANGKA: GRID_ANGKA, POSISI_SEG: POSISI_SEG, SIFAT_DIGIT: SIFAT_DIGIT };
   var ASLI = JSON.parse(JSON.stringify(TABEL));
   function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
   function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
 
-  var api = { setLang: setLang, baganLahir: baganLahir, elemenKunci: elemenKunci,
+  var api = { setLang: setLang, baganLahir: baganLahir, segitiga: segitiga, KARMA: KARMA, SIFAT_DIGIT: SIFAT_DIGIT, elemenKunci: elemenKunci,
     jdn: jdn, reduceNum: reduceNum, zodiak: zodiak, lifePath: lifePath, TAHUN_PERSONAL: TAHUN_PERSONAL,
     namaNumerologi: namaNumerologi, kedewasaan: kedewasaan, LP_DETAIL: LP_DETAIL, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN, ANGKA: ANGKA,
     bazi: bazi, weton: weton, jodohWeton: jodohWeton, wetonIdeal: wetonIdeal, wetonBerikut: wetonBerikut, imlek: imlek, shio: shio, EL_SARAN: EL_SARAN

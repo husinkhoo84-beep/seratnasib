@@ -449,6 +449,30 @@ window.SERAT_EN = {
       8: ["No 8: be careful and attentive to detail, especially with money.", "One 8: careful, neat, and good at organising.", "Two 8s: very organised and gifted at managing money.", "Three or more 8s: a perfectionist who gets restless when things are off. Allow room for imperfection."],
       9: ["No 9: broaden your horizons and your care for the wider world.", "One 9: you have ideals and care about others.", "Two 9s: idealistic, intelligent, and broad-minded.", "Three or more 9s: very high ideals that leave you easily disappointed by reality. Stay grounded."]
     },
+    POSISI_SEG: {
+      A: "From your birth day: your basic character and how you see yourself.",
+      B: "From your birth month: your emotional side, family, and close relationships.",
+      C: "From the first two digits of the year: the influence of environment and generation.",
+      D: "From the last two digits of the year: inborn talents carried from your family.",
+      E: "Self combined with feelings: your personality in youth.",
+      F: "Feelings combined with environment: how you socialise and cooperate.",
+      G: "Environment combined with talent: the direction of your career and fortune.",
+      H: "The inner side: inner strength and hidden drives.",
+      I: "The outer side: the impression you show the world.",
+      J: "The core number: the key to your life and your main mission."
+    },
+    SIFAT_DIGIT: {
+      0: "Number 0: open potential that can go anywhere, but needs a clear goal.",
+      1: "Number 1: independent, a leader, bold in starting things, and strong-willed.",
+      2: "Number 2: sensitive, cooperative, patient, and good at keeping relationships.",
+      3: "Number 3: creative, communicative, cheerful, and expressive.",
+      4: "Number 4: disciplined, orderly, hard-working, and trustworthy.",
+      5: "Number 5: free, adaptable, and fond of challenges and new things.",
+      6: "Number 6: loving, responsible, and devoted to family.",
+      7: "Number 7: analytical, intuitive, spiritual, and fond of going deep.",
+      8: "Number 8: ambitious, authoritative, and gifted with money and power.",
+      9: "Number 9: wise, generous, and caring towards others."
+    },
     EL_TAHUN: ["Metal", "Metal", "Water", "Water", "Wood", "Wood", "Fire", "Fire", "Earth", "Earth"]
   },
 
@@ -757,7 +781,10 @@ window.SERAT_EN = {
     "b.kekuatan": "Strength of your Day Master", "b.kuat": "Strong", "b.lembut": "Gentle", "b.skor": "{a} of {b} element points support your Day Master.",
     "b.baik": "Favourable elements", "b.caranya": "How to strengthen it:", "b.pilarJ": "Meaning of the four pillars", "b.istana": "Spouse palace ({s})",
     "z.cintaJ": "Love and relationships", "z.karierS": "career", "z.cocokJ": "Compatible signs", "z.warnaJ": "Lucky colours",
-    "g.judul": "Birth chart", "g.lead": "The digits of your birth date ({d}) are arranged in the Pythagorean grid. The numbers at the side are row totals, the numbers below are column totals. Green lines are full, red lines are empty.",
+    "seg.judul": "Power of Number triangle", "seg.lead": "The eight digits of your birth date ({t}) on the top row are added in pairs, then keep going down until one core number is left at the bottom tip. The small letters mark each position.",
+    "seg.inti": "Core number {n}", "seg.pos": "Position {h} · number {n}", "seg.dominan": "Strongest number in the triangle: {n}", "seg.hilang": "Numbers that don't appear",
+    "seg.lengkap": "Every number 1–9 appears in your triangle. Your energy is complete and balanced.",
+    "g.judul": "Pythagorean grid", "g.lead": "The digits of your birth date ({d}) are arranged in the Pythagorean grid. The numbers at the side are row totals, the numbers below are column totals. Green lines are full, red lines are empty.",
     "g.pikiran": "Mind", "g.perasaan": "Emotion", "g.fisik": "Practical", "g.rencana": "Planning", "g.kemauan": "Willpower", "g.tindakan": "Action", "g.tekad": "Determination", "g.spiritual": "Spiritual",
     "g.dominanBaris": "Your strongest plane", "g.dominanKolom": "How you work",
     "g.dom.pikiran": "The mind row is the fullest. You are a thinker: analytical, full of ideas, and fond of learning. Your decisions come from logic.",
