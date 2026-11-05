@@ -1,4 +1,4 @@
-/* English text for Serat Nasib. Loaded once; applied by Ramalan.setLang / Natal.setLang and the page's t(). */
+/* English text for Garis Takdir. Loaded once; applied by Ramalan.setLang / Natal.setLang and the page's t(). */
 window.SERAT_EN = {
   ramalan: {
     S: {
@@ -898,7 +898,7 @@ window.SERAT_EN = {
     "lg.demo": "Demo mode: the form isn't connected to an email service yet, so this data was not sent.",
     "lg.cek": "Check your inbox to confirm your subscription.",
     "lg.tag.shio": "{v}", "lg.tag.angka": "Number {v}",
-    "footer": "Readings on Serat Nasib draw on the traditions of astrology, Pythagorean numerology, Javanese primbon, and Chinese metaphysics. Use them for entertainment and reflection, not as a substitute for medical, legal, or financial decisions.",
+    "footer": "Readings on Garis Takdir draw on the traditions of astrology, Pythagorean numerology, Javanese primbon, and Chinese metaphysics. Use them for entertainment and reflection, not as a substitute for medical, legal, or financial decisions.",
     "bulan": ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
     "tgl": "{b} {d}, {y}",
     "m.zodiak": "Astrology", "m.zodiak.d": "Birth chart: planet positions, ascendant, houses, and aspects, with a full interpretation.",
@@ -1033,7 +1033,7 @@ window.SERAT_EN = {
     "s.watak": "Character", "s.cocok": "Compatible with", "s.hindari": "Less compatible (clash)", "s.untung": "Fortune in {y} (year of the {s})",
     "s.note": "Your Chinese zodiac sign follows the Lunar New Year, not 1 January. The Lunar New Year date is calculated from the new moon in Beijing time.",
     "g.terbuka": "{n} of 6 readings unlocked", "g.lanjut": "Next step", "g.pilih": "Choose the reading you want to unlock",
-    "g.pilihP": "Each reading is unlocked one at a time by watching a short ad. These ads keep Serat Nasib free.",
+    "g.pilihP": "Each reading is unlocked one at a time by watching a short ad. These ads keep Garis Takdir free.",
     "g.sudah": " · unlocked", "g.kunci": "Locked reading", "g.iklan": "Ad",
     "g.tontonP": "Watch a short ad to the end, and your {m} reading opens right away.",
     "g.tonton": "Watch ad &amp; unlock", "g.lain": "Choose another reading", "g.bukaLain": "Open another reading",

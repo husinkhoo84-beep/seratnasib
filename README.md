@@ -1,4 +1,4 @@
-# Serat Nasib
+# Garis Takdir
 
 Website ramalan nasib statis (HTML + CSS + JavaScript murni, tanpa build).
 

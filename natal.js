@@ -1,4 +1,4 @@
-/* Bagan kelahiran (natal chart) untuk Serat Nasib.
+/* Bagan kelahiran (natal chart) untuk Garis Takdir.
    Posisi planet dihitung sendiri tanpa pustaka luar:
    - Matahari & Bulan: rumus Meeus (Astronomical Algorithms, bab 25 & 47), ketelitian sekitar 0,01–0,02°.
    - Merkurius s.d. Pluto: elemen Kepler JPL (Standish, berlaku 1800–2050), ketelitian umumnya di bawah 0,1°.
