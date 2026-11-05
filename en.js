@@ -299,6 +299,135 @@ window.SERAT_EN = {
       8: "Your first impression is commanding, established, and classy.",
       9: "Your first impression is wise, generous, and open."
     },
+    HURUF: {
+      A: "Independent, ambitious, and quick to start. You move fast once you have a goal.", B: "Gentle, emotional, and peace-loving. You need to feel safe before you take a step.",
+      C: "Expressive, cheerful, and creative. You start things with enthusiasm and words.", D: "Steady, practical, and determined. You make a plan before you move.",
+      E: "Free, communicative, and fond of new things. You learn through direct experience.", F: "Warm, responsible, and loving. You think of others first.",
+      G: "Thoughtful, independent, and intuitive. You weigh things deeply before deciding.", H: "Authoritative, ambitious, and business-minded. You see opportunity everywhere.",
+      I: "Sensitive, compassionate, and artistic. Your feelings are your compass when deciding.", J: "Honest, clever, and a natural leader. You don't give up before you succeed.",
+      K: "Intuitive, charismatic, and idealistic. You begin with a big vision.", L: "Logical, open, and sociable. You weigh the pros and cons calmly.",
+      M: "Hard-working, persistent, and grounded. You finish what you start.", N: "Creative, imaginative, and freedom-loving. You have plenty of fresh ideas.",
+      O: "Loyal, patient, and principled. You hold firmly to the values you believe in.", P: "Clever, curious, and knowledgeable. You analyse before you act.",
+      Q: "Unique, gifted, and a little mysterious. You have your own way of doing things.", R: "Energetic, caring, and capable. You have great energy for helping people.",
+      S: "Charismatic, emotional, and unafraid of change. You start with a strong gut feeling.", T: "Sensitive, active, and cooperative. You move faster with a team.",
+      U: "Lucky, creative, and easy to love. You need to learn to make decisions quickly.", V: "Visionary, efficient, and practical. You can turn big ideas into reality.",
+      W: "Expressive, persistent, and spirited. You bounce back after a fall.", X: "Sensitive, artistic, and strong-willed. You learn a lot from life experience.",
+      Y: "Free, intuitive, and bold. You dislike being told what to do and choose your own path.", Z: "Optimistic, wise, and hopeful. You can be a fair mediator."
+    },
+    HURUF_AKHIR: {
+      1: "You finish things decisively and on your own.", 2: "You finish things patiently and involve others.",
+      3: "You wrap things up in a cheerful, creative way.", 4: "You complete work neatly and thoroughly.",
+      5: "You move quickly to something new once a task is done.", 6: "You make sure everyone is happy before calling a task finished.",
+      7: "You finish things carefully and with full calculation.", 8: "You close matters with measurable, profitable results.",
+      9: "You close a chapter with grace and are ready to let go."
+    },
+    KARMA: {
+      1: "Learning self-confidence, taking the initiative, and standing on your own feet.", 2: "Learning patience, sensitivity to others' feelings, and cooperation.",
+      3: "Learning to express your feelings and ideas, and not being afraid to be seen.", 4: "Learning discipline, order, and finishing work diligently.",
+      5: "Learning to accept change and to dare to try new experiences.", 6: "Learning to carry family responsibility and to commit.",
+      7: "Learning to reflect, study deeply, and trust your intuition.", 8: "Learning to manage money and power, and to make big decisions.",
+      9: "Learning empathy, forgiveness, and care for the wider world."
+    },
+    GAIRAH: {
+      1: "A strong drive to lead and be first.", 2: "A longing for harmonious relationships and cooperation.",
+      3: "A desire to express yourself through words, art, and socialising.", 4: "A love of order, real work, and solid results.",
+      5: "A passion for freedom, travel, and new experiences.", 6: "A deep wish to care for family and create a beautiful home.",
+      7: "A thirst for knowledge, truth, and spiritual matters.", 8: "Ambition for success, stability, and influence.",
+      9: "A calling to help others and give meaning to the world."
+    },
+    DEWASA: {
+      1: "In the second half of life, you become more independent and bold in leading your own way.", 2: "In the second half of life, relationships and inner peace become what matters most.",
+      3: "In the second half of life, your creativity and joy shine even brighter.", 4: "In the second half of life, you build solid, lasting results.",
+      5: "In the second half of life, you feel freer and explore a great deal.", 6: "In the second half of life, family and service become the centre of your happiness.",
+      7: "In the second half of life, you find wisdom and inner calm.", 8: "In the second half of life, your stability and influence reach their peak.",
+      9: "In the second half of life, you are called to share and benefit many people.", 11: "In the second half of life, you become a source of inspiration and insight.",
+      22: "In the second half of life, you have the chance to realise a great work.", 33: "In the second half of life, you become a loving guide."
+    },
+    PASARAN_DETAIL: [
+      { cinta: "In love you are sweet and attentive, fall in love easily, and like to spoil your partner. Watch your words when angry so they don't wound.",
+        karier: "Suited to work with many people: service, trade, education, food, or social activities.",
+        rezeki: "Fortune comes through your social life and kindness. People trust you easily, but don't be so generous that you forget to save." },
+      { cinta: "You are loyal but like to be in control. You need a patient partner who appreciates your hard work.",
+        karier: "Suited to business, finance, trade, or work that demands persistence and clear targets.",
+        rezeki: "Your instinct for making money is strong and you are good at building wealth. Don't let ambition make you stingy or suspicious." },
+      { cinta: "You are a homebody who wants respect. Relationships last when there is mutual respect and neither insists on winning.",
+        karier: "Suited to leadership, public office, teaching, advising, spokesperson roles, or work that needs authority.",
+        rezeki: "Steady fortune, especially from people's trust and from position. You are well suited to running a family business or managing assets." },
+      { cinta: "You are very loyal and responsible, but not good at expressing feelings. Show affection in words, not only in deeds.",
+        karier: "Suited to work that needs steadiness: engineering, farming, the military, administration, or skilled crafts.",
+        rezeki: "Fortune comes through hard work and patience. Not instant, but solid. Avoid financial decisions made in emotion." },
+      { cinta: "You are charming and magnetic, but your moods shift easily. A partner needs to understand your deep inner side.",
+        karier: "Suited to communication, art, spiritual work, healing, negotiation, or work that relies on intuition.",
+        rezeki: "Fortune often arrives unexpectedly through the right hunch. Keep disciplined records so money isn't lost to sudden spending." }
+    ],
+    HARI_DETAIL: {
+      "Minggu": "Your birth day is ruled by the Sun: suited to leadership, but learn to listen to others. Look after your heart and eyes.",
+      "Senin": "Your birth day is ruled by the Moon: your feelings are refined and you empathise easily. Keep your emotions and sleep in balance.",
+      "Selasa": "Your birth day is ruled by Mars: brave and quick to act. Channel your energy through sport and avoid decisions made in anger.",
+      "Rabu": "Your birth day is ruled by Mercury: clever at trading and talking. Stay consistent so you don't keep switching paths.",
+      "Kamis": "Your birth day is ruled by Jupiter: wise and respected. Suited to teaching or advising. Watch your weight and blood sugar.",
+      "Jumat": "Your birth day is ruled by Venus: you love beauty and peace. Good fortune through art, beauty, and service.",
+      "Sabtu": "Your birth day is ruled by Saturn: tough and resilient. Success comes late but lasts. Look after your bones and joints."
+    },
+    SHIO_DETAIL: [
+      { cinta: "Romantic and attentive to small things, but slow to trust. You show love by looking after your partner in practical ways.", karier: "Quick to spot opportunities. Suited to business, trade, finance, writing, and market research.", uang: "Good at saving and counting. Avoid hoarding out of fear of not having enough.", sehat: "Prone to worry and poor sleep from an overactive mind. Look after your digestion and make time to rest.", warna: "Blue, gold, green", arah: "West, northwest, southwest" },
+      { cinta: "Loyal, serious, and slow to open your heart. Once committed, you are an extremely dependable partner.", karier: "Diligent and resilient. Suited to farming, manufacturing, engineering, banking, property, and work that needs patience.", uang: "Stable finances thanks to a frugal life. Wealth grows slowly but surely through real assets.", sehat: "Physically strong but rarely rests. Watch for fatigue, stomach, and joint problems.", warna: "White, yellow, green", arah: "South, north" },
+      { cinta: "Passionate and protective. You need a partner who gives you room and doesn't hold you back.", karier: "A brave leader. Suited to entrepreneurship, management, public office, sport, or entertainment.", uang: "You take risks, so fortune can be large, but the swings are sharp too. Keep an emergency fund.", sehat: "High energy, but easily stressed when blocked. Look after your liver and sleep.", warna: "Blue, grey, orange", arah: "East, north, south" },
+      { cinta: "Gentle, romantic, and understanding. You look for a calm, harmonious relationship free of drama.", karier: "Diplomatic with refined taste. Suited to design, art, law, education, health care, and public relations.", uang: "Careful and averse to speculation. Good fortune comes from work that needs precision and taste.", sehat: "Sensitive to stress and atmosphere. Keep your immunity up and avoid bottling up feelings.", warna: "Red, pink, purple, blue", arah: "East, south, northwest" },
+      { cinta: "Charismatic and generous in love, but can be dominant. You need a partner who admires you and can keep up.", karier: "Ambitious and big-hearted. Suited to leadership, business, architecture, journalism, or politics.", uang: "Big fortune comes easily, but so does spending it. Long-term investment saves you.", sehat: "Rarely ill, but likes to push too hard. Watch your blood pressure and fatigue.", warna: "Gold, silver, grey", arah: "West, north, northwest" },
+      { cinta: "Alluring, mysterious, and loyal, but can be jealous. Trust is the key to your relationships.", karier: "Strategic and intuitive. Suited to research, analysis, consulting, psychology, investing, or law.", uang: "Wise with money and a good investor. Fortune often comes through information and accurate calculation.", sehat: "Easily drained emotionally. Watch your diet and skin, and make time to be alone.", warna: "Black, red, yellow", arah: "Northeast, southwest, south" },
+      { cinta: "Warm and spirited, quick to fall in love but in need of freedom. A controlling partner makes you restless.", karier: "Energetic and sociable. Suited to sales, tourism, journalism, entertainment, sport, and transport.", uang: "Good at making money but quick to spend it. Set up automatic savings.", sehat: "Active and agile, but prone to injury from rushing. Look after your heart and breathing.", warna: "Yellow, green", arah: "Northwest, southwest, east" },
+      { cinta: "Gentle, loyal, and loving. You need security and attention, and you love sincerely.", karier: "Creative and artistic. Suited to design, art, food, early education, caregiving, and crafts.", uang: "Fortune is adequate, but you need discipline because you are soft-hearted and lend money easily.", sehat: "Sensitive to weather and mood. Look after your digestion and find calming activities.", warna: "Green, red, purple", arah: "North, northwest" },
+      { cinta: "Fun, witty, and full of surprises. You need a partner who is clever and never boring.", karier: "A fast learner with many tricks. Suited to technology, finance, trade, entertainment, and problem-solving.", uang: "Good at earning from many sources. Avoid speculating just for the thrill.", sehat: "You move a lot so tend to be healthy, but look after your lungs and don't skip rest.", warna: "White, blue, gold", arah: "North, northwest, west" },
+      { cinta: "Honest and loyal, but sometimes too critical. Show gentleness so your partner feels valued.", karier: "Precise and neat. Suited to accounting, the military, medicine, beauty, publishing, and management.", uang: "A good financial planner. Steady fortune through hard work and careful calculation.", sehat: "Look after your lungs and mental health, as you tend to be a perfectionist.", warna: "Gold, brown, yellow", arah: "South, southeast" },
+      { cinta: "Very loyal and protective. You need an honest partner, because betrayal is hard for you to forgive.", karier: "Fair and responsible. Suited to police work, teaching, medicine, social work, law, or security.", uang: "You don't chase wealth, but your finances are safe because you live simply.", sehat: "Prone to worrying about others. Look after your digestion and make time to relax.", warna: "Red, green, purple", arah: "East, south, northeast" },
+      { cinta: "Sincere, romantic, and indulgent with your partner. You forgive easily and seek a warm relationship.", karier: "A pleasant, trusted worker. Suited to food, entertainment, service, tourism, and trade.", uang: "Money usually flows well, but you enjoy life. Keep entertainment spending in check.", sehat: "Watch overeating, blood sugar, and weight.", warna: "Yellow, grey, brown", arah: "Southeast, northeast" }
+    ],
+    HUB_SHIO: { sama: { k: "Same sign" }, sanhe: { k: "Very compatible" }, liuhe: { k: "Secret friend" }, chong: { k: "Clash" }, hai: { k: "Less compatible" }, netral: { k: "Neutral" } },
+    RAMAL_TAHUN: {
+      sama: { umum: "A Ben Ming Nian year (your own sign's year). Tradition says it brings tests and changes, so move through it with humility and care.", karier: "Not the best time for a big leap. Strengthen your position, build your skills, and avoid conflict with superiors.", cinta: "Relationships are tested by emotions. If single, don't rush a new acquaintance into something serious.", uang: "Hold back on big spending and avoid lending large sums.", sehat: "Protect your stamina and rest well. Wear something red as a symbol of protection." },
+      sanhe: { umum: "This year forms a harmonious triangle (San He) with your sign. Help arrives from many sides and plans move more easily.", karier: "The right time for a promotion, starting a business, or moving somewhere better.", cinta: "Romance is warm. If single, your chances of meeting a partner are high. If attached, a good time to take the next step.", uang: "Money flows through cooperation. Long-term investments have good prospects.", sehat: "Good energy. Keep it up with a regular routine." },
+      liuhe: { umum: "This year is your sign's secret friend (Liu He). The right people arrive at the right time and open doors.", karier: "Cooperation and connections are key. Accept sensible offers to collaborate.", cinta: "A romantic year, good for marriage or repairing a relationship.", uang: "Stable finances with extra income from your network.", sehat: "Good health. Keep work and rest in balance." },
+      chong: { umum: "This year clashes (chong) with your sign. Sudden changes may come, such as a new job, a move, or a shift in a relationship.", karier: "Avoid rushed decisions and open conflict. If change is needed, plan it carefully.", cinta: "Misunderstandings are likely. Communicate more and be patient.", uang: "Watch for unexpected expenses and risky investments. Keep a reserve fund.", sehat: "Take care when travelling and driving. Get regular check-ups." },
+      hai: { umum: "This year is not very friendly to your sign. Small obstacles and gossip may appear, but a calm attitude overcomes them.", karier: "Focus on your own work and mind your words at the workplace.", cinta: "Guard trust and stay away from third parties who stir up trouble.", uang: "Read carefully before signing any financial agreement.", sehat: "Look after your emotional health and reduce stress." },
+      netral: { umum: "This year is neutral for your sign. Results depend mostly on your own effort and decisions.", karier: "Progress comes through consistent hard work. Build your skills.", cinta: "Relationships are calm. Give extra attention to keep them warm.", uang: "Finances are fairly stable. Budget discipline gives you the edge.", sehat: "Keep up your exercise and eating routine." }
+    },
+    EL_TAHUN_ARTI: {
+      Logam: "The Metal element makes you decisive, principled, and steadfast in your goals. You work with discipline and are hard to shake.",
+      Air: "The Water element makes you clever, flexible, and intuitive. You read situations well and adapt easily.",
+      Kayu: "The Wood element makes you generous, creative, and growth-minded. You enjoy helping others develop.",
+      Api: "The Fire element makes you spirited, brave, and passionate. You easily inspire the people around you.",
+      Tanah: "The Earth element makes you stable, practical, and trustworthy. You are a foundation for family and team."
+    },
+    DM_DETAIL: {
+      Kayu: { karier: "You grow in environments that give you room to develop: education, publishing, design, health care, farming, NGOs, or a business you can grow step by step.", cinta: "A loyal partner who likes to guide. You need someone who respects your principles and supports your growth.", uang: "Wealth grows like a tree: slowly, but with abundant fruit. Long-term investment suits you.", sehat: "By tradition, the organs to look after are the liver and gallbladder, plus the eyes and muscles. Ease off anger and late nights." },
+      Api: { karier: "You shine in front of people: marketing, entertainment, teaching, leadership, food, technology, or work that spreads enthusiasm.", cinta: "Passionate, warm, and expressive. You need a partner who matches your energy without dampening it.", uang: "Money comes and goes fast. Budget discipline keeps your fortune burning.", sehat: "By tradition, the heart and circulation need care, along with the tongue and small intestine. Manage stress and outbursts." },
+      Tanah: { karier: "You are the trusted foundation: property, banking, construction, administration, farming, logistics, consulting, and work that keeps systems running.", cinta: "Stable, loyal, and nurturing. You show love through security and responsibility.", uang: "Good at saving and managing assets. Your wealth is solid, especially through land and property.", sehat: "By tradition, the stomach, spleen, and digestion need care. Avoid overthinking and irregular meals." },
+      Logam: { karier: "You excel in fields that need firmness and precision: law, finance, mechanical engineering, the military, police, jewellery, or management.", cinta: "Loyal and true to your word, but can seem cold. Express your feelings so your partner feels close.", uang: "Firm about money and a good negotiator. Big fortune comes from bold decisions.", sehat: "By tradition, the lungs, skin, and large intestine need care. Avoid holding in sadness." },
+      Air: { karier: "You are clever and adaptable: communication, travel, trade, research, philosophy, psychology, IT, or fisheries.", cinta: "Understanding, intuitive, and romantic. You need a partner who brings calm and depth.", uang: "Money flows in from many directions. Create clear savings channels so it doesn't leak away.", sehat: "By tradition, the kidneys, bladder, and bones need care. Drink enough and ease excessive fear." }
+    },
+    BZ_TEKS: {
+      kuat: "Your Day Master is strong: many elements in your chart support you. You are independent, confident, and resilient under pressure, but can be stubborn. Balance comes from channelling energy into creative work, hard work, and discipline.",
+      lemah: "Your Day Master is gentle: there are fewer supporting elements in your chart. You are flexible, sensitive, and cooperative, but tire easily when carrying too much. Balance comes from support, learning, and the right environment."
+    },
+    BZ_PERAN: {
+      ibu: "Resource element (mother): knowledge, mentors, and protection.", teman: "Companion element: friends, peers, and self-confidence.",
+      anak: "Output element: creativity, talent, and how you create.", harta: "Wealth element: money, business opportunities, and the fruits of work.",
+      kuasa: "Power element: career, discipline, position, and reputation."
+    },
+    PILAR_MAKNA: {
+      y: "Ancestors, extended family, and childhood (roughly ages 0–16). It also shows how outsiders see you.",
+      m: "Parents, siblings, and career (roughly ages 17–32). The month pillar shows your birth season, which most affects elemental strength.",
+      d: "You and your partner (roughly ages 33–48). The top stem is your Day Master, the lower branch is the spouse palace.",
+      h: "Children, aspirations, and later life (age 49 onwards). It shows the fruit of a lifetime's effort."
+    },
+    PASANGAN_EL: {
+      Kayu: "Wood spouse palace: your partner tends to be patient, guiding, and keen to grow together.",
+      Api: "Fire spouse palace: your partner tends to be warm, expressive, and spirited.",
+      Tanah: "Earth spouse palace: your partner tends to be loyal, stable, and dependable.",
+      Logam: "Metal spouse palace: your partner tends to be firm, principled, and orderly.",
+      Air: "Water spouse palace: your partner tends to be clever, flexible, and understanding."
+    },
     EL_TAHUN: ["Metal", "Metal", "Water", "Water", "Wood", "Wood", "Fire", "Fire", "Earth", "Earth"]
   },
 
@@ -411,6 +540,78 @@ window.SERAT_EN = {
       "A year of friendship and community. Hopes and long-term plans grow stronger.",
       "A reflective year. A good time for inner rest, spirituality, and closing old chapters."
     ],
+    VENUS_RASI: [
+      "You fall in love fast and openly. You like the chase, are drawn to bold partners, and get bored when a relationship goes flat.",
+      "Love for you means loyalty and comfort. You are romantic through touch, gifts, and good food, and deeply faithful.",
+      "You need a partner who is good to talk to. Words and humour win you over, and you enjoy variety.",
+      "You love gently and protectively. Security, family, and a warm home are your love language.",
+      "You love generously with a touch of sweet drama. You want to be adored, and you love to spoil your partner too.",
+      "You show love through small attentions and practical help. You are choosy, but very loyal once sure.",
+      "You love beauty, balance, and good manners. Relationships are central to your life, and you want an equal partner.",
+      "Your love is deep, intense, and total. You are very loyal, but need complete honesty. Jealousy can appear when you feel threatened.",
+      "You love cheerfully and freely. Your ideal partner is a fellow adventurer who is also a great conversation partner.",
+      "You are serious about love and look for something long term. You show affection through responsibility and commitment.",
+      "You need love that is also friendship and gives you space. You are drawn to people who are unique and open-minded.",
+      "You are romantic, empathetic, and self-sacrificing. You look for a love that feels like destiny. Keep boundaries so you don't get hurt."
+    ],
+    MARS_RASI: [
+      "You act fast and directly. Your drive and courage are great, but patience needs practice.",
+      "You move slowly but cannot be stopped. Persistence is your main weapon.",
+      "You act through words and ideas. Your energy spreads across many things at once.",
+      "You act to protect the people you love. Emotion is both your fuel and your weak spot.",
+      "You act with confidence and want recognition. Your enthusiasm is contagious.",
+      "You work neatly, efficiently, and in detail. You turn energy into tangible results.",
+      "You weigh things first and like to work with others. You avoid open conflict.",
+      "Your willpower is very strong and strategic. You rarely give up and know when to strike.",
+      "You act optimistically and spontaneously. Adventure and big goals fire you up.",
+      "You are ambitious, disciplined, and highly effective. You build your career step by step.",
+      "You move for ideas and freedom. You like new methods and refuse rigid rules.",
+      "Your energy works through intuition and empathy. You are strongest when fighting for others or for your art."
+    ],
+    R7_RASI: [
+      "You are drawn to partners who are bold, independent, and spirited.", "You are drawn to partners who are calm, loyal, and settled.",
+      "You are drawn to partners who are clever, funny, and communicative.", "You are drawn to partners who are caring and family-oriented.",
+      "You are drawn to partners who are confident and charismatic.", "You are drawn to partners who are neat, attentive, and dependable.",
+      "You are drawn to partners who are charming, fair, and tasteful.", "You are drawn to partners who are intense, loyal, and mysterious.",
+      "You are drawn to partners who are optimistic, honest, and adventurous.", "You are drawn to partners who are mature, ambitious, and responsible.",
+      "You are drawn to partners who are unique, free, and broad-minded.", "You are drawn to partners who are gentle, artistic, and empathetic."
+    ],
+    MC_RASI: [
+      "Your best career calls for courage and leadership: entrepreneurship, sport, the military, or pioneering a new field.",
+      "Your best career builds real value: finance, property, food, art, design, or beauty.",
+      "Your best career is in the world of information: media, writing, marketing, sales, teaching, or transport.",
+      "Your best career gives others security: caregiving, property, food, education, or a family business.",
+      "Your best career puts you in the spotlight: entertainment, leadership, art, politics, or public-facing work.",
+      "Your best career demands skill and precision: health care, analysis, administration, technology, or editing.",
+      "Your best career involves partnership and aesthetics: law, design, diplomacy, consulting, or public relations.",
+      "Your best career touches deep matters: research, psychology, investigation, finance, medicine, or crisis management.",
+      "Your best career broadens horizons: higher education, publishing, law, tourism, or international business.",
+      "Your best career builds a long-term reputation: management, government, engineering, or large corporations.",
+      "Your best career changes things: technology, science, social causes, innovation, or community organisations.",
+      "Your best career serves and inspires: art, music, film, healing, spirituality, or humanitarian work."
+    ],
+    SAT_RASI: [
+      "Your lesson: lead patiently and don't act rashly. Success comes after learning self-control.",
+      "Your lesson: build financial security through discipline, not fear of scarcity.",
+      "Your lesson: speak with conviction and focus on mastering one skill.",
+      "Your lesson: balance family responsibilities with personal ambition.",
+      "Your lesson: dare to be seen and create without fear of judgement.",
+      "Your lesson: work carefully without becoming a self-punishing perfectionist.",
+      "Your lesson: build fair, committed relationships and partnerships.",
+      "Your lesson: trust others and manage shared money wisely.",
+      "Your lesson: build mature beliefs and knowledge, not mere opinions.",
+      "Your lesson: carry big responsibility. Your career is strong when built patiently.",
+      "Your lesson: turn big ideas into something real and useful to many people.",
+      "Your lesson: give form to your intuition and keep boundaries when helping others."
+    ],
+    JUP_RASI: [
+      "Luck comes when you dare to start and take the initiative.", "Luck comes through patience, savings, and tangible assets.",
+      "Luck comes through networking, communication, and learning new things.", "Luck comes through family, home, and caring.",
+      "Luck comes when you shine, create, and are generous.", "Luck comes through careful work and sincere service.",
+      "Luck comes through partners, associates, and cooperation.", "Luck comes through shared finances, research, and the courage to change.",
+      "Luck comes through travel, education, and faith.", "Luck comes through hard work and a good reputation.",
+      "Luck comes through community, friends, and innovative ideas.", "Luck comes through intuition, kindness, and spiritual practice."
+    ],
     S: {
       diRasi: "{p} in {r}", diRumah: "{p} in house {n}", rumahN: ", house {n}", perkiraan: " (approximate)", retroTag: " (retrograde)",
       fokusHidup: " Your life focus is in house {n}: {u}.", ascJudul: "Ascendant in {r}", mcArah: " Your MC in {r} points to a career pursued {g}.", gayaPrefix: "@@",
@@ -426,7 +627,10 @@ window.SERAT_EN = {
       sinAsc: "One person's {q} falls on the other's Ascendant: an instant sense of connection from the first meeting.",
       hub: { sama: "the same element", lengkap: "complementary", beda: "different" },
       srAsc: "Yearly Ascendant in {r}", srSun: "This year's main focus is on {u}.", srMoon: "Your emotional needs this year show up in {u}. ",
-      srJup: "Luck comes most easily this year through {u}.", srSat: "This year's lessons and hard work lie in {u}."
+      srJup: "Luck comes most easily this year through {u}.", srSat: "This year's lessons and hard work lie in {u}.",
+      rumah7: "House 7 (partner) in {r}", mcJudul: "MC (career peak) in {r}",
+      r10: "Planets in your career house: {p}", r10Isi: "Planets in the 10th house make career and reputation an important part of your life. You have a chance to become widely known through your work.",
+      r2: "Planets in your money house: {p}", r2Isi: "Planets in the 2nd house make income and possessions stand out. You have a gift for earning from your own skills."
     }
   },
 
@@ -518,6 +722,20 @@ window.SERAT_EN = {
     "n.dari": "Life path number from {tgl}",
     "n.rumus": "Formula", "n.hariLahir": "Birth day number", "n.tahunP": "Personal year {y}",
     "n.makna": "Meaning of number {n}", "n.tahunPj": "Personal year {n} ({y})", "n.bakat": "Talent from your birth day",
+    "nm.dewasa": "Maturity number {n}", "nm.bakatJ": "The gifts your name carries", "nm.kuat": "Strengths of your name", "nm.karier": "Careers your name supports",
+    "nm.cinta": "Your name and love", "nm.jaga": "What to watch", "nm.hurufJ": "First and last letters",
+    "nm.awal": "First letter {h}: how you begin", "nm.akhir": "Last letter {h}: how you finish",
+    "nm.peta": "Number map of your name", "nm.petaLead": "How often each number 1–9 appears in your name. Gold boxes appear most, dashed boxes don't appear at all.",
+    "nm.gairah": "Hidden passion", "nm.karma": "Life lessons (missing numbers)", "nm.karmaNol": "Every number 1–9 appears in your name. This is a sign of a balanced, versatile person.",
+    "w.naungan": "Ruler of {h}", "w.hidup": "Love, career, and money", "w.rezeki": "Fortune",
+    "w.ideal": "Most compatible partner wetons", "w.idealLead": "Calculated from your neptu ({n}) plus a partner's neptu, according to the Javanese matchmaking primbon. These wetons fall into the best groups.",
+    "w.wetonan": "Your next wetonan", "w.berikut": "Next", "w.lalu": "+{n} days",
+    "w.wetonanLead": "Your weton {w} repeats every 35 days. In Javanese tradition this day is good for a small thanksgiving, weton fasting, prayer, or starting something important.",
+    "s.karierTh": "Career", "s.elemenJ": "Birth year element: {e}", "s.angka": "Lucky numbers", "s.arah": "Good directions", "s.jamLahir": "Your sign's hour",
+    "s.jamBaik": "Good hours to start important matters:", "s.tabel": "Compatibility with all 12 signs",
+    "b.kekuatan": "Strength of your Day Master", "b.kuat": "Strong", "b.lembut": "Gentle", "b.skor": "{a} of {b} element points support your Day Master.",
+    "b.baik": "Favourable elements", "b.caranya": "How to strengthen it:", "b.pilarJ": "Meaning of the four pillars", "b.istana": "Spouse palace ({s})",
+    "z.cintaJ": "Love and relationships", "z.karierS": "career", "z.cocokJ": "Compatible signs", "z.warnaJ": "Lucky colours",
     "n.misi": "Life mission", "n.kekuatan": "Strengths", "n.kelemahan": "Weaknesses to watch", "n.sikap": "Attitude number",
     "n.hidup": "Love, career, and money", "n.karier": "Suitable careers", "n.uang": "Finances", "n.sehat": "Health and energy",
     "n.kini": "Your current cycle", "n.bulanP": "Personal month {n} ({b})", "n.hariP": "Personal day {n} (today)", "n.hariPIsi": "Today's energy is good for {k}.",

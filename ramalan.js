@@ -28,6 +28,7 @@
     netral: "Tahun ini netral untuk shio Anda. Hasil sangat bergantung pada usaha sendiri."
   };
   function elT(e) { return S.el[e] || e; }
+  function elemenKunci() { var m = {}; Object.keys(S.el).forEach(function (k) { m[S.el[k]] = k; }); return m; } // nama tampilan -> kunci Indonesia
   function salin(o, ubah) { var r = {}; Object.keys(o).forEach(function (k) { r[k] = o[k]; }); Object.keys(ubah).forEach(function (k) { r[k] = ubah[k]; }); return r; }
 
   // ---------- 1. Zodiak barat ----------
@@ -281,13 +282,71 @@
       rincian.push({ h: " ", v: 0 });
     });
     rincian.pop();
+    var inklusi = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    rincian.forEach(function (r) { if (r.v) inklusi[r.v]++; });
+    var maks = Math.max.apply(null, Object.keys(inklusi).map(function (k) { return inklusi[k]; }));
+    var karma = Object.keys(inklusi).filter(function (k) { return inklusi[k] === 0; }).map(Number);
+    var gairah = Object.keys(inklusi).filter(function (k) { return maks > 0 && inklusi[k] === maks; }).map(Number);
+    var awal = clean.charAt(0), akhir = clean.replace(/ /g, "").slice(-1);
     return {
       bersih: clean, rincian: rincian,
       ekspresi: reduceNum(all, true), jumlah: all,
       jiwa: reduceNum(vow, true),
-      kepribadian: reduceNum(con, true)
+      kepribadian: reduceNum(con, true),
+      inklusi: inklusi, karma: karma.map(function (n) { return { n: n, isi: KARMA[n] }; }), gairah: gairah.map(function (n) { return { n: n, isi: GAIRAH[n] }; }),
+      awal: awal, awalIsi: HURUF[awal] || "", akhir: akhir, akhirIsi: HURUF_AKHIR[letterVal(akhir || "A")]
     };
   }
+  function kedewasaan(lp, ekspresi) { var n = reduceNum(reduceNum(lp) + reduceNum(ekspresi), true); return { n: n, isi: DEWASA[n] }; }
+  // huruf pertama nama (cornerstone): cara Anda memulai dan menghadapi hal baru
+  var HURUF = {
+    A: "Mandiri, ambisius, dan berani memulai. Anda bergerak cepat begitu punya tujuan.", B: "Lembut, penuh perasaan, dan suka kedamaian. Anda butuh rasa aman sebelum melangkah.",
+    C: "Ekspresif, ceria, dan kreatif. Anda memulai sesuatu dengan antusias dan kata-kata.", D: "Teguh, praktis, dan bertekad kuat. Anda menyusun rencana sebelum bergerak.",
+    E: "Bebas, komunikatif, dan suka hal baru. Anda belajar lewat pengalaman langsung.", F: "Hangat, bertanggung jawab, dan penyayang. Anda memikirkan orang lain lebih dulu.",
+    G: "Pemikir, mandiri, dan intuitif. Anda menimbang dalam-dalam sebelum memutuskan.", H: "Berwibawa, ambisius, dan berbakat bisnis. Anda melihat peluang di mana-mana.",
+    I: "Peka, penuh kasih, dan artistik. Perasaan Anda menjadi kompas dalam mengambil keputusan.", J: "Jujur, cerdas, dan suka memimpin. Anda tidak suka menyerah sebelum berhasil.",
+    K: "Intuitif, karismatik, dan idealis. Anda memulai dengan visi besar.", L: "Logis, terbuka, dan suka bergaul. Anda menimbang untung rugi dengan tenang.",
+    M: "Pekerja keras, tekun, dan membumi. Anda menyelesaikan apa yang sudah dimulai.", N: "Kreatif, imajinatif, dan suka kebebasan. Anda punya banyak ide segar.",
+    O: "Setia, sabar, dan berprinsip. Anda memegang teguh nilai yang Anda percaya.", P: "Cerdas, penuh rasa ingin tahu, dan berwawasan. Anda menganalisis sebelum bertindak.",
+    Q: "Unik, berbakat, dan agak misterius. Anda punya cara sendiri yang berbeda dari orang lain.", R: "Penuh semangat, peduli, dan cakap. Anda punya energi besar untuk membantu orang.",
+    S: "Karismatik, emosional, dan berani berubah. Anda memulai dengan dorongan hati yang kuat.", T: "Peka, aktif, dan suka kerja sama. Anda maju lebih cepat bersama tim.",
+    U: "Beruntung, kreatif, dan mudah dicintai. Anda perlu belajar mengambil keputusan dengan cepat.", V: "Visioner, efisien, dan praktis. Anda mampu mewujudkan ide besar.",
+    W: "Ekspresif, gigih, dan bersemangat. Anda bangkit kembali setelah jatuh.", X: "Peka, artistik, dan berwatak kuat. Anda belajar banyak dari pengalaman hidup.",
+    Y: "Bebas, intuitif, dan berani. Anda tidak suka diatur dan memilih jalan sendiri.", Z: "Optimis, bijak, dan penuh harapan. Anda bisa menjadi penengah yang adil."
+  };
+  // huruf terakhir (capstone): cara Anda menyelesaikan sesuatu, menurut nilai hurufnya
+  var HURUF_AKHIR = {
+    1: "Anda menuntaskan sesuatu dengan tegas dan mandiri.", 2: "Anda menyelesaikan sesuatu dengan sabar dan melibatkan orang lain.",
+    3: "Anda menutup urusan dengan cara yang ceria dan kreatif.", 4: "Anda menyelesaikan pekerjaan dengan rapi dan tuntas.",
+    5: "Anda cepat beralih ke hal baru setelah satu urusan selesai.", 6: "Anda memastikan semua orang puas sebelum menganggap tugas selesai.",
+    7: "Anda menuntaskan sesuatu dengan teliti dan penuh perhitungan.", 8: "Anda menyelesaikan urusan dengan hasil yang terukur dan menguntungkan.",
+    9: "Anda menutup satu bab dengan ikhlas dan siap melepaskan."
+  };
+  // angka yang tidak muncul di nama (pelajaran karma)
+  var KARMA = {
+    1: "Belajar percaya diri, berani mengambil inisiatif, dan berdiri di atas kaki sendiri.", 2: "Belajar sabar, peka pada perasaan orang lain, dan bekerja sama.",
+    3: "Belajar mengungkapkan perasaan dan gagasan, serta tidak takut tampil.", 4: "Belajar disiplin, teratur, dan menyelesaikan pekerjaan dengan tekun.",
+    5: "Belajar menerima perubahan dan berani mencoba pengalaman baru.", 6: "Belajar memikul tanggung jawab keluarga dan menjalin komitmen.",
+    7: "Belajar merenung, mendalami ilmu, dan mempercayai intuisi.", 8: "Belajar mengelola uang, kekuasaan, dan mengambil keputusan besar.",
+    9: "Belajar berempati, memaafkan, dan peduli pada orang banyak."
+  };
+  // angka yang paling sering muncul (gairah tersembunyi)
+  var GAIRAH = {
+    1: "Dorongan kuat untuk memimpin dan menjadi yang pertama.", 2: "Kerinduan pada hubungan yang harmonis dan kerja sama.",
+    3: "Hasrat berekspresi lewat kata, seni, dan pergaulan.", 4: "Kecintaan pada keteraturan, kerja nyata, dan hasil yang kokoh.",
+    5: "Gairah pada kebebasan, perjalanan, dan pengalaman baru.", 6: "Keinginan besar untuk merawat keluarga dan membuat rumah yang indah.",
+    7: "Rasa haus pada ilmu, kebenaran, dan hal-hal spiritual.", 8: "Ambisi pada kesuksesan, kemapanan, dan pengaruh.",
+    9: "Panggilan untuk menolong sesama dan memberi arti bagi dunia."
+  };
+  // angka kedewasaan: tujuan yang makin terasa setelah usia sekitar 40
+  var DEWASA = {
+    1: "Di paruh kedua hidup, Anda makin mandiri dan berani memimpin jalan sendiri.", 2: "Di paruh kedua hidup, hubungan dan kedamaian batin menjadi yang paling berharga.",
+    3: "Di paruh kedua hidup, kreativitas dan kegembiraan Anda justru makin bersinar.", 4: "Di paruh kedua hidup, Anda membangun hasil kerja yang kokoh dan tahan lama.",
+    5: "Di paruh kedua hidup, Anda merasa lebih bebas dan banyak menjelajah.", 6: "Di paruh kedua hidup, keluarga dan pelayanan menjadi pusat kebahagiaan Anda.",
+    7: "Di paruh kedua hidup, Anda menemukan kebijaksanaan dan ketenangan batin.", 8: "Di paruh kedua hidup, kemapanan dan pengaruh Anda mencapai puncaknya.",
+    9: "Di paruh kedua hidup, Anda terpanggil berbagi dan memberi manfaat bagi banyak orang.", 11: "Di paruh kedua hidup, Anda menjadi sumber inspirasi dan pencerahan.",
+    22: "Di paruh kedua hidup, Anda berkesempatan mewujudkan karya besar.", 33: "Di paruh kedua hidup, Anda menjadi pembimbing yang penuh kasih."
+  };
   var EKSPRESI_BAKAT = {
     1: "Bakat memimpin dan merintis. Nama ini mendorong Anda tampil sebagai pelopor.",
     2: "Bakat merangkul dan menjadi penengah. Nama ini memancarkan kelembutan dan kepekaan.",
@@ -357,6 +416,35 @@
     "Logam": "warna putih atau emas, arah barat, keteraturan dan ketegasan",
     "Air": "warna biru atau hitam, arah utara, istirahat, refleksi, dan perjalanan"
   };
+  var DM_DETAIL = {
+    Kayu: { karier: "Anda tumbuh di lingkungan yang memberi ruang berkembang: pendidikan, penerbitan, desain, kesehatan, pertanian, LSM, atau usaha yang bisa dibesarkan pelan-pelan.", cinta: "Anda pasangan yang setia dan suka membimbing. Anda butuh pasangan yang menghargai prinsip dan mendukung pertumbuhan Anda.", uang: "Rezeki tumbuh seperti pohon: pelan tetapi berbuah lebat. Cocok dengan investasi jangka panjang.", sehat: "Organ yang perlu dijaga menurut tradisi: hati dan kantung empedu, juga mata dan otot. Kurangi marah dan begadang." },
+    Api: { karier: "Anda bersinar di depan orang: pemasaran, hiburan, mengajar, kepemimpinan, kuliner, teknologi, atau pekerjaan yang menyebarkan semangat.", cinta: "Penuh gairah, hangat, dan ekspresif. Anda butuh pasangan yang mengimbangi energi tanpa memadamkan semangat Anda.", uang: "Uang cepat datang dan cepat pergi. Disiplin anggaran menjaga api rezeki tetap menyala.", sehat: "Menurut tradisi, jantung dan sirkulasi darah perlu dijaga, juga lidah dan usus kecil. Kendalikan stres dan emosi yang meledak." },
+    Tanah: { karier: "Anda pondasi yang dipercaya: properti, perbankan, konstruksi, administrasi, pertanian, logistik, konsultasi, dan pekerjaan yang menjaga sistem.", cinta: "Stabil, setia, dan mengayomi. Anda menunjukkan cinta lewat rasa aman dan tanggung jawab.", uang: "Pandai menyimpan dan mengelola aset. Kekayaan Anda kokoh, terutama lewat tanah dan properti.", sehat: "Menurut tradisi, perut, limpa, dan pencernaan perlu dijaga. Hindari terlalu banyak berpikir dan makan tidak teratur." },
+    Logam: { karier: "Anda unggul di bidang yang butuh ketegasan dan presisi: hukum, keuangan, teknik mesin, militer, kepolisian, perhiasan, atau manajemen.", cinta: "Setia dan teguh pada janji, tetapi bisa terlihat dingin. Ungkapkan perasaan agar pasangan merasa dekat.", uang: "Tegas dalam urusan uang dan pandai bernegosiasi. Rezeki besar datang dari keputusan yang berani.", sehat: "Menurut tradisi, paru-paru, kulit, dan usus besar perlu dijaga. Hindari memendam kesedihan." },
+    Air: { karier: "Anda cerdas dan luwes: komunikasi, perjalanan, perdagangan, riset, filsafat, psikologi, teknologi informasi, atau perikanan.", cinta: "Penuh pengertian, intuitif, dan romantis. Anda butuh pasangan yang memberi ketenangan dan kedalaman.", uang: "Rezeki mengalir dari banyak arah. Buat saluran tabungan yang jelas agar tidak bocor.", sehat: "Menurut tradisi, ginjal, kandung kemih, dan tulang perlu dijaga. Cukupi minum dan kurangi rasa takut berlebihan." }
+  };
+  var BZ_TEKS = {
+    kuat: "Elemen diri Anda kuat: banyak elemen dalam bagan yang mendukung Anda. Anda mandiri, percaya diri, dan tahan tekanan, tetapi bisa keras kepala. Keseimbangan didapat dengan menyalurkan energi lewat karya, kerja keras, dan disiplin.",
+    lemah: "Elemen diri Anda lembut: elemen pendukung dalam bagan lebih sedikit. Anda luwes, peka, dan pandai bekerja sama, tetapi mudah lelah bila memikul terlalu banyak. Keseimbangan didapat dengan dukungan, ilmu, dan lingkungan yang tepat."
+  };
+  var BZ_PERAN = {
+    ibu: "Elemen pendukung (ibu): ilmu, mentor, dan perlindungan.", teman: "Elemen saudara: teman, rekan, dan rasa percaya diri.",
+    anak: "Elemen ekspresi: kreativitas, bakat, dan cara Anda berkarya.", harta: "Elemen harta: uang, peluang usaha, dan hasil kerja.",
+    kuasa: "Elemen kekuasaan: karier, disiplin, jabatan, dan nama baik."
+  };
+  var PILAR_MAKNA = {
+    y: "Leluhur, keluarga besar, dan masa kecil (sekitar usia 0–16). Juga menggambarkan cara orang luar melihat Anda.",
+    m: "Orang tua, saudara, dan karier (sekitar usia 17–32). Pilar bulan menunjukkan musim kelahiran, yang paling memengaruhi kekuatan elemen.",
+    d: "Diri Anda sendiri dan pasangan (sekitar usia 33–48). Batang atas adalah elemen diri, cabang bawah adalah istana pasangan.",
+    h: "Anak, cita-cita, dan masa tua (usia 49 ke atas). Menggambarkan buah dari usaha seumur hidup."
+  };
+  var PASANGAN_EL = {
+    Kayu: "Istana pasangan berelemen Kayu: pasangan cenderung sabar, membimbing, dan suka bertumbuh bersama.",
+    Api: "Istana pasangan berelemen Api: pasangan cenderung hangat, ekspresif, dan bersemangat.",
+    Tanah: "Istana pasangan berelemen Tanah: pasangan cenderung setia, stabil, dan bisa diandalkan.",
+    Logam: "Istana pasangan berelemen Logam: pasangan cenderung tegas, berprinsip, dan rapi.",
+    Air: "Istana pasangan berelemen Air: pasangan cenderung cerdas, luwes, dan penuh pengertian."
+  };
   function baziYearIndex(dt) { // tahun Ba Zi berganti saat Li Chun (~4 Feb)
     var y = dt.y;
     if (dt.m < 2 || (dt.m === 2 && dt.d < 4)) y--;
@@ -397,7 +485,20 @@
     var dm = GAN[ds], hitungT = {};
     els.forEach(function (e) { hitungT[elT(e)] = count[e]; });
     var out = pillars.map(function (p) { return { key: p.key, label: S.pilar[p.key], g: salin(p.g, { el: elT(p.g.el) }), z: salin(p.z, { el: elT(p.z.el) }) }; });
-    return { pilar: out, dayMaster: salin(dm, { el: elT(dm.el) }), dmInfo: DAY_MASTER[dm.n], elemen: hitungT, lemah: lemah.map(elT), kuat: kuat.map(elT), saran: lemah.map(function (e) { return elT(e) + ": " + EL_SARAN[e]; }) };
+    // kekuatan elemen diri: elemen sama + elemen yang melahirkannya (bulan lahir dihitung dua kali karena musim paling berpengaruh)
+    var SIKLUS = ["Kayu", "Api", "Tanah", "Logam", "Air"], di = SIKLUS.indexOf(dm.el);
+    var ibu = SIKLUS[mod(di - 1, 5)], anak = SIKLUS[mod(di + 1, 5)], harta = SIKLUS[mod(di + 2, 5)], kuasa = SIKLUS[mod(di + 3, 5)];
+    var bobot = {}; els.forEach(function (e) { bobot[e] = count[e]; }); bobot[pillars[1].z.el]++;
+    var dukung = bobot[dm.el] + bobot[ibu], semua = 0; els.forEach(function (e) { semua += bobot[e]; });
+    var kuatDM = dukung * 2 >= semua;
+    var baik = kuatDM ? [anak, harta, kuasa] : [ibu, dm.el];
+    var relasi = {}; relasi[dm.el] = "teman"; relasi[ibu] = "ibu"; relasi[anak] = "anak"; relasi[harta] = "harta"; relasi[kuasa] = "kuasa";
+    var dd = DM_DETAIL[dm.el];
+    return { kuatDM: kuatDM, dukung: dukung, semua: semua, kekuatanIsi: kuatDM ? BZ_TEKS.kuat : BZ_TEKS.lemah,
+      baik: baik.map(function (e) { return { e: elT(e), isi: BZ_PERAN[relasi[e]] }; }), dmDetail: dd,
+      pilarMakna: pillars.map(function (p) { return { key: p.key, label: S.pilar[p.key], isi: PILAR_MAKNA[p.key] }; }),
+      pasangan: PASANGAN_EL[pillars[2].z.el], pasanganShio: pillars[2].z.shio,
+      pilar: out, dayMaster: salin(dm, { el: elT(dm.el) }), dmInfo: DAY_MASTER[dm.n], elemen: hitungT, lemah: lemah.map(elT), kuat: kuat.map(elT), saran: lemah.map(function (e) { return elT(e) + ": " + EL_SARAN[e]; }) };
   }
 
   // ---------- 5. Weton Jawa ----------
@@ -441,7 +542,7 @@
     var hari = HARI[mod(j + 1, 7)];
     var pas = PASARAN[mod(j, 5)]; // dikalibrasi: 17 Agustus 1945 = Jumat Legi
     var total = hari.neptu + pas.neptu;
-    return { hari: hari, pasaran: pas, neptu: total, wetonLabel: hari.n + " " + pas.n, wetonId: hari.id + " " + ASLI.PASARAN[mod(j, 5)].n, watakHari: WATAK_HARI[hari.id], laku: LAKU[total] };
+    return { hari: hari, pasaran: pas, neptu: total, wetonLabel: hari.n + " " + pas.n, wetonId: hari.id + " " + ASLI.PASARAN[mod(j, 5)].n, watakHari: WATAK_HARI[hari.id], hariDetail: HARI_DETAIL[hari.id], pasDetail: PASARAN_DETAIL[mod(j, 5)], laku: LAKU[total] };
   }
   var JODOH = [ // sisa (neptu A + neptu B) mod 8, metode "Pegat-Ratu-Jodoh-Topo-Tinari-Padu-Sujanan-Pesthi"
     { k: "Pesthi", b: "Rukun, tenteram, dan damai sampai tua. Ujian datang tetapi tidak merusak hubungan.", skor: 5 },
@@ -453,6 +554,53 @@
     { k: "Padu", b: "Sering bertengkar karena hal kecil, tetapi tidak sampai berpisah.", skor: 2 },
     { k: "Sujanan", b: "Rawan pertengkaran dan godaan perselingkuhan. Perlu saling menjaga kepercayaan.", skor: 1 }
   ];
+  // weton pasangan yang paling cocok: sisa (neptu + neptu pasangan) mod 8 = Pesthi, Ratu, Jodoh, atau Tinari
+  function wetonIdeal(dt) {
+    var w = weton(dt), baik = [0, 2, 3, 5], out = [];
+    baik.forEach(function (r) {
+      var daftar = [];
+      for (var h = 0; h < 7; h++) for (var q = 0; q < 5; q++) {
+        var nn = HARI[h].neptu + PASARAN[q].neptu;
+        if ((w.neptu + nn) % 8 === r) daftar.push(HARI[h].n + " " + PASARAN[q].n);
+      }
+      if (daftar.length) out.push({ k: JODOH[r].k, b: JODOH[r].b, skor: JODOH[r].skor, weton: daftar });
+    });
+    return out;
+  }
+  // tanggal wetonan berikutnya (hari & pasaran yang sama, berulang tiap 35 hari)
+  function wetonBerikut(dt, dari, n) {
+    var j0 = jdn(dt.y, dt.m, dt.d), j1 = jdn(dari.y, dari.m, dari.d), sisa = mod(j0 - j1, 35), out = [];
+    for (var i = 0; i < (n || 3); i++) { var x = jdToYMD(j1 + sisa + 35 * i); out.push({ y: x.y, m: x.m, d: x.d }); }
+    return out;
+  }
+  // watak lebih rinci per pasaran
+  var PASARAN_DETAIL = [
+    { cinta: "Dalam cinta Anda manis dan perhatian, mudah jatuh hati, dan suka memanjakan pasangan. Jaga ucapan saat marah agar tidak melukai.",
+      karier: "Cocok di pekerjaan yang melibatkan banyak orang: pelayanan, perdagangan, pendidikan, kuliner, atau kegiatan sosial.",
+      rezeki: "Rezeki datang lewat pergaulan dan kebaikan hati. Anda mudah dipercaya orang, tetapi jangan terlalu royal hingga lupa menabung." },
+    { cinta: "Anda setia tetapi suka mengatur. Anda butuh pasangan yang sabar dan menghargai kerja keras Anda.",
+      karier: "Cocok di bisnis, keuangan, perdagangan, atau pekerjaan yang menuntut ketekunan dan target jelas.",
+      rezeki: "Naluri mencari uang kuat dan Anda pandai mengumpulkan harta. Hati-hati agar ambisi tidak membuat Anda pelit atau mudah curiga." },
+    { cinta: "Anda pasangan yang betah di rumah dan ingin dihormati. Hubungan langgeng jika ada saling menghargai dan tidak saling menang sendiri.",
+      karier: "Cocok sebagai pemimpin, pejabat, guru, penasihat, juru bicara, atau pekerjaan yang membutuhkan wibawa.",
+      rezeki: "Rezeki stabil, terutama dari kepercayaan orang dan jabatan. Anda cocok mengelola usaha keluarga atau aset." },
+    { cinta: "Anda sangat setia dan bertanggung jawab, tetapi kurang pandai mengungkapkan perasaan. Tunjukkan sayang lewat kata, bukan hanya tindakan.",
+      karier: "Cocok di pekerjaan yang butuh keteguhan: teknik, pertanian, militer, administrasi, atau keahlian tangan.",
+      rezeki: "Rezeki datang lewat kerja keras dan kesabaran. Tidak instan, tetapi kokoh. Hindari keputusan keuangan karena emosi." },
+    { cinta: "Anda memikat dan penuh pesona, tetapi suasana hati mudah berubah. Pasangan perlu memahami sisi batin Anda yang dalam.",
+      karier: "Cocok di bidang komunikasi, seni, spiritual, penyembuhan, negosiasi, atau pekerjaan yang mengandalkan intuisi.",
+      rezeki: "Rezeki sering datang tak terduga lewat firasat yang tepat. Catat keuangan dengan disiplin agar tidak habis karena belanja mendadak." }
+  ];
+  // nasihat per hari kelahiran
+  var HARI_DETAIL = {
+    "Minggu": "Hari kelahiran Anda dinaungi Matahari: cocok memimpin, tetapi belajarlah mendengarkan orang lain. Jaga kesehatan jantung dan mata.",
+    "Senin": "Hari kelahiran Anda dinaungi Bulan: perasaan Anda halus dan mudah berempati. Jaga keseimbangan emosi dan pola tidur.",
+    "Selasa": "Hari kelahiran Anda dinaungi Mars: berani dan cepat bertindak. Salurkan energi lewat olahraga dan hindari keputusan saat marah.",
+    "Rabu": "Hari kelahiran Anda dinaungi Merkurius: cerdas berdagang dan berbicara. Jaga konsistensi agar tidak mudah berpindah-pindah.",
+    "Kamis": "Hari kelahiran Anda dinaungi Jupiter: bijak dan dihormati. Cocok menjadi guru atau penasihat. Waspadai berat badan dan gula darah.",
+    "Jumat": "Hari kelahiran Anda dinaungi Venus: menyukai keindahan dan kedamaian. Rezeki baik lewat seni, kecantikan, dan pelayanan.",
+    "Sabtu": "Hari kelahiran Anda dinaungi Saturnus: tangguh dan tahan uji. Kesuksesan datang terlambat tetapi bertahan lama. Jaga tulang dan sendi."
+  };
   function jodohWeton(a, b) {
     var wa = weton(a), wb = weton(b), sum = wa.neptu + wb.neptu;
     return { a: wa, b: wb, total: sum, hasil: JODOH[sum % 8] };
@@ -511,6 +659,45 @@
     { id: "Anjing", n: "Anjing", sifat: "Setia, jujur, dan adil. Teman yang bisa dipercaya dan suka melindungi.", cocok: "Macan, Kelinci, Kuda", hindari: "Naga" },
     { id: "Babi", n: "Babi", sifat: "Tulus, murah hati, dan menikmati hidup. Rezeki biasanya lancar.", cocok: "Kelinci, Kambing, Macan", hindari: "Ular" }
   ];
+  var SHIO_DETAIL = [
+    { cinta: "Romantis dan perhatian pada hal kecil, tetapi butuh waktu untuk percaya. Anda menunjukkan cinta dengan menjaga pasangan secara praktis.", karier: "Cerdik melihat peluang. Cocok di bisnis, perdagangan, keuangan, penulisan, dan riset pasar.", uang: "Pandai menabung dan berhitung. Hindari menimbun berlebihan karena takut kekurangan.", sehat: "Mudah cemas dan kurang tidur karena banyak pikiran. Jaga pencernaan dan beri waktu untuk istirahat.", angka: "2, 3", warna: "Biru, emas, hijau", arah: "Barat, barat laut, barat daya" },
+    { cinta: "Setia, serius, dan pelan dalam membuka hati. Sekali berkomitmen, Anda pasangan yang sangat bisa diandalkan.", karier: "Tekun dan tahan banting. Cocok di pertanian, manufaktur, teknik, perbankan, properti, dan pekerjaan yang butuh kesabaran.", uang: "Keuangan stabil karena hidup hemat. Kekayaan tumbuh pelan tetapi pasti lewat aset nyata.", sehat: "Kuat secara fisik, tetapi jarang istirahat. Waspadai kelelahan, perut, dan sendi.", angka: "1, 4", warna: "Putih, kuning, hijau", arah: "Selatan, utara" },
+    { cinta: "Penuh gairah dan melindungi. Anda butuh pasangan yang memberi ruang dan tidak terlalu mengekang.", karier: "Pemimpin yang berani. Cocok sebagai wirausaha, manajer, pejabat, atlet, atau di dunia hiburan.", uang: "Berani mengambil risiko sehingga rezeki bisa besar, tetapi naik turunnya juga tajam. Siapkan dana darurat.", sehat: "Energi tinggi, tetapi mudah stres saat dihalangi. Jaga hati dan kualitas tidur.", angka: "1, 3, 4", warna: "Biru, abu-abu, oranye", arah: "Timur, utara, selatan" },
+    { cinta: "Lembut, romantis, dan penuh pengertian. Anda mencari hubungan yang tenang, harmonis, dan jauh dari drama.", karier: "Diplomatis dan berselera tinggi. Cocok di desain, seni, hukum, pendidikan, kesehatan, dan hubungan masyarakat.", uang: "Hati-hati dan tidak suka berspekulasi. Rezeki baik dari pekerjaan yang membutuhkan ketelitian dan cita rasa.", sehat: "Peka terhadap stres dan suasana. Jaga daya tahan tubuh dan hindari terlalu memendam perasaan.", angka: "3, 4, 6", warna: "Merah, merah muda, ungu, biru", arah: "Timur, selatan, barat laut" },
+    { cinta: "Karismatik dan dermawan dalam cinta, tetapi bisa dominan. Anda butuh pasangan yang mengagumi sekaligus mampu mengimbangi.", karier: "Ambisius dan berjiwa besar. Cocok sebagai pemimpin, pengusaha, arsitek, jurnalis, atau di dunia politik.", uang: "Mudah mendapat rezeki besar, tetapi juga gemar membelanjakannya. Investasi jangka panjang menyelamatkan Anda.", sehat: "Jarang sakit, tetapi suka memaksakan diri. Waspadai tekanan darah dan kelelahan.", angka: "1, 6, 7", warna: "Emas, perak, abu-abu", arah: "Barat, utara, barat laut" },
+    { cinta: "Memikat, misterius, dan setia, tetapi bisa cemburu. Kepercayaan adalah kunci hubungan Anda.", karier: "Strategis dan intuitif. Cocok sebagai peneliti, analis, konsultan, psikolog, investor, atau ahli hukum.", uang: "Bijak mengelola uang dan pandai berinvestasi. Rezeki sering datang lewat informasi dan perhitungan yang tepat.", sehat: "Mudah lelah secara batin. Jaga pola makan, kulit, dan beri waktu menyendiri.", angka: "2, 8, 9", warna: "Hitam, merah, kuning", arah: "Timur laut, barat daya, selatan" },
+    { cinta: "Hangat dan bersemangat, cepat jatuh cinta tetapi butuh kebebasan. Pasangan yang terlalu mengatur membuat Anda gelisah.", karier: "Energik dan pandai bergaul. Cocok di penjualan, pariwisata, jurnalistik, hiburan, olahraga, dan transportasi.", uang: "Pandai mencari uang tetapi juga cepat menghabiskannya. Buat pos tabungan otomatis.", sehat: "Aktif dan lincah, tetapi rawan cedera karena terburu-buru. Jaga jantung dan pernapasan.", angka: "2, 3, 7", warna: "Kuning, hijau", arah: "Barat laut, barat daya, timur" },
+    { cinta: "Lembut, setia, dan penuh kasih. Anda butuh rasa aman dan perhatian, dan memberi cinta dengan tulus.", karier: "Kreatif dan berjiwa seni. Cocok di desain, seni, kuliner, pendidikan anak, perawatan, dan kerajinan.", uang: "Rezeki cukup, tetapi perlu disiplin karena mudah iba dan meminjamkan uang.", sehat: "Peka terhadap cuaca dan suasana hati. Jaga pencernaan dan cari kegiatan yang menenangkan.", angka: "2, 7", warna: "Hijau, merah, ungu", arah: "Utara, barat laut" },
+    { cinta: "Seru, jenaka, dan penuh kejutan. Anda butuh pasangan yang cerdas dan tidak membosankan.", karier: "Cepat belajar dan banyak akal. Cocok di teknologi, keuangan, perdagangan, hiburan, dan pemecahan masalah.", uang: "Pandai menghasilkan uang dari banyak sumber. Hindari spekulasi demi sensasi.", sehat: "Banyak bergerak sehingga cenderung sehat, tetapi jaga paru-paru dan jangan mengabaikan istirahat.", angka: "4, 9", warna: "Putih, biru, emas", arah: "Utara, barat laut, barat" },
+    { cinta: "Jujur dan setia, tetapi kadang terlalu kritis. Tunjukkan kelembutan agar pasangan merasa dihargai.", karier: "Teliti dan rapi. Cocok di akuntansi, militer, kedokteran, kecantikan, penerbitan, dan manajemen.", uang: "Perencana keuangan yang baik. Rezeki stabil lewat kerja keras dan perhitungan matang.", sehat: "Jaga paru-paru dan kesehatan mental karena cenderung perfeksionis.", angka: "5, 7, 8", warna: "Emas, cokelat, kuning", arah: "Selatan, tenggara" },
+    { cinta: "Sangat setia dan melindungi. Anda butuh pasangan yang jujur, karena pengkhianatan sulit Anda maafkan.", karier: "Adil dan bertanggung jawab. Cocok sebagai polisi, guru, dokter, pekerja sosial, pengacara, atau di bidang keamanan.", uang: "Tidak terlalu mengejar harta, tetapi keuangan aman karena hidup sederhana.", sehat: "Mudah cemas memikirkan orang lain. Jaga pencernaan dan luangkan waktu bersantai.", angka: "3, 4, 9", warna: "Merah, hijau, ungu", arah: "Timur, selatan, timur laut" },
+    { cinta: "Tulus, romantis, dan memanjakan pasangan. Anda mudah memaafkan dan mencari hubungan yang hangat.", karier: "Pekerja yang menyenangkan dan dipercaya. Cocok di kuliner, hiburan, pelayanan, pariwisata, dan perdagangan.", uang: "Rezeki biasanya lancar, tetapi gemar menikmati hidup. Kendalikan belanja hiburan.", sehat: "Waspadai pola makan berlebihan, gula darah, dan berat badan.", angka: "2, 5, 8", warna: "Kuning, abu-abu, cokelat", arah: "Tenggara, timur laut" }
+  ];
+  // hubungan dua shio: sama, san he (segitiga), liu he (sahabat rahasia), chong (ciong), hai (bahaya), netral
+  function hubunganShio(a, b) {
+    if (a === b) return "sama";
+    if (mod(a - b, 12) === 4 || mod(b - a, 12) === 4) return "sanhe";
+    if (mod(a + b, 12) === 1) return "liuhe";
+    if (mod(a - b, 12) === 6) return "chong";
+    if (mod(a + b, 12) === 7) return "hai";
+    return "netral";
+  }
+  var HUB_SHIO = { sama: { k: "Sama", skor: 2 }, sanhe: { k: "Sangat cocok", skor: 5 }, liuhe: { k: "Sahabat rahasia", skor: 5 }, chong: { k: "Ciong", skor: 1 }, hai: { k: "Kurang cocok", skor: 2 }, netral: { k: "Netral", skor: 3 } };
+  var RAMAL_TAHUN = {
+    sama: { umum: "Tahun Ben Ming Nian (tahun shio sendiri). Tradisi menyebut tahun ini penuh ujian dan perubahan, jadi jalani dengan rendah hati dan hati-hati.", karier: "Bukan saat terbaik untuk lompatan besar. Perkuat posisi, tingkatkan keahlian, dan hindari konflik dengan atasan.", cinta: "Hubungan diuji oleh emosi. Bagi yang lajang, kenalan baru sebaiknya tidak terburu-buru dibawa ke jenjang serius.", uang: "Tahan pengeluaran besar dan hindari meminjamkan uang dalam jumlah besar.", sehat: "Jaga stamina dan istirahat cukup. Pakai benda berwarna merah sebagai simbol perlindungan." },
+    sanhe: { umum: "Tahun ini termasuk segitiga harmonis (San He) dengan shio Anda. Banyak bantuan datang dan rencana lebih mudah berjalan.", karier: "Waktu yang tepat untuk naik jabatan, membuka usaha, atau pindah ke tempat yang lebih baik.", cinta: "Asmara hangat. Bagi yang lajang, peluang bertemu jodoh besar. Bagi yang berpasangan, cocok untuk melangkah ke jenjang berikutnya.", uang: "Rezeki mengalir dari kerja sama. Investasi jangka panjang punya peluang baik.", sehat: "Energi baik. Pertahankan dengan pola hidup teratur." },
+    liuhe: { umum: "Tahun ini adalah sahabat rahasia (Liu He) shio Anda. Orang yang tepat datang di saat tepat dan membuka pintu.", karier: "Kerja sama dan relasi menjadi kunci. Terima ajakan kolaborasi yang masuk akal.", cinta: "Tahun yang romantis dan baik untuk menikah atau memperbaiki hubungan.", uang: "Keuangan stabil dengan rezeki tambahan dari jaringan pertemanan.", sehat: "Kondisi baik. Jaga keseimbangan kerja dan istirahat." },
+    chong: { umum: "Tahun ini berbenturan (ciong) dengan shio Anda. Perubahan mendadak bisa datang, seperti pindah kerja, pindah rumah, atau perubahan hubungan.", karier: "Hindari keputusan terburu-buru dan konflik terbuka. Bila harus berubah, rencanakan dengan matang.", cinta: "Rawan salah paham. Perbanyak komunikasi dan kesabaran.", uang: "Waspadai pengeluaran tak terduga dan investasi berisiko. Simpan dana cadangan.", sehat: "Berhati-hati di perjalanan dan saat berkendara. Periksa kesehatan secara rutin." },
+    hai: { umum: "Tahun ini kurang bersahabat dengan shio Anda. Hambatan kecil dan gosip bisa muncul, tetapi bisa diatasi dengan sikap tenang.", karier: "Fokus pada pekerjaan sendiri dan jaga ucapan di lingkungan kerja.", cinta: "Jaga kepercayaan dan hindari pihak ketiga yang memancing masalah.", uang: "Teliti sebelum menandatangani perjanjian keuangan.", sehat: "Jaga kesehatan emosi dan kurangi stres." },
+    netral: { umum: "Tahun ini netral untuk shio Anda. Hasil sangat bergantung pada usaha dan keputusan sendiri.", karier: "Kemajuan datang lewat kerja keras yang konsisten. Tingkatkan keahlian.", cinta: "Hubungan tenang. Beri perhatian lebih agar tetap hangat.", uang: "Keuangan cukup stabil. Disiplin anggaran membuat Anda unggul.", sehat: "Jaga rutinitas olahraga dan pola makan." }
+  };
+  var EL_TAHUN_ARTI = {
+    Logam: "Elemen Logam membuat Anda tegas, berprinsip, dan teguh pada tujuan. Anda bekerja dengan disiplin dan sulit digoyahkan.",
+    Air: "Elemen Air membuat Anda cerdas, luwes, dan intuitif. Anda pandai membaca situasi dan menyesuaikan diri.",
+    Kayu: "Elemen Kayu membuat Anda murah hati, kreatif, dan suka bertumbuh. Anda senang membantu orang lain berkembang.",
+    Api: "Elemen Api membuat Anda bersemangat, berani, dan penuh gairah. Anda mudah menginspirasi orang di sekitar.",
+    Tanah: "Elemen Tanah membuat Anda stabil, praktis, dan dapat dipercaya. Anda menjadi pondasi bagi keluarga dan tim."
+  };
   var EL_TAHUN = ["Logam", "Logam", "Air", "Air", "Kayu", "Kayu", "Api", "Api", "Tanah", "Tanah"]; // berdasar digit terakhir tahun
   function shio(dt) {
     var cny = imlek(dt.y), y = dt.y;
@@ -523,22 +710,29 @@
     else if (a.cocok.indexOf(kini) >= 0) rel = S.selaras;
     else if (a.hindari === kini) rel = S.ciong;
     else rel = S.netral;
-    return { shio: s, tahunImlek: y, elemen: EL_TAHUN[mod(y, 10)], imlekTanggal: imlek(dt.y), sebelumImlek: before, tahunIni: nowY, shioTahunIni: SHIO[nowIdx].n, ramalanTahunIni: rel };
+    var hub = hubunganShio(idx, nowIdx);
+    var jam = function (i) { var a = mod(i * 2 - 1, 24); return String(a).padStart(2, "0") + ".00–" + String(mod(a + 2, 24)).padStart(2, "0") + ".00"; };
+    var tabel = SHIO.map(function (x, i) { var h = hubunganShio(idx, i); return { i: i, n: x.n, hub: h, k: HUB_SHIO[h].k, skor: HUB_SHIO[h].skor }; });
+    var jamBaik = [idx, mod(idx + 4, 12), mod(idx + 8, 12), mod(1 - idx, 12)].map(function (i) { return SHIO[i].n + " " + jam(i); });
+    return { shio: s, idx: idx, detail: SHIO_DETAIL[idx], tahunIniRamal: RAMAL_TAHUN[hub], hubKini: HUB_SHIO[hub].k, skorKini: HUB_SHIO[hub].skor, tabel: tabel, jamBaik: jamBaik, jamLahir: jam(idx),
+      elemenArti: EL_TAHUN_ARTI[ASLI.EL_TAHUN[mod(y, 10)]], tahunImlek: y, elemen: EL_TAHUN[mod(y, 10)], imlekTanggal: imlek(dt.y), sebelumImlek: before, tahunIni: nowY, shioTahunIni: SHIO[nowIdx].n, ramalanTahunIni: rel };
   }
 
   // ---------- Bahasa ----------
   var TABEL = { ZODIAK: ZODIAK, ANGKA: ANGKA, TAHUN_PERSONAL: TAHUN_PERSONAL, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN,
     GAN: GAN, ZHI: ZHI, DAY_MASTER: DAY_MASTER, EL_SARAN: EL_SARAN, HARI: HARI, PASARAN: PASARAN, WATAK_HARI: WATAK_HARI, LAKU: LAKU,
     JODOH: JODOH, SHIO: SHIO, EL_TAHUN: EL_TAHUN, S: S,
-    LP_DETAIL: LP_DETAIL, PUNCAK: PUNCAK, TANTANGAN: TANTANGAN, BULAN_PERSONAL: BULAN_PERSONAL, SIKAP: SIKAP, KATA_KUNCI: KATA_KUNCI };
+    LP_DETAIL: LP_DETAIL, PUNCAK: PUNCAK, TANTANGAN: TANTANGAN, BULAN_PERSONAL: BULAN_PERSONAL, SIKAP: SIKAP, KATA_KUNCI: KATA_KUNCI,
+    HURUF: HURUF, HURUF_AKHIR: HURUF_AKHIR, KARMA: KARMA, GAIRAH: GAIRAH, DEWASA: DEWASA, PASARAN_DETAIL: PASARAN_DETAIL, HARI_DETAIL: HARI_DETAIL, SHIO_DETAIL: SHIO_DETAIL, HUB_SHIO: HUB_SHIO, RAMAL_TAHUN: RAMAL_TAHUN, EL_TAHUN_ARTI: EL_TAHUN_ARTI,
+    DM_DETAIL: DM_DETAIL, BZ_TEKS: BZ_TEKS, BZ_PERAN: BZ_PERAN, PILAR_MAKNA: PILAR_MAKNA, PASANGAN_EL: PASANGAN_EL };
   var ASLI = JSON.parse(JSON.stringify(TABEL));
   function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
   function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
 
-  var api = { setLang: setLang,
+  var api = { setLang: setLang, elemenKunci: elemenKunci,
     jdn: jdn, reduceNum: reduceNum, zodiak: zodiak, lifePath: lifePath, TAHUN_PERSONAL: TAHUN_PERSONAL,
-    namaNumerologi: namaNumerologi, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN, ANGKA: ANGKA,
-    bazi: bazi, weton: weton, jodohWeton: jodohWeton, imlek: imlek, shio: shio, EL_SARAN: EL_SARAN
+    namaNumerologi: namaNumerologi, kedewasaan: kedewasaan, LP_DETAIL: LP_DETAIL, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN, ANGKA: ANGKA,
+    bazi: bazi, weton: weton, jodohWeton: jodohWeton, wetonIdeal: wetonIdeal, wetonBerikut: wetonBerikut, imlek: imlek, shio: shio, EL_SARAN: EL_SARAN
   };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Ramalan = api;
 })(this);

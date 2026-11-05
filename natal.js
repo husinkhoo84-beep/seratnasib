@@ -240,6 +240,78 @@
     Mutabel: "Kualitas Mutabel kuat: Anda luwes dan mudah beradaptasi dengan perubahan."
   };
 
+  var VENUS_RASI = [
+    "Anda jatuh cinta dengan cepat dan terus terang. Anda suka mengejar, menyukai pasangan yang berani, dan bosan bila hubungan terlalu datar.",
+    "Cinta bagi Anda adalah kesetiaan dan kenyamanan. Anda romantis lewat sentuhan, hadiah, dan makanan enak, serta sangat setia.",
+    "Anda butuh pasangan yang enak diajak ngobrol. Rayuan lewat kata dan humor paling ampuh untuk Anda, dan Anda suka variasi.",
+    "Anda mencintai dengan lembut dan melindungi. Rasa aman, keluarga, dan kehangatan rumah adalah bahasa cinta Anda.",
+    "Anda mencintai dengan murah hati dan penuh drama manis. Anda ingin dipuja, dan Anda juga suka memanjakan pasangan.",
+    "Anda menunjukkan cinta lewat perhatian kecil dan bantuan nyata. Anda pemilih, tetapi sangat setia setelah yakin.",
+    "Anda mencintai keindahan, keseimbangan, dan sopan santun. Hubungan adalah pusat hidup Anda, dan Anda ingin pasangan yang setara.",
+    "Cinta Anda dalam, intens, dan total. Anda sangat setia, tetapi butuh kejujuran penuh. Cemburu bisa muncul bila merasa terancam.",
+    "Anda mencintai dengan riang dan bebas. Pasangan ideal adalah teman berpetualang yang juga sahabat diskusi.",
+    "Anda serius dalam cinta dan mencari hubungan jangka panjang. Anda menunjukkan sayang lewat tanggung jawab dan komitmen.",
+    "Anda butuh cinta yang juga persahabatan dan memberi ruang. Anda tertarik pada orang yang unik dan berpikiran terbuka.",
+    "Anda romantis, penuh empati, dan rela berkorban. Anda mencari cinta yang terasa seperti takdir. Jaga batas agar tidak terluka."
+  ];
+  var MARS_RASI = [
+    "Anda bertindak cepat dan langsung. Gairah dan keberanian besar, tetapi kesabaran perlu dilatih.",
+    "Anda bergerak pelan tetapi tidak bisa dihentikan. Ketekunan adalah senjata utama Anda.",
+    "Anda bertindak lewat kata dan ide. Energi Anda tersebar ke banyak hal sekaligus.",
+    "Anda bertindak untuk melindungi orang tersayang. Emosi menjadi bahan bakar sekaligus titik lemah Anda.",
+    "Anda bertindak dengan percaya diri dan ingin diakui. Semangat Anda menular ke orang lain.",
+    "Anda bekerja rapi, efisien, dan detail. Anda mengubah energi menjadi hasil kerja yang nyata.",
+    "Anda bertindak dengan menimbang dulu dan suka bekerja bersama. Anda menghindari konflik terbuka.",
+    "Tekad Anda sangat kuat dan strategis. Anda jarang menyerah dan tahu kapan harus menyerang.",
+    "Anda bertindak dengan optimis dan spontan. Petualangan dan tujuan besar membuat Anda bergairah.",
+    "Anda ambisius, disiplin, dan sangat efektif. Anda membangun karier selangkah demi selangkah.",
+    "Anda bergerak demi ide dan kebebasan. Anda suka cara baru dan tidak mau diatur secara kaku.",
+    "Energi Anda bekerja lewat intuisi dan empati. Anda lebih kuat saat berjuang untuk orang lain atau untuk karya seni."
+  ];
+  var R7_RASI = [
+    "Anda tertarik pada pasangan yang berani, mandiri, dan bersemangat.", "Anda tertarik pada pasangan yang tenang, setia, dan mapan.",
+    "Anda tertarik pada pasangan yang cerdas, lucu, dan komunikatif.", "Anda tertarik pada pasangan yang penyayang dan berorientasi keluarga.",
+    "Anda tertarik pada pasangan yang percaya diri dan berkarisma.", "Anda tertarik pada pasangan yang rapi, perhatian, dan bisa diandalkan.",
+    "Anda tertarik pada pasangan yang menawan, adil, dan berselera baik.", "Anda tertarik pada pasangan yang intens, setia, dan penuh misteri.",
+    "Anda tertarik pada pasangan yang optimis, jujur, dan suka berpetualang.", "Anda tertarik pada pasangan yang dewasa, ambisius, dan bertanggung jawab.",
+    "Anda tertarik pada pasangan yang unik, bebas, dan berwawasan luas.", "Anda tertarik pada pasangan yang lembut, artistik, dan penuh empati."
+  ];
+  var MC_RASI = [
+    "Karier terbaik Anda menuntut keberanian dan kepemimpinan: wirausaha, olahraga, militer, atau merintis bidang baru.",
+    "Karier terbaik Anda membangun nilai nyata: keuangan, properti, kuliner, seni, desain, atau kecantikan.",
+    "Karier terbaik Anda di dunia informasi: media, penulisan, pemasaran, penjualan, mengajar, atau transportasi.",
+    "Karier terbaik Anda memberi rasa aman bagi orang lain: perawatan, properti, kuliner, pendidikan, atau usaha keluarga.",
+    "Karier terbaik Anda membuat Anda tampil: hiburan, kepemimpinan, seni, politik, atau pekerjaan yang dikenal publik.",
+    "Karier terbaik Anda menuntut keahlian dan ketelitian: kesehatan, analisis, administrasi, teknologi, atau editing.",
+    "Karier terbaik Anda melibatkan kerja sama dan estetika: hukum, desain, diplomasi, konsultasi, atau hubungan masyarakat.",
+    "Karier terbaik Anda menyentuh hal yang dalam: riset, psikologi, investigasi, keuangan, kedokteran, atau manajemen krisis.",
+    "Karier terbaik Anda memperluas wawasan: pendidikan tinggi, penerbitan, hukum, pariwisata, atau bisnis internasional.",
+    "Karier terbaik Anda membangun reputasi jangka panjang: manajemen, pemerintahan, teknik, atau korporasi besar.",
+    "Karier terbaik Anda mengubah keadaan: teknologi, sains, kegiatan sosial, inovasi, atau organisasi komunitas.",
+    "Karier terbaik Anda melayani dan menginspirasi: seni, musik, film, penyembuhan, spiritual, atau kerja kemanusiaan."
+  ];
+  var SAT_RASI = [
+    "Pelajaran Anda: sabar memimpin dan tidak bertindak gegabah. Kesuksesan datang setelah belajar mengendalikan diri.",
+    "Pelajaran Anda: membangun rasa aman finansial dengan disiplin, bukan dengan rasa takut kekurangan.",
+    "Pelajaran Anda: berbicara dengan yakin dan fokus mendalami satu keahlian.",
+    "Pelajaran Anda: menyeimbangkan tanggung jawab keluarga dan ambisi pribadi.",
+    "Pelajaran Anda: berani tampil dan berkarya tanpa takut dinilai orang.",
+    "Pelajaran Anda: bekerja teliti tanpa menjadi perfeksionis yang menyiksa diri.",
+    "Pelajaran Anda: membangun hubungan dan kerja sama yang adil dan berkomitmen.",
+    "Pelajaran Anda: mempercayai orang lain dan mengelola keuangan bersama dengan bijak.",
+    "Pelajaran Anda: membangun keyakinan dan ilmu yang matang, bukan sekadar pendapat.",
+    "Pelajaran Anda: memegang tanggung jawab besar. Karier Anda kuat bila dibangun dengan sabar.",
+    "Pelajaran Anda: mewujudkan ide besar menjadi sesuatu yang nyata dan berguna bagi banyak orang.",
+    "Pelajaran Anda: memberi bentuk pada intuisi dan menjaga batas diri saat menolong orang."
+  ];
+  var JUP_RASI = [
+    "Keberuntungan datang saat Anda berani memulai dan mengambil inisiatif.", "Keberuntungan datang lewat kesabaran, tabungan, dan aset nyata.",
+    "Keberuntungan datang lewat jaringan, komunikasi, dan belajar hal baru.", "Keberuntungan datang lewat keluarga, rumah, dan rasa peduli.",
+    "Keberuntungan datang saat Anda tampil, berkarya, dan bermurah hati.", "Keberuntungan datang lewat kerja yang rapi dan pelayanan yang tulus.",
+    "Keberuntungan datang lewat pasangan, mitra, dan kerja sama.", "Keberuntungan datang lewat keuangan bersama, riset, dan keberanian berubah.",
+    "Keberuntungan datang lewat perjalanan, pendidikan, dan keyakinan.", "Keberuntungan datang lewat kerja keras dan reputasi yang baik.",
+    "Keberuntungan datang lewat komunitas, teman, dan ide inovatif.", "Keberuntungan datang lewat intuisi, kebaikan hati, dan kegiatan spiritual."
+  ];
   // potongan kalimat (diterjemahkan lewat setLang)
   var S = {
     diRasi: "{p} di {r}", diRumah: "{p} di rumah {n}", rumahN: ", rumah {n}", perkiraan: " (perkiraan)", retroTag: " (retrograde)",
@@ -256,7 +328,10 @@
     sinAsc: "{q} satu orang jatuh di Ascendant yang lain: ada rasa langsung cocok sejak pertemuan pertama.",
     hub: { sama: "sama", lengkap: "saling melengkapi", beda: "berbeda" },
     srAsc: "Ascendant tahunan {r}", srSun: "Fokus utama tahun ini ada pada urusan {u}.", srMoon: "Kebutuhan emosional tahun ini terasa dalam urusan {u}. ",
-    srJup: "Keberuntungan tahun ini paling mudah datang lewat {u}.", srSat: "Pelajaran dan kerja keras tahun ini ada pada {u}."
+    srJup: "Keberuntungan tahun ini paling mudah datang lewat {u}.", srSat: "Pelajaran dan kerja keras tahun ini ada pada {u}.",
+    rumah7: "Rumah 7 (pasangan) di {r}", mcJudul: "MC (puncak karier) di {r}",
+    r10: "Planet di rumah karier: {p}", r10Isi: "Planet di rumah 10 membuat karier dan nama baik menjadi bagian penting hidup Anda. Anda berpeluang dikenal luas lewat pekerjaan.",
+    r2: "Planet di rumah uang: {p}", r2Isi: "Planet di rumah 2 membuat urusan penghasilan dan harta sangat menonjol. Anda punya bakat menghasilkan uang dari keahlian sendiri."
   };
   function F(tpl, v) { return tpl.replace(/\{(\w+)\}/g, function (_, k) { return v[k] !== undefined ? v[k] : ""; }); }
 
@@ -281,6 +356,21 @@
     var maxKw = Object.keys(c.kualitas).sort(function (a, b) { return c.kualitas[b] - c.kualitas[a]; })[0];
     out.keseimbangan.push(ELEMEN_ARTI[maxEl], KUALITAS_ARTI[maxKw]);
     if (c.elemen[minEl] <= 2) out.keseimbangan.push(F(S.elKurang, { e: S.elNama[minEl], k: S.elKegiatan[minEl] }));
+    // cinta & karier
+    out.cinta = [
+      { judul: F(S.diRasi, { p: by.venus.n, r: by.venus.pos.nama }), isi: VENUS_RASI[by.venus.pos.rasi] },
+      { judul: F(S.diRasi, { p: by.mars.n, r: by.mars.pos.nama }), isi: MARS_RASI[by.mars.pos.rasi] }
+    ];
+    if (c.angles) out.cinta.push({ judul: F(S.rumah7, { r: RASI[(c.ascRasi + 6) % 12] }), isi: R7_RASI[(c.ascRasi + 6) % 12] });
+    out.karier = [];
+    if (c.angles) out.karier.push({ judul: F(S.mcJudul, { r: posisi(c.angles.mc).nama }), isi: MC_RASI[Math.floor(c.angles.mc / 30)] });
+    out.karier.push({ judul: F(S.diRasi, { p: by.saturn.n, r: by.saturn.pos.nama }), isi: SAT_RASI[by.saturn.pos.rasi] });
+    out.karier.push({ judul: F(S.diRasi, { p: by.jupiter.n, r: by.jupiter.pos.nama }), isi: JUP_RASI[by.jupiter.pos.rasi] });
+    if (c.angles) {
+      var r10 = c.planets.filter(function (p) { return p.rumah === 10; }), r2 = c.planets.filter(function (p) { return p.rumah === 2; });
+      if (r10.length) out.karier.push({ judul: F(S.r10, { p: r10.map(function (p) { return p.n; }).join(", ") }), isi: S.r10Isi });
+      if (r2.length) out.karier.push({ judul: F(S.r2, { p: r2.map(function (p) { return p.n; }).join(", ") }), isi: S.r2Isi });
+    }
     return out;
   }
 
@@ -466,7 +556,8 @@
   // ---------- Bahasa ----------
   var TABEL = { RASI: RASI, PLANETS: PLANETS, ASPEK: ASPEK, GAYA: GAYA, BULAN_RASI: BULAN_RASI, ASC_RASI: ASC_RASI, PLANET_MAKNA: PLANET_MAKNA, RUMAH: RUMAH,
     KATA: KATA, ASPEK_ARTI: ASPEK_ARTI, ELEMEN_ARTI: ELEMEN_ARTI, KUALITAS_ARTI: KUALITAS_ARTI, TR_TEMA: TR_TEMA, TR_LAMA: TR_LAMA, NADA: NADA,
-    PASANGAN: PASANGAN, SR_ASC: SR_ASC, S: S };
+    PASANGAN: PASANGAN, SR_ASC: SR_ASC, S: S,
+    VENUS_RASI: VENUS_RASI, MARS_RASI: MARS_RASI, R7_RASI: R7_RASI, MC_RASI: MC_RASI, SAT_RASI: SAT_RASI, JUP_RASI: JUP_RASI };
   var ASLI = JSON.parse(JSON.stringify(TABEL));
   function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
   function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }

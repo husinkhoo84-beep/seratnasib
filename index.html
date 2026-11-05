@@ -220,6 +220,19 @@ h3.sec { font-family: var(--f-display); font-size: 24px; margin: 26px 0 12px }
 .untung b { display: block; font-size: 16px; color: var(--ink); margin-top: 2px; font-weight: 600 }
 @media (max-width: 720px) { .puncak, .untung { grid-template-columns: repeat(2, minmax(0, 1fr)) } }
 @media (max-width: 480px) { .puncak { grid-template-columns: 1fr } }
+.inklusi { display: grid; grid-template-columns: repeat(9, minmax(0, 1fr)); gap: 6px }
+.inklusi div { border: 1px solid var(--line); border-radius: 8px; text-align: center; padding: 8px 2px }
+.inklusi span { display: block; font-size: 20px; color: var(--nila) }
+.inklusi b { font-size: 12px; color: var(--muted); font-weight: 600 }
+.inklusi .max { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface)) }
+.inklusi .nol { border-style: dashed; opacity: .7 }
+.tabel-shio { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px }
+.tabel-shio div { border-radius: 8px; padding: 10px 8px; background: var(--nila-soft); min-width: 0 }
+.tabel-shio b { display: block; font-size: 14px } .tabel-shio span { font-size: 12px; color: var(--muted) }
+.tabel-shio .sk5 { background: color-mix(in srgb, var(--good) 16%, var(--surface)) } .tabel-shio .sk1 { background: color-mix(in srgb, var(--bad) 16%, var(--surface)) }
+.tabel-shio .sk2 { background: color-mix(in srgb, var(--warn) 14%, var(--surface)) }
+@media (max-width: 720px) { .tabel-shio { grid-template-columns: repeat(3, minmax(0, 1fr)) } }
+@media (max-width: 480px) { .inklusi { grid-template-columns: repeat(5, minmax(0, 1fr)) } }
 @media (max-width: 820px) { .natal { grid-template-columns: 1fr } }
 
 /* Langganan */
@@ -363,6 +376,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     "z.jamTak": "jam tidak diketahui", "z.harmonis": "Harmonis", "z.tegang": "Tegang",
     "z.titik": "Titik", "z.derajat": "Derajat", "z.rasi": "Rasi", "z.rumah": "Rumah", "z.planet": "Planet", "z.puncak": "Puncak langit",
     "z.inti": "Inti kepribadian", "z.watak": "Watak {z}", "z.pribadi": "Planet pribadi", "z.aspek": "Aspek utama",
+    "z.cintaJ": "Cinta dan hubungan", "z.karierS": "karier", "z.cocokJ": "Zodiak yang cocok", "z.warnaJ": "Warna keberuntungan",
     "z.seimbang": "Keseimbangan", "z.elkual": "Elemen dan kualitas", "z.cinta": "Cinta", "z.karier": "Karier dan rezeki",
     "z.note": "Posisi planet dihitung dengan rumus astronomi (zodiak tropikal) untuk waktu lahir di zona waktu {k}. Rumah memakai sistem Whole Sign. ",
     "z.noteTanpa": "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan.",
@@ -410,21 +424,34 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     "nm.beda": "Angka nama {a} dan angka jalan hidup {b}. ",
     "nm.satu": "Keduanya satu kelompok getaran, sehingga saling menguatkan.",
     "nm.lain": "Keduanya berbeda getaran. Nama memberi warna tambahan yang melengkapi bakat bawaan Anda.",
+    "nm.dewasa": "Angka kedewasaan {n}", "nm.bakatJ": "Bakat yang dibawa nama Anda", "nm.kuat": "Kekuatan nama", "nm.karier": "Karier yang didukung nama",
+    "nm.cinta": "Nama dan cinta", "nm.jaga": "Yang perlu dijaga", "nm.hurufJ": "Huruf pertama dan terakhir",
+    "nm.awal": "Huruf pertama {h}: cara Anda memulai", "nm.akhir": "Huruf terakhir {h}: cara Anda menyelesaikan",
+    "nm.peta": "Peta angka dalam nama", "nm.petaLead": "Berapa kali setiap angka 1–9 muncul di nama Anda. Kotak emas paling sering muncul, kotak putus-putus tidak muncul sama sekali.",
+    "nm.gairah": "Gairah tersembunyi", "nm.karma": "Pelajaran hidup (angka yang hilang)", "nm.karmaNol": "Semua angka 1–9 muncul di nama Anda. Ini tanda pribadi yang seimbang dan serba bisa.",
     "nm.note": "Huruf bertanda garis emas adalah vokal. Nilai huruf memakai tabel Pythagoras (A=1 sampai I=9, lalu berulang). Tanda baca dan gelar diabaikan.",
     "b.judul": "Empat Pilar Ba Zi", "b.sub": "Elemen diri (Day Master): {n}, {el} {yy}", "b.anda": " · Anda",
     "b.watak": "Watak elemen diri", "b.seimbang": "Keseimbangan lima elemen",
     "b.dominan": "Elemen dominan", "b.dominanIsi": "{e}. Sifat elemen ini paling menonjol dalam keseharian Anda.",
     "b.tambah": "Elemen yang perlu ditambah",
+    "b.kekuatan": "Kekuatan elemen diri", "b.kuat": "Kuat", "b.lembut": "Lembut", "b.skor": "{a} dari {b} poin elemen mendukung elemen diri Anda.",
+    "b.baik": "Elemen pembawa keberuntungan", "b.caranya": "Cara menguatkannya:", "b.pilarJ": "Makna empat pilar", "b.istana": "Istana pasangan ({s})",
     "b.note": "Pilar tahun berganti pada Li Chun (sekitar 4 Februari) dan pilar bulan mengikuti 12 batas musim matahari. Untuk kelahiran 1 hari di sekitar batas musim, hasil bisa bergeser. ",
     "b.noteJam": "Pilih jam lahir untuk melihat pilar jam.",
     "w.hari": "Hari", "w.pasaran": "Pasaran", "w.jumlah": "Jumlah neptu",
     "w.watakHari": "Watak hari {h}", "w.watakPas": "Watak pasaran {p}", "w.laku": "Laku neptu {n}",
     "w.jodoh": "Cek jodoh weton", "w.tglPas": "Tanggal lahir pasangan", "w.hitung": "Hitung kecocokan",
     "w.isiTgl": "Isi tanggal lahir pasangan.", "w.hasil": "Anda {a} ({na}) + pasangan {b} ({nb}) = {t}",
+    "w.naungan": "Naungan hari {h}", "w.hidup": "Cinta, karier, dan rezeki", "w.rezeki": "Rezeki",
+    "w.ideal": "Weton pasangan paling cocok", "w.idealLead": "Dihitung dari neptu Anda ({n}) ditambah neptu pasangan, menurut primbon perjodohan. Ini weton yang jatuh pada golongan terbaik.",
+    "w.wetonan": "Wetonan Anda berikutnya", "w.berikut": "Berikutnya", "w.lalu": "+{n} hari",
+    "w.wetonanLead": "Weton {w} berulang setiap 35 hari. Dalam tradisi Jawa, hari ini baik untuk syukuran kecil, puasa weton, berdoa, atau memulai hal penting.",
     "w.note": "Weton dihitung dari siklus 7 hari dan 5 pasaran. Ingat, hari Jawa berganti saat matahari terbenam, sehingga orang yang lahir malam hari kadang memakai weton hari berikutnya.",
     "s.judul": "Shio {s} {e}", "s.tahun": "Tahun Imlek {y}", "s.imlek": "Imlek tahun {y} jatuh pada <b>{tgl}</b>",
     "s.sebelum": "Anda lahir <b>sebelum</b> Imlek, jadi ikut shio tahun sebelumnya", "s.setelah": "Anda lahir <b>setelah</b> Imlek",
     "s.watak": "Watak", "s.cocok": "Cocok dengan", "s.hindari": "Kurang cocok (ciong)", "s.untung": "Peruntungan {y} (tahun {s})",
+    "s.karierTh": "Karier", "s.elemenJ": "Elemen tahun lahir: {e}", "s.angka": "Angka keberuntungan", "s.arah": "Arah baik", "s.jamLahir": "Jam shio Anda",
+    "s.jamBaik": "Jam-jam baik untuk memulai urusan penting:", "s.tabel": "Kecocokan dengan 12 shio",
     "s.note": "Shio ditentukan oleh tahun Imlek, bukan 1 Januari. Tanggal Imlek dihitung dari fase bulan baru waktu Beijing.",
     "g.terbuka": "{n} dari 6 bacaan terbuka", "g.lanjut": "Langkah berikutnya", "g.pilih": "Pilih bacaan yang ingin Anda buka",
     "g.pilihP": "Setiap bacaan dibuka satu per satu dengan menonton iklan singkat. Iklan inilah yang membuat Serat Nasib tetap gratis.",
@@ -607,7 +634,9 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         '<h3 class="sec">' + t("z.inti") + '</h3><div class="grid2">' + list(an.inti) + blk(t("z.watak", { z: z.n }), z.sifat) + '</div>' +
         '<h3 class="sec">' + t("z.pribadi") + '</h3><div class="grid2">' + list(an.planet) + '</div>' +
         (asp ? '<h3 class="sec">' + t("z.aspek") + '</h3><div class="grid2">' + asp + '</div>' : "") +
-        '<h3 class="sec">' + t("z.seimbang") + '</h3><div class="grid2">' + blk(t("z.elkual"), an.keseimbangan.join(" ")) + blk(t("z.cinta"), z.cinta) + blk(t("z.karier"), z.karier) + '</div>' +
+        '<h3 class="sec">' + t("z.cintaJ") + '</h3><div class="grid2">' + list(an.cinta) + blk(t("z.watak", { z: z.n }) + " · " + t("z.cinta"), z.cinta) + '</div>' +
+        '<h3 class="sec">' + t("z.karier") + '</h3><div class="grid2">' + list(an.karier) + blk(t("z.watak", { z: z.n }) + " · " + t("z.karierS"), z.karier) + '</div>' +
+        '<h3 class="sec">' + t("z.seimbang") + '</h3><div class="grid2">' + blk(t("z.elkual"), an.keseimbangan.join(" ")) + blk(t("z.cocokJ"), z.cocok + ". " + t("z.warnaJ") + ": " + z.warna + ".") + '</div>' +
         note(t("z.note", { k: d.kota.n }) + (d.jam === null ? t("z.noteTanpa") : t("z.noteJam"))));
     },
     angka: function (d) {
@@ -641,6 +670,9 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         for (var i = 0; i < w.length; i++) html += '<span class="' + (vow(w, i) ? "v" : "") + '">' + w[i] + '<small>' + (((w.charCodeAt(i) - 65) % 9) + 1) + '</small></span>';
         if (wi < words.length - 1) html += '<span class="gap"></span>';
       });
+      var ex = R.LP_DETAIL[n.ekspresi], dw = R.kedewasaan(d.lp.angka, n.ekspresi);
+      var maxI = Math.max.apply(null, Object.values(n.inklusi)) || 1;
+      var ink = Object.keys(n.inklusi).map(function (k) { var c = n.inklusi[k]; return '<div class="' + (c === 0 ? "nol" : c === maxI ? "max" : "") + '"><span class="mono">' + k + '</span><b>' + c + '×</b></div>'; }).join("");
       return head(n.ekspresi, t("nm.judul"), esc(d.nama)) +
         '<div class="letters" aria-label="' + t("nm.huruf") + '">' + html + '</div>' +
         '<div class="num-trio">' +
@@ -648,11 +680,18 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
           '<div class="block"><h3>' + t("nm.jiwa") + '</h3><div class="big">' + n.jiwa + '</div><p>' + R.JIWA[n.jiwa] + '</p></div>' +
           '<div class="block"><h3>' + t("nm.kepribadian") + '</h3><div class="big">' + n.kepribadian + '</div><p>' + R.KEPRIBADIAN[n.kepribadian] + '</p></div>' +
         '</div>' +
-        blk(t("nm.selaras"), n.ekspresi === d.lp.angka ? t("nm.sama", { n: d.lp.angka }) :
+        '<div class="grid2">' + blk(t("nm.selaras"), n.ekspresi === d.lp.angka ? t("nm.sama", { n: d.lp.angka }) :
           t("nm.beda", { a: n.ekspresi, b: d.lp.angka }) + (Math.abs(R.reduceNum(n.ekspresi) - R.reduceNum(d.lp.angka)) % 3 === 0 ? t("nm.satu") : t("nm.lain"))) +
+          blk(t("nm.dewasa", { n: dw.n }), dw.isi) + '</div>' +
+        '<h3 class="sec">' + t("nm.bakatJ") + '</h3><div class="grid2">' + blk(t("nm.kuat"), ex.kekuatan) + blk(t("nm.karier"), ex.karier) + blk(t("nm.cinta"), ex.cinta) + blk(t("nm.jaga"), ex.kelemahan) + '</div>' +
+        '<h3 class="sec">' + t("nm.hurufJ") + '</h3><div class="grid2">' + blk(t("nm.awal", { h: n.awal }), n.awalIsi) + blk(t("nm.akhir", { h: n.akhir }), n.akhirIsi) + '</div>' +
+        '<h3 class="sec">' + t("nm.peta") + '</h3><p class="sub-lead">' + t("nm.petaLead") + '</p><div class="inklusi">' + ink + '</div>' +
+        '<div class="grid2" style="margin-top:18px">' + blk(t("nm.gairah"), n.gairah.map(function (g) { return '<b>' + g.n + '</b>: ' + g.isi; }).join(" ")) +
+          blk(t("nm.karma"), n.karma.length ? n.karma.map(function (k) { return '<b>' + k.n + '</b>: ' + k.isi; }).join(" ") : t("nm.karmaNol")) + '</div>' +
         note(t("nm.note"));
     },
     bazi: function (d) {
+      var ELK = function (e) { var m = R.elemenKunci(); return m[e] || e; };
       var b = d.bz, order = b.pilar.slice().reverse(); // tampilan tradisional: jam, hari, bulan, tahun
       var max = Math.max.apply(null, Object.values(b.elemen)) || 1;
       var cols = order.map(function (p) {
@@ -669,24 +708,41 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         '<div class="block"><h3>' + t("b.seimbang") + '</h3><div class="bars">' + bars + '</div></div>' +
         blk(t("b.dominan"), t("b.dominanIsi", { e: b.kuat.join(", ") })) +
         blk(t("b.tambah"), b.saran.join(". ") + ".") + '</div>' +
+        '<h3 class="sec">' + t("b.kekuatan") + '</h3><div class="verdict s' + (b.kuatDM ? 5 : 3) + '"><p><span class="pill">' + (b.kuatDM ? t("b.kuat") : t("b.lembut")) + '</span> ' + t("b.skor", { a: b.dukung, b: b.semua }) + '</p><p style="margin-top:6px">' + b.kekuatanIsi + '</p></div>' +
+        '<h3 class="sec">' + t("b.baik") + '</h3><div class="grid2">' + b.baik.map(function (x) { return blk(x.e, x.isi + " " + (R.EL_SARAN[ELK(x.e)] ? t("b.caranya") + " " + R.EL_SARAN[ELK(x.e)] + "." : "")); }).join("") + '</div>' +
+        '<h3 class="sec">' + t("w.hidup") + '</h3><div class="grid2">' + blk(t("n.karier"), b.dmDetail.karier) + blk(t("z.cinta"), b.dmDetail.cinta) + blk(t("n.uang"), b.dmDetail.uang) + blk(t("n.sehat"), b.dmDetail.sehat) + '</div>' +
+        '<h3 class="sec">' + t("b.pilarJ") + '</h3><div class="grid2">' + b.pilarMakna.map(function (m) { var pp = b.pilar.filter(function (q) { return q.key === m.key; })[0]; return blk(m.label + " · " + pp.g.h + pp.z.h + " " + pp.g.n + " " + pp.z.n, m.isi); }).join("") +
+          blk(t("b.istana", { s: b.pasanganShio }), b.pasangan) + '</div>' +
         note(t("b.note") + (d.jam === null ? t("b.noteJam") : ""));
     },
     weton: function (d) {
       var w = d.wt;
       return head("☾", "Weton " + w.wetonLabel, "Neptu " + w.hari.neptu + " + " + w.pasaran.neptu + " = " + w.neptu) +
         '<div class="facts"><div>' + t("w.hari") + ' <b>' + w.hari.n + '</b> (neptu ' + w.hari.neptu + ')</div><div>' + t("w.pasaran") + ' <b>' + w.pasaran.n + '</b> (neptu ' + w.pasaran.neptu + ')</div><div>' + t("w.jumlah") + ' <b class="mono">' + w.neptu + '</b></div></div>' +
-        '<div class="grid2">' + blk(t("w.watakHari", { h: w.hari.n }), w.watakHari) + blk(t("w.watakPas", { p: w.pasaran.n }), w.pasaran.watak) + blk(t("w.laku", { n: w.neptu }), w.laku) + '</div>' +
+        '<div class="grid2">' + blk(t("w.watakHari", { h: w.hari.n }), w.watakHari) + blk(t("w.watakPas", { p: w.pasaran.n }), w.pasaran.watak) + blk(t("w.laku", { n: w.neptu }), w.laku) + blk(t("w.naungan", { h: w.hari.n }), w.hariDetail) + '</div>' +
+        '<h3 class="sec">' + t("w.hidup") + '</h3><div class="grid2">' + blk(t("z.cinta"), w.pasDetail.cinta) + blk(t("n.karier"), w.pasDetail.karier) + blk(t("w.rezeki"), w.pasDetail.rezeki) + '</div>' +
+        '<h3 class="sec">' + t("w.ideal") + '</h3><p class="sub-lead">' + t("w.idealLead", { n: w.neptu }) + '</p><div class="grid2">' +
+          R.wetonIdeal(d.dt).map(function (g) { return '<div class="block"><h3><span class="pill">' + g.k + '</span></h3><p><b>' + g.weton.join(", ") + '</b></p><p class="muted" style="margin-top:4px">' + g.b + '</p></div>'; }).join("") + '</div>' +
+        '<h3 class="sec">' + t("w.wetonan") + '</h3><div class="untung">' +
+          R.wetonBerikut(d.dt, { y: hariIni.getFullYear(), m: hariIni.getMonth() + 1, d: hariIni.getDate() }, 4).map(function (x, i) { return '<div>' + (i === 0 ? t("w.berikut") : t("w.lalu", { n: i * 35 })) + '<b>' + fmt(x) + '</b></div>'; }).join("") + '</div>' +
+        '<p class="sub-lead" style="margin-top:10px">' + t("w.wetonanLead", { w: w.wetonLabel }) + '</p>' +
         '<div class="jodoh"><h3 style="font-size:24px">' + t("w.jodoh") + '</h3>' +
         '<form id="jodoh-form"><div class="field"><label for="tgl-pasangan">' + t("w.tglPas") + '</label><input id="tgl-pasangan" type="date" min="1900-01-01" max="2100-12-31" value="' + state.tglJodoh + '"></div>' +
         '<button class="primary" type="submit">' + t("w.hitung") + '</button></form><div id="jodoh-hasil"></div></div>' +
         note(t("w.note"));
     },
     shio: function (d) {
-      var s = d.sh;
+      var s = d.sh, x = s.detail, rm = s.tahunIniRamal;
       return head(s.shio.n.charAt(0), t("s.judul", { s: s.shio.n, e: s.elemen }), t("s.tahun", { y: s.tahunImlek })) +
         '<div class="facts"><div>' + t("s.imlek", { y: d.dt.y, tgl: fmt(s.imlekTanggal) }) + '</div><div>' + (s.sebelumImlek ? t("s.sebelum") : t("s.setelah")) + '</div></div>' +
         '<div class="grid2">' + blk(t("s.watak"), s.shio.sifat) + blk(t("s.cocok"), s.shio.cocok) + blk(t("s.hindari"), s.shio.hindari) +
-        blk(t("s.untung", { y: s.tahunIni, s: s.shioTahunIni }), s.ramalanTahunIni) + '</div>' +
+        blk(t("s.elemenJ", { e: s.elemen }), s.elemenArti) + '</div>' +
+        '<h3 class="sec">' + t("w.hidup") + '</h3><div class="grid2">' + blk(t("z.cinta"), x.cinta) + blk(t("n.karier"), x.karier) + blk(t("n.uang"), x.uang) + blk(t("n.sehat"), x.sehat) + '</div>' +
+        '<h3 class="sec">' + t("s.untung", { y: s.tahunIni, s: s.shioTahunIni }) + '</h3><div class="verdict s' + s.skorKini + '"><p><span class="pill">' + s.hubKini + '</span> ' + rm.umum + '</p></div>' +
+        '<div class="grid2" style="margin-top:16px">' + blk(t("s.karierTh"), rm.karier) + blk(t("z.cinta"), rm.cinta) + blk(t("n.uang"), rm.uang) + blk(t("n.sehat"), rm.sehat) + '</div>' +
+        '<h3 class="sec">' + t("n.untung") + '</h3><div class="untung"><div>' + t("s.angka") + '<b>' + x.angka + '</b></div><div>' + t("n.warna") + '<b>' + x.warna + '</b></div><div>' + t("s.arah") + '<b>' + x.arah + '</b></div><div>' + t("s.jamLahir") + '<b>' + s.jamLahir + '</b></div></div>' +
+        '<p class="sub-lead" style="margin-top:10px">' + t("s.jamBaik") + ' ' + s.jamBaik.join(" · ") + '</p>' +
+        '<h3 class="sec">' + t("s.tabel") + '</h3><div class="tabel-shio">' + s.tabel.map(function (r) { return '<div class="sk' + r.skor + '"><b>' + r.n + '</b><span>' + r.k + '</span></div>'; }).join("") + '</div>' +
         note(t("s.note"));
     }
   };
