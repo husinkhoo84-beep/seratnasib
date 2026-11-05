@@ -259,37 +259,41 @@
   };
 
   // ---------- Segitiga Power of Number ----------
-  // baris atas: 8 angka tanggal lahir (DD MM YYYY), dijumlahkan berpasangan menjadi 4 angka, lalu turun 3, 2, sampai 1 angka inti.
+  // Atas: DD MM YY YY. Baris 1: tiap pasangan dijumlah (A B C D). Baris 2: E = A+B, F = C+D. Ujung: angka akar = E+F.
+  // Samping kiri: A+E dan B+E. Samping kanan: C+F dan D+F. Bawah: akar+F dan akar+E, lalu jumlah keduanya.
   function satuDigit(n) { while (n > 9) n = digitSum(n); return n; }
   function segitiga(dt) {
-    var top = (String(dt.d).padStart(2, "0") + String(dt.m).padStart(2, "0") + String(dt.y).padStart(4, "0")).split("").map(Number);
-    var r1 = [0, 2, 4, 6].map(function (i) { return satuDigit(top[i] + top[i + 1]); });
-    var rows = [r1];
-    while (rows[rows.length - 1].length > 1) { var p = rows[rows.length - 1], n = []; for (var i = 0; i < p.length - 1; i++) n.push(satuDigit(p[i] + p[i + 1])); rows.push(n); }
-    var semua = [].concat.apply([], rows), hit = {};
-    for (var k = 1; k <= 9; k++) hit[k] = 0;
-    semua.forEach(function (x) { if (x) hit[x]++; });
+    var dd = String(dt.d).padStart(2, "0"), mm = String(dt.m).padStart(2, "0"), yy = String(dt.y).padStart(4, "0");
+    var pas = [dd, mm, yy.slice(0, 2), yy.slice(2)];
+    var top = (dd + mm + yy).split("").map(Number);
+    var A = satuDigit(top[0] + top[1]), B = satuDigit(top[2] + top[3]), C = satuDigit(top[4] + top[5]), D = satuDigit(top[6] + top[7]);
+    var E = satuDigit(A + B), F = satuDigit(C + D), J = satuDigit(E + F);
+    var K1 = satuDigit(A + E), K2 = satuDigit(B + E), N1 = satuDigit(C + F), N2 = satuDigit(D + F);
+    var P = satuDigit(J + F), Q = satuDigit(J + E), Rr = satuDigit(P + Q);
+    var val = { A: A, B: B, C: C, D: D, E: E, F: F, J: J, K1: K1, K2: K2, N1: N1, N2: N2, P: P, Q: Q, R: Rr };
+    var hit = {}; for (var k = 1; k <= 9; k++) hit[k] = 0;
+    Object.keys(val).forEach(function (x) { if (val[x]) hit[val[x]]++; });
     var mx = Math.max.apply(null, Object.keys(hit).map(function (k) { return hit[k]; }));
-    var posisi = [
-      { id: "A", n: rows[0][0] }, { id: "B", n: rows[0][1] }, { id: "C", n: rows[0][2] }, { id: "D", n: rows[0][3] },
-      { id: "E", n: rows[1][0] }, { id: "F", n: rows[1][1] }, { id: "G", n: rows[1][2] },
-      { id: "H", n: rows[2][0] }, { id: "I", n: rows[2][1] }, { id: "J", n: rows[3][0] }
-    ].map(function (p) { return { id: p.id, n: p.n, makna: POSISI_SEG[p.id], sifat: SIFAT_DIGIT[p.n] }; });
-    return { top: top, rows: rows, inti: rows[3][0], posisi: posisi, hitung: hit,
+    var posisi = ["A", "B", "C", "D", "E", "F", "K1", "K2", "N1", "N2", "P", "Q", "R", "J"].map(function (id) { return { id: id, n: val[id], makna: POSISI_SEG[id], sifat: SIFAT_DIGIT[val[id]] }; });
+    return { pasangan: pas, top: top, val: val, inti: J, posisi: posisi, hitung: hit,
       dominan: Object.keys(hit).filter(function (k) { return hit[k] === mx; }).map(Number),
       hilang: Object.keys(hit).filter(function (k) { return hit[k] === 0; }).map(Number) };
   }
   var POSISI_SEG = {
     A: "Dari tanggal lahir: karakter dasar dan cara Anda memandang diri sendiri.",
     B: "Dari bulan lahir: sisi perasaan, keluarga, dan hubungan dekat.",
-    C: "Dari dua angka awal tahun: pengaruh lingkungan dan generasi.",
-    D: "Dari dua angka akhir tahun: bakat bawaan yang dibawa dari keluarga.",
-    E: "Gabungan diri dan perasaan: kepribadian di masa muda.",
-    F: "Gabungan perasaan dan lingkungan: cara Anda bergaul dan bekerja sama.",
-    G: "Gabungan lingkungan dan bakat: arah karier dan rezeki.",
-    H: "Sisi dalam: kekuatan batin dan dorongan tersembunyi.",
-    I: "Sisi luar: kesan yang Anda tampilkan kepada dunia.",
-    J: "Angka inti: kunci hidup dan misi utama Anda."
+    C: "Dari abad kelahiran: pengaruh lingkungan dan generasi.",
+    D: "Dari tahun kelahiran: bakat bawaan dan kesempatan hidup.",
+    E: "Gabungan tanggal dan bulan: kepribadian dan masa muda (sampai sekitar usia 30).",
+    F: "Gabungan abad dan tahun: masa dewasa, karier, dan cara Anda menghadapi dunia.",
+    K1: "Samping kiri atas: hubungan dengan ayah, figur pemimpin, dan atasan.",
+    K2: "Samping kiri bawah: hubungan dengan ibu, keluarga, dan rumah.",
+    N1: "Samping kanan atas: hubungan dengan teman, rekan kerja, dan jaringan.",
+    N2: "Samping kanan bawah: hubungan dengan pasangan dan mitra usaha.",
+    P: "Bawah kiri: sisi bawah sadar, kebiasaan yang muncul saat tertekan.",
+    Q: "Bawah kanan: sisi bawah sadar, cara Anda bereaksi secara spontan.",
+    R: "Angka paling bawah: potensi tersembunyi yang matang di paruh kedua hidup.",
+    J: "Angka akar: kunci hidup dan misi utama Anda."
   };
   var SIFAT_DIGIT = {
     0: "Angka 0: potensi terbuka yang bisa diarahkan ke mana saja, tetapi perlu tujuan yang jelas.",

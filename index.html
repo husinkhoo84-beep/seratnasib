@@ -228,12 +228,14 @@ h3.sec { font-family: var(--f-display); font-size: 24px; margin: 26px 0 12px }
 .inklusi .nol { border-style: dashed; opacity: .7 }
 .seg-wrap { max-width: 460px }
 .seg { width: 100%; height: auto; display: block }
-.seg-bg { fill: var(--nila-soft); stroke: var(--line) }
-.seg-l { stroke: var(--muted); stroke-width: 1; opacity: .5 }
-.seg-top { font: 600 17px var(--f-mono); fill: var(--ink); text-anchor: middle }
-.seg-c { fill: var(--surface); stroke: var(--nila); stroke-width: 1.5 } .seg-c.inti { fill: var(--accent); stroke: var(--accent) }
-.seg-n { font: 600 18px var(--f-mono); fill: var(--nila); text-anchor: middle } .seg-n.inti { fill: #fff; font-size: 21px }
-.seg-h { font: 600 10px var(--f-body); fill: var(--accent-ink) }
+.seg-tri { fill: none; stroke: var(--ink); stroke-width: 3; stroke-linejoin: round }
+.seg-tip { fill: #f5e61a }
+.seg-l { stroke: var(--ink); stroke-width: 1.2 } .seg-base { stroke: var(--ink); stroke-width: 1 }
+.seg-top { font: 500 30px var(--f-body); fill: var(--ink); text-anchor: middle }
+.seg-n { font: 500 34px var(--f-body); fill: var(--ink); text-anchor: middle; dominant-baseline: middle }
+.seg-n.inti { fill: #d0201a; font-weight: 600 }
+.seg-s { font: 500 32px var(--f-body); fill: var(--ink); text-anchor: middle; dominant-baseline: middle }
+.seg-h { font: 600 11px var(--f-body); fill: var(--accent-ink) }
 .gl-wrap { overflow-x: auto }
 .gl { display: grid; grid-template-columns: repeat(3, minmax(64px, 96px)) minmax(96px, 150px); gap: 6px; width: max-content; max-width: 100% }
 .gl-c { position: relative; aspect-ratio: 1; border: 1.5px solid var(--nila); border-radius: 8px; display: grid; place-items: center; background: var(--surface) }
@@ -425,8 +427,12 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     "n.dari": "Angka jalan hidup dari {tgl}",
     "n.rumus": "Rumus", "n.hariLahir": "Angka hari lahir", "n.tahunP": "Tahun personal {y}",
     "n.makna": "Makna angka {n}", "n.tahunPj": "Tahun personal {n} ({y})", "n.bakat": "Bakat dari hari lahir",
-    "seg.judul": "Segitiga Power of Number", "seg.lead": "Delapan angka tanggal lahir Anda ({t}) di baris atas dijumlahkan berpasangan, lalu terus turun sampai tersisa satu angka inti di ujung bawah. Huruf kecil menunjukkan posisi tiap angka.",
-    "seg.inti": "Angka inti {n}", "seg.pos": "Posisi {h} · angka {n}", "seg.dominan": "Angka paling kuat dalam segitiga: {n}", "seg.hilang": "Angka yang tidak muncul",
+    "seg.judul": "Segitiga Power of Number", "seg.lead": "Tanggal lahir Anda ({t}) dijumlahkan per pasangan, lalu turun sampai angka akar di ujung kuning. Angka di samping kiri dan kanan serta angka di bawah garis dihitung dari angka di dalam segitiga.",
+    "seg.inti": "Angka akar {n}", "seg.pos": "{h} · angka {n}",
+    "seg.dalam": "Angka di dalam segitiga", "seg.samping": "Angka samping", "seg.bawah": "Angka bawah",
+    "seg.lbl.A": "Tanggal (A)", "seg.lbl.B": "Bulan (B)", "seg.lbl.C": "Abad (C)", "seg.lbl.D": "Tahun (D)", "seg.lbl.E": "Masa muda (E)", "seg.lbl.F": "Masa dewasa (F)",
+    "seg.lbl.K1": "Kiri luar", "seg.lbl.K2": "Kiri dalam", "seg.lbl.N1": "Kanan dalam", "seg.lbl.N2": "Kanan luar",
+    "seg.lbl.P": "Bawah kiri", "seg.lbl.Q": "Bawah kanan", "seg.lbl.R": "Paling bawah", "seg.lbl.J": "Akar", "seg.dominan": "Angka paling kuat dalam segitiga: {n}", "seg.hilang": "Angka yang tidak muncul",
     "seg.lengkap": "Semua angka 1–9 muncul di segitiga Anda. Energi Anda lengkap dan seimbang.",
     "g.judul": "Bagan kotak Pythagoras", "g.lead": "Angka tanggal lahir Anda ({d}) disusun dalam kotak Pythagoras. Angka di samping adalah jumlah per baris, angka di bawah jumlah per kolom. Garis hijau lengkap, garis merah kosong.",
     "g.pikiran": "Pikiran", "g.perasaan": "Perasaan", "g.fisik": "Fisik", "g.rencana": "Rencana", "g.kemauan": "Kemauan", "g.tindakan": "Tindakan", "g.tekad": "Tekad", "g.spiritual": "Spiritual",
@@ -783,28 +789,32 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   };
   // segitiga Power of Number (SVG)
   function segitigaHTML(dt) {
-    var g = R.segitiga(dt), W = 360, xs = [], ys = [26, 86, 146, 206, 266];
-    for (var i = 0; i < 8; i++) xs.push(28 + i * 43.4);
-    var pos = [[0, 2, 4, 6].map(function (i) { return (xs[i] + xs[i + 1]) / 2; })];
-    while (pos[pos.length - 1].length > 1) { var p = pos[pos.length - 1], n = []; for (var k = 0; k < p.length - 1; k++) n.push((p[k] + p[k + 1]) / 2); pos.push(n); }
-    var huruf = [["A", "B", "C", "D"], ["E", "F", "G"], ["H", "I"], ["J"]];
-    var svg = '<svg class="seg" viewBox="0 0 ' + W + ' 300" role="img" aria-label="' + t("seg.judul") + '">';
-    svg += '<path d="M8 6 H' + (W - 8) + ' L' + (W / 2) + ' 296 Z" class="seg-bg"/>';
-    // garis penghubung
-    for (var i2 = 0; i2 < 4; i2++) { [2 * i2, 2 * i2 + 1].forEach(function (j) { svg += '<line x1="' + xs[j] + '" y1="' + (ys[0] + 8) + '" x2="' + pos[0][i2] + '" y2="' + (ys[1] - 18) + '" class="seg-l"/>'; }); }
-    for (var r = 1; r < pos.length; r++) pos[r].forEach(function (x, k) { [k, k + 1].forEach(function (j) { svg += '<line x1="' + pos[r - 1][j] + '" y1="' + (ys[r] + 18) + '" x2="' + x + '" y2="' + (ys[r + 1] - 18) + '" class="seg-l"/>'; }); });
-    g.top.forEach(function (dgt, i) { svg += '<text x="' + xs[i] + '" y="' + (ys[0] + 6) + '" class="seg-top">' + dgt + '</text>'; });
-    g.rows.forEach(function (row, r) { row.forEach(function (v, k) {
-      var cx = pos[r][k], cy = ys[r + 1], inti = r === 3;
-      svg += '<circle cx="' + cx + '" cy="' + cy + '" r="' + (inti ? 21 : 17) + '" class="seg-c' + (inti ? " inti" : "") + '"/><text x="' + cx + '" y="' + (cy + 6) + '" class="seg-n' + (inti ? " inti" : "") + '">' + v + '</text>' +
-        '<text x="' + (cx + (inti ? 26 : 21)) + '" y="' + (cy - 12) + '" class="seg-h">' + huruf[r][k] + '</text>';
-    }); });
+    var g = R.segitiga(dt), v = g.val;
+    var T = function (x, y, txt, cls) { return '<text x="' + x + '" y="' + y + '" class="' + cls + '">' + txt + '</text>'; };
+    // segitiga terbalik: puncak atas y=70 (lebar 40..400), ujung bawah (220, 330)
+    var svg = '<svg class="seg" viewBox="0 0 440 430" role="img" aria-label="' + t("seg.judul") + '">';
+    var xAt = function (y, kiri) { var f = (y - 70) / 260; return kiri ? 40 + 180 * f : 400 - 180 * f; };
+    svg += '<polygon points="' + xAt(240, true) + ',240 ' + xAt(240, false) + ',240 220,330" class="seg-tip"/>';
+    svg += '<polygon points="40,70 400,70 220,330" class="seg-tri"/>';
+    svg += '<line x1="' + xAt(140, true) + '" y1="140" x2="' + xAt(140, false) + '" y2="140" class="seg-l"/><line x1="' + xAt(240, true) + '" y1="240" x2="' + xAt(240, false) + '" y2="240" class="seg-l"/>';
+    svg += '<line x1="220" y1="70" x2="220" y2="240" class="seg-l"/>';
+    [[110, g.pasangan[0]], [180, g.pasangan[1]], [265, g.pasangan[2]], [335, g.pasangan[3]]].forEach(function (q) { svg += T(q[0], 48, q[1], "seg-top"); });
+    [[115, v.A], [178, v.B], [262, v.C], [325, v.D]].forEach(function (q) { svg += T(q[0], 118, q[1], "seg-n"); });
+    svg += T(180, 205, v.E, "seg-n") + T(260, 205, v.F, "seg-n") + T(220, 300, v.J, "seg-n inti");
+    svg += T(58, 300, v.K1, "seg-s") + T(108, 300, v.K2, "seg-s") + T(332, 300, v.N1, "seg-s") + T(382, 300, v.N2, "seg-s");
+    svg += '<line x1="30" y1="345" x2="410" y2="345" class="seg-base"/>';
+    svg += T(180, 385, v.P, "seg-s") + T(260, 385, v.Q, "seg-s") + T(220, 422, v.R, "seg-s");
+    // label posisi kecil
+    [[132, 96, "A"], [195, 96, "B"], [279, 96, "C"], [342, 96, "D"], [196, 182, "E"], [276, 182, "F"], [238, 272, "J"]].forEach(function (q) { svg += T(q[0], q[1], q[2], "seg-h"); });
     svg += '</svg>';
-    var tgl = String(dt.d).padStart(2, "0") + " " + String(dt.m).padStart(2, "0") + " " + dt.y;
+    var tgl = g.pasangan.join(" ");
+    var grup = function (ids) { return g.posisi.filter(function (p) { return ids.indexOf(p.id) >= 0; }).map(function (p) { return blk(t("seg.pos", { h: t("seg.lbl." + p.id), n: p.n }), p.makna + " " + p.sifat); }).join(""); };
     return '<h3 class="sec">' + t("seg.judul") + '</h3><p class="sub-lead">' + t("seg.lead", { t: tgl }) + '</p>' +
       '<div class="seg-wrap">' + svg + '</div>' +
-      '<div class="verdict s5" style="margin-top:14px"><p><span class="pill">' + t("seg.inti", { n: g.inti }) + '</span> ' + g.posisi[9].sifat + '</p></div>' +
-      '<div class="grid2" style="margin-top:18px">' + g.posisi.slice(0, 9).map(function (p) { return blk(t("seg.pos", { h: p.id, n: p.n }), p.makna + " " + p.sifat); }).join("") + '</div>' +
+      '<div class="verdict s5" style="margin-top:14px"><p><span class="pill">' + t("seg.inti", { n: g.inti }) + '</span> ' + R.SIFAT_DIGIT[g.inti] + '</p></div>' +
+      '<h3 class="sec">' + t("seg.dalam") + '</h3><div class="grid2">' + grup(["A", "B", "C", "D", "E", "F"]) + '</div>' +
+      '<h3 class="sec">' + t("seg.samping") + '</h3><div class="grid2">' + grup(["K1", "K2", "N1", "N2"]) + '</div>' +
+      '<h3 class="sec">' + t("seg.bawah") + '</h3><div class="grid2">' + grup(["P", "Q", "R"]) + '</div>' +
       '<div class="grid2" style="margin-top:18px">' + blk(t("seg.dominan", { n: g.dominan.join(", ") }), g.dominan.map(function (n) { return R.SIFAT_DIGIT[n]; }).join(" ")) +
         blk(t("seg.hilang"), g.hilang.length ? g.hilang.map(function (n) { return '<b>' + n + '</b>: ' + R.KARMA[n]; }).join(" ") : t("seg.lengkap")) + '</div>';
   }
