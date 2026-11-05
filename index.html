@@ -226,6 +226,16 @@ h3.sec { font-family: var(--f-display); font-size: 24px; margin: 26px 0 12px }
 .inklusi b { font-size: 12px; color: var(--muted); font-weight: 600 }
 .inklusi .max { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--surface)) }
 .inklusi .nol { border-style: dashed; opacity: .7 }
+.gl-wrap { overflow-x: auto }
+.gl { display: grid; grid-template-columns: repeat(3, minmax(64px, 96px)) minmax(96px, 150px); gap: 6px; width: max-content; max-width: 100% }
+.gl-c { position: relative; aspect-ratio: 1; border: 1.5px solid var(--nila); border-radius: 8px; display: grid; place-items: center; background: var(--surface) }
+.gl-c b { font-family: var(--f-mono); font-size: 20px; letter-spacing: .04em; color: var(--nila); font-weight: 600 }
+.gl-c.kosong { border-style: dashed; border-color: var(--line) } .gl-c.kosong b { color: var(--muted); font-weight: 400 }
+.gl-k { position: absolute; top: 4px; left: 7px; font-size: 11px; color: var(--muted) }
+.gl-l { display: flex; flex-direction: column; justify-content: center; padding: 6px 10px; border-radius: 8px; background: var(--nila-soft); font-size: 12px; line-height: 1.3 }
+.gl-l b { font-weight: 600 } .gl-l span { font-size: 16px; color: var(--nila) }
+.gl-l.penuh { background: color-mix(in srgb, var(--good) 18%, var(--surface)) } .gl-l.kosong { background: color-mix(in srgb, var(--bad) 14%, var(--surface)) }
+.gl-l.diag { font-size: 11px }
 .tabel-shio { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 6px }
 .tabel-shio div { border-radius: 8px; padding: 10px 8px; background: var(--nila-soft); min-width: 0 }
 .tabel-shio b { display: block; font-size: 14px } .tabel-shio span { font-size: 12px; color: var(--muted) }
@@ -407,6 +417,18 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     "n.dari": "Angka jalan hidup dari {tgl}",
     "n.rumus": "Rumus", "n.hariLahir": "Angka hari lahir", "n.tahunP": "Tahun personal {y}",
     "n.makna": "Makna angka {n}", "n.tahunPj": "Tahun personal {n} ({y})", "n.bakat": "Bakat dari hari lahir",
+    "g.judul": "Bagan kelahiran", "g.lead": "Angka tanggal lahir Anda ({d}) disusun dalam kotak Pythagoras. Angka di samping adalah jumlah per baris, angka di bawah jumlah per kolom. Garis hijau lengkap, garis merah kosong.",
+    "g.pikiran": "Pikiran", "g.perasaan": "Perasaan", "g.fisik": "Fisik", "g.rencana": "Rencana", "g.kemauan": "Kemauan", "g.tindakan": "Tindakan", "g.tekad": "Tekad", "g.spiritual": "Spiritual",
+    "g.dominanBaris": "Bidang paling kuat", "g.dominanKolom": "Cara Anda bekerja",
+    "g.dom.pikiran": "Baris pikiran paling banyak terisi. Anda pemikir: analitis, penuh ide, dan senang belajar. Keputusan Anda lahir dari logika.",
+    "g.dom.perasaan": "Baris perasaan paling banyak terisi. Anda digerakkan oleh hati: peka, intuitif, dan peduli pada suasana di sekitar.",
+    "g.dom.fisik": "Baris fisik paling banyak terisi. Anda orang yang praktis dan membumi: senang bekerja nyata, terampil, dan tangguh.",
+    "g.dom.rencana": "Kolom rencana paling kuat. Anda berpikir dulu sebelum bergerak dan pandai menyusun strategi.",
+    "g.dom.kemauan": "Kolom kemauan paling kuat. Anda didorong tekad dan keyakinan, dan teguh pada keputusan.",
+    "g.dom.tindakan": "Kolom tindakan paling kuat. Anda cepat bergerak dan lebih suka belajar sambil melakukan.",
+    "g.dom.seimbangB": "Tidak ada baris yang jauh lebih menonjol. Pikiran, perasaan, dan sisi praktis Anda cukup seimbang, sehingga Anda bisa menyesuaikan diri dengan banyak situasi.",
+    "g.dom.seimbangK": "Kolom rencana, kemauan, dan tindakan cukup seimbang. Anda bisa berpikir, memutuskan, dan bergerak dengan porsi yang sama.",
+    "g.panah": "Garis kekuatan dan kelemahan", "g.penuh": "lengkap", "g.kosong": "kosong", "g.tiapAngka": "Makna setiap angka dalam bagan", "g.angkaJ": "Angka {n} · muncul {k}×",
     "n.misi": "Misi hidup", "n.kekuatan": "Kekuatan", "n.kelemahan": "Kelemahan yang perlu dijaga", "n.sikap": "Angka sikap",
     "n.hidup": "Cinta, karier, dan rezeki", "n.karier": "Karier yang cocok", "n.uang": "Keuangan", "n.sehat": "Kesehatan dan energi",
     "n.kini": "Peruntungan saat ini", "n.bulanP": "Bulan personal {n} ({b})", "n.hariP": "Hari personal {n} (hari ini)", "n.hariPIsi": "Energi hari ini cocok untuk {k}.",
@@ -649,6 +671,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       var tc = lp.tantangan.map(function (c) { return blk(t("n.tantanganKe", { k: c.ke, n: c.n }), c.isi); }).join("");
       return head(lp.angka, lp.info.judul, t("n.dari", { tgl: fmt(d.dt) })) +
         '<div class="facts"><div>' + t("n.rumus") + ' <b class="mono">' + lp.rumus + '</b></div><div>' + t("n.hariLahir") + ' <b class="mono">' + lp.hariLahir + '</b></div><div>' + t("n.sikap") + ' <b class="mono">' + lp.sikap + '</b></div><div>' + t("n.tahunP", { y: lp.tahunIni }) + ' <b class="mono">' + lp.tahunPersonal + '</b></div></div>' +
+        baganHTML(d.dt) +
         '<div class="grid2">' + blk(t("n.makna", { n: lp.angka }), lp.info.isi) + blk(t("n.misi"), x.misi) +
         blk(t("n.kekuatan"), x.kekuatan) + blk(t("n.kelemahan"), x.kelemahan) + '</div>' +
         '<h3 class="sec">' + t("n.hidup") + '</h3><div class="grid2">' + blk(t("z.cinta"), x.cinta) + blk(t("n.karier"), x.karier) + blk(t("n.uang"), x.uang) + blk(t("n.sehat"), x.kesehatan) + '</div>' +
@@ -746,6 +769,25 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         note(t("s.note"));
     }
   };
+  // bagan kelahiran Pythagoras: kotak 3×3 dengan jumlah per baris (samping) dan per kolom (bawah)
+  function baganHTML(dt) {
+    var g = R.baganLahir(dt), by = {}; g.garis.forEach(function (x) { by[x.id] = x; });
+    var rowId = ["pikiran", "perasaan", "fisik"], colId = ["rencana", "kemauan", "tindakan"];
+    var sel = function (n) { var k = g.hitung[n]; return '<div class="gl-c' + (k ? "" : " kosong") + '"><span class="gl-k">' + n + '</span><b>' + (k ? String(n).repeat(k) : "–") + '</b></div>'; };
+    var lab = function (x) { return '<div class="gl-l ' + x.status + '"><b>' + t("g." + x.id) + '</b><span class="mono">' + x.jumlah + '</span></div>'; };
+    var html = '<div class="gl">';
+    g.rows.forEach(function (r, i) { html += r.map(sel).join("") + lab(by[rowId[i]]); });
+    html += colId.map(function (c) { return lab(by[c]); }).join("") + '<div class="gl-l diag ' + by.tekad.status + '"><b>' + t("g.tekad") + ' / ' + t("g.spiritual") + '</b><span class="mono">' + by.tekad.jumlah + ' / ' + by.spiritual.jumlah + '</span></div></div>';
+    var baris = rowId.map(function (id) { return by[id]; }), kuat = baris.slice().sort(function (a, b) { return b.jumlah - a.jumlah; })[0];
+    var kolom = colId.map(function (id) { return by[id]; }), kuatK = kolom.slice().sort(function (a, b) { return b.jumlah - a.jumlah; })[0];
+    var panah = g.garis.filter(function (x) { return x.isi; });
+    var seri = function (arr) { var v = arr.map(function (x) { return x.jumlah; }).sort(function (p, q) { return q - p; }); return v[0] === v[1]; };
+    return '<h3 class="sec">' + t("g.judul") + '</h3><p class="sub-lead">' + t("g.lead", { d: g.digit.join(" ") }) + '</p>' +
+      '<div class="gl-wrap">' + html + '</div>' +
+      '<div class="grid2" style="margin-top:18px">' + blk(t("g.dominanBaris"), seri(baris) ? t("g.dom.seimbangB") : t("g.dom." + kuat.id)) + blk(t("g.dominanKolom"), seri(kolom) ? t("g.dom.seimbangK") : t("g.dom." + kuatK.id)) + '</div>' +
+      (panah.length ? '<h3 class="sec">' + t("g.panah") + '</h3><div class="grid2">' + panah.map(function (x) { return '<div class="block asp ' + (x.status === "penuh" ? "harmonis" : "tegang") + '"><h3>' + x.n + ' · ' + t("g." + x.status) + '</h3><p>' + x.isi + '</p></div>'; }).join("") + '</div>' : "") +
+      '<h3 class="sec">' + t("g.tiapAngka") + '</h3><div class="grid2">' + g.angka.map(function (a) { return blk(t("g.angkaJ", { n: a.n, k: a.kali }), a.isi); }).join("") + '</div>';
+  }
   function head(g, t, sub) { return '<div class="panel-head"><div class="glyph" aria-hidden="true">' + g + '</div><div><h2>' + t + '</h2><p class="sub">' + sub + '</p></div></div>'; }
   function blk(t, p) { return '<div class="block"><h3>' + t + '</h3><p>' + p + '</p></div>'; }
   function note(t) { return '<p class="method-note">' + t + '</p>'; }

@@ -258,6 +258,52 @@
     9: "Tahun penutupan. Selesaikan urusan lama dan lepaskan yang tidak lagi berguna."
   };
 
+  // ---------- Bagan kelahiran Pythagoras (kotak 3×3 dari angka tanggal lahir) ----------
+  // tata letak:  3 6 9  (pikiran)
+  //              2 5 8  (perasaan)
+  //              1 4 7  (fisik)
+  //  kolom:      rencana  kemauan  tindakan
+  var GRID_ROWS = [[3, 6, 9], [2, 5, 8], [1, 4, 7]];
+  var GARIS = [
+    { id: "pikiran", angka: [3, 6, 9], jenis: "baris" }, { id: "perasaan", angka: [2, 5, 8], jenis: "baris" }, { id: "fisik", angka: [1, 4, 7], jenis: "baris" },
+    { id: "rencana", angka: [1, 2, 3], jenis: "kolom" }, { id: "kemauan", angka: [4, 5, 6], jenis: "kolom" }, { id: "tindakan", angka: [7, 8, 9], jenis: "kolom" },
+    { id: "tekad", angka: [1, 5, 9], jenis: "diagonal" }, { id: "spiritual", angka: [3, 5, 7], jenis: "diagonal" }
+  ];
+  var GARIS_TEKS = {
+    pikiran: { n: "Garis pikiran", penuh: "Garis pikiran lengkap (3-6-9): daya ingat, imajinasi, dan kecerdasan Anda menonjol. Anda cepat memahami hal baru dan pandai menganalisis.", kosong: "Garis pikiran kosong: Anda lebih mengandalkan pengalaman daripada teori. Biasakan mencatat dan membaca agar ide lebih terarah." },
+    perasaan: { n: "Garis perasaan", penuh: "Garis perasaan lengkap (2-5-8): emosi Anda seimbang dan peka. Anda pandai berempati dan menjaga hubungan.", kosong: "Garis perasaan kosong: Anda cenderung menyimpan perasaan dan sulit mengungkapkannya. Belajarlah terbuka kepada orang terdekat." },
+    fisik: { n: "Garis fisik", penuh: "Garis fisik lengkap (1-4-7): Anda praktis, terampil dengan tangan, dan kuat secara fisik. Anda suka hasil yang nyata.", kosong: "Garis fisik kosong: Anda lebih hidup di dunia ide dan perasaan. Jaga kebugaran dan biasakan menuntaskan pekerjaan praktis." },
+    rencana: { n: "Garis perencana", penuh: "Garis perencana lengkap (1-2-3): Anda pandai menyusun rencana dan berpikir runtut. Cocok menjadi pengatur dan pemikir strategi.", kosong: "Garis perencana kosong: Anda lebih spontan. Buat daftar dan rencana tertulis agar langkah lebih teratur." },
+    kemauan: { n: "Garis kemauan", penuh: "Garis kemauan lengkap (4-5-6): tekad Anda sangat kuat. Sekali memutuskan, Anda akan berusaha sampai berhasil.", kosong: "Garis kemauan kosong: semangat Anda mudah naik turun. Pasang tujuan kecil yang jelas agar tetap terdorong." },
+    tindakan: { n: "Garis tindakan", penuh: "Garis tindakan lengkap (7-8-9): Anda energik dan cepat bergerak. Ide langsung diwujudkan menjadi tindakan.", kosong: "Garis tindakan kosong: Anda sering menunda karena terlalu banyak pertimbangan. Mulailah dari langkah kecil hari ini." },
+    tekad: { n: "Garis tekad", penuh: "Garis tekad lengkap (1-5-9): Anda gigih dan tidak mudah menyerah. Hambatan justru membuat Anda makin kuat.", kosong: "Garis tekad kosong: Anda mudah ragu saat menghadapi rintangan. Kelilingi diri dengan orang yang menyemangati." },
+    spiritual: { n: "Garis spiritual", penuh: "Garis spiritual lengkap (3-5-7): intuisi dan kepekaan batin Anda tajam. Anda tertarik pada makna hidup dan hal-hal spiritual.", kosong: "Garis spiritual kosong: Anda lebih percaya pada hal yang terlihat dan logis. Luangkan waktu hening untuk mendengarkan suara hati." }
+  };
+  // makna tiap angka menurut berapa kali muncul: [tidak ada, 1×, 2×, 3× atau lebih]
+  var GRID_ANGKA = {
+    1: ["Tidak ada angka 1: Anda perlu belajar mengungkapkan diri dan percaya pada pendapat sendiri.", "Satu angka 1: Anda bisa mengungkapkan diri dengan wajar, walau kadang sulit menjelaskan perasaan terdalam.", "Dua angka 1: komunikasi Anda seimbang. Anda pandai menyampaikan pendapat dan memahami orang lain.", "Tiga angka 1 atau lebih: Anda sangat ekspresif dan banyak bicara, tetapi kadang sulit dipahami atau terlalu mendominasi."],
+    2: ["Tidak ada angka 2: Anda kurang peka terhadap perasaan sendiri dan orang lain. Latih intuisi dan kesabaran.", "Satu angka 2: Anda cukup peka dan intuitif, tetapi mudah tersinggung bila perasaan diabaikan.", "Dua angka 2: intuisi Anda tajam dan Anda mudah membaca suasana. Anda bijak menilai orang.", "Tiga angka 2 atau lebih: Anda sangat sensitif sehingga mudah terluka. Lindungi energi Anda dari lingkungan yang negatif."],
+    3: ["Tidak ada angka 3: Anda perlu usaha lebih untuk mengingat dan berimajinasi. Belajar lewat praktik paling cocok.", "Satu angka 3: daya ingat dan imajinasi Anda baik. Anda menikmati belajar.", "Dua angka 3: Anda sangat kreatif dan cerdas, dengan banyak ide. Jaga agar tidak hidup di awang-awang.", "Tiga angka 3 atau lebih: imajinasi Anda luar biasa, tetapi pikiran bisa terlalu sibuk dan mudah cemas."],
+    4: ["Tidak ada angka 4: Anda kurang suka keteraturan dan rutinitas. Latih kesabaran dan kerapian.", "Satu angka 4: Anda praktis, teratur, dan terampil bekerja dengan tangan.", "Dua angka 4: Anda sangat terorganisasi dan pekerja keras. Hati-hati menjadi terlalu kaku.", "Tiga angka 4 atau lebih: Anda sangat teliti dan tekun, tetapi bisa terlalu materialistis atau keras kepala."],
+    5: ["Tidak ada angka 5: Anda perlu belajar mengendalikan emosi dan menentukan arah hidup dengan tegas.", "Satu angka 5: emosi Anda cukup seimbang dan Anda memiliki dorongan untuk maju.", "Dua angka 5: tekad dan semangat Anda besar. Anda tidak mudah dihentikan.", "Tiga angka 5 atau lebih: energi Anda sangat kuat, bisa terburu-buru atau emosional. Salurkan lewat kegiatan fisik."],
+    6: ["Tidak ada angka 6: Anda perlu belajar memikul tanggung jawab rumah tangga dan dekat dengan keluarga.", "Satu angka 6: Anda penyayang keluarga dan kreatif dalam mengurus rumah.", "Dua angka 6: Anda sangat peduli pada keluarga, tetapi bisa terlalu khawatir dan protektif.", "Tiga angka 6 atau lebih: Anda mudah cemas dan menanggung beban orang lain. Belajarlah melepaskan."],
+    7: ["Tidak ada angka 7: Anda belajar dari buku dan nasihat, sehingga jarang perlu belajar lewat kehilangan.", "Satu angka 7: Anda belajar lewat pengalaman pribadi, kadang lewat pengorbanan kecil.", "Dua angka 7: hidup mengajar Anda lewat kehilangan atau kekecewaan, yang membuat Anda bijak.", "Tiga angka 7 atau lebih: pelajaran hidup Anda dalam dan kadang berat, tetapi membuat Anda menjadi penuntun bagi orang lain."],
+    8: ["Tidak ada angka 8: Anda perlu teliti dan berhati-hati dengan detail, terutama soal keuangan.", "Satu angka 8: Anda teliti, rapi, dan mampu mengatur dengan baik.", "Dua angka 8: Anda sangat terorganisasi dan berbakat mengelola keuangan.", "Tiga angka 8 atau lebih: Anda perfeksionis dan gelisah bila ada yang tidak sesuai. Beri ruang pada ketidaksempurnaan."],
+    9: ["Tidak ada angka 9: Anda perlu memperluas wawasan dan kepedulian pada orang banyak.", "Satu angka 9: Anda punya cita-cita dan peduli pada sesama.", "Dua angka 9: Anda idealis, cerdas, dan berwawasan luas.", "Tiga angka 9 atau lebih: idealisme Anda sangat tinggi sehingga mudah kecewa pada kenyataan. Tetap membumi."]
+  };
+  function baganLahir(dt) {
+    var digit = (String(dt.d).padStart(2, "0") + String(dt.m).padStart(2, "0") + String(dt.y)).split("").map(Number).filter(function (x) { return x > 0; });
+    var hit = { 1: 0, 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0 };
+    digit.forEach(function (x) { hit[x]++; });
+    var garis = GARIS.map(function (g) {
+      var ada = g.angka.filter(function (a) { return hit[a] > 0; }).length, jml = g.angka.reduce(function (s, a) { return s + hit[a]; }, 0);
+      return { id: g.id, jenis: g.jenis, angka: g.angka, n: GARIS_TEKS[g.id].n, ada: ada, jumlah: jml, status: ada === 3 ? "penuh" : ada === 0 ? "kosong" : "sebagian",
+        isi: ada === 3 ? GARIS_TEKS[g.id].penuh : ada === 0 ? GARIS_TEKS[g.id].kosong : "" };
+    });
+    var angka = [1, 2, 3, 4, 5, 6, 7, 8, 9].map(function (n) { return { n: n, kali: hit[n], isi: GRID_ANGKA[n][Math.min(hit[n], 3)] }; });
+    return { digit: digit, hitung: hit, rows: GRID_ROWS, garis: garis, angka: angka };
+  }
+
   // ---------- 3. Numerologi nama lengkap (Pythagoras) ----------
   function letterVal(ch) { return ((ch.charCodeAt(0) - 65) % 9) + 1; }
   function isVowel(ch, word, i) {
@@ -724,12 +770,12 @@
     JODOH: JODOH, SHIO: SHIO, EL_TAHUN: EL_TAHUN, S: S,
     LP_DETAIL: LP_DETAIL, PUNCAK: PUNCAK, TANTANGAN: TANTANGAN, BULAN_PERSONAL: BULAN_PERSONAL, SIKAP: SIKAP, KATA_KUNCI: KATA_KUNCI,
     HURUF: HURUF, HURUF_AKHIR: HURUF_AKHIR, KARMA: KARMA, GAIRAH: GAIRAH, DEWASA: DEWASA, PASARAN_DETAIL: PASARAN_DETAIL, HARI_DETAIL: HARI_DETAIL, SHIO_DETAIL: SHIO_DETAIL, HUB_SHIO: HUB_SHIO, RAMAL_TAHUN: RAMAL_TAHUN, EL_TAHUN_ARTI: EL_TAHUN_ARTI,
-    DM_DETAIL: DM_DETAIL, BZ_TEKS: BZ_TEKS, BZ_PERAN: BZ_PERAN, PILAR_MAKNA: PILAR_MAKNA, PASANGAN_EL: PASANGAN_EL };
+    DM_DETAIL: DM_DETAIL, BZ_TEKS: BZ_TEKS, BZ_PERAN: BZ_PERAN, PILAR_MAKNA: PILAR_MAKNA, PASANGAN_EL: PASANGAN_EL, GARIS_TEKS: GARIS_TEKS, GRID_ANGKA: GRID_ANGKA };
   var ASLI = JSON.parse(JSON.stringify(TABEL));
   function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
   function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
 
-  var api = { setLang: setLang, elemenKunci: elemenKunci,
+  var api = { setLang: setLang, baganLahir: baganLahir, elemenKunci: elemenKunci,
     jdn: jdn, reduceNum: reduceNum, zodiak: zodiak, lifePath: lifePath, TAHUN_PERSONAL: TAHUN_PERSONAL,
     namaNumerologi: namaNumerologi, kedewasaan: kedewasaan, LP_DETAIL: LP_DETAIL, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN, ANGKA: ANGKA,
     bazi: bazi, weton: weton, jodohWeton: jodohWeton, wetonIdeal: wetonIdeal, wetonBerikut: wetonBerikut, imlek: imlek, shio: shio, EL_SARAN: EL_SARAN

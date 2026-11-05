@@ -428,6 +428,27 @@ window.SERAT_EN = {
       Logam: "Metal spouse palace: your partner tends to be firm, principled, and orderly.",
       Air: "Water spouse palace: your partner tends to be clever, flexible, and understanding."
     },
+    GARIS_TEKS: {
+      pikiran: { n: "Mind line", penuh: "Full mind line (3-6-9): your memory, imagination, and intelligence stand out. You grasp new things quickly and analyse well.", kosong: "Empty mind line: you rely more on experience than theory. Make a habit of reading and taking notes so your ideas stay focused." },
+      perasaan: { n: "Emotion line", penuh: "Full emotion line (2-5-8): your emotions are balanced and sensitive. You empathise easily and look after relationships.", kosong: "Empty emotion line: you tend to keep feelings inside and find them hard to express. Learn to open up to the people close to you." },
+      fisik: { n: "Practical line", penuh: "Full practical line (1-4-7): you are practical, good with your hands, and physically strong. You like tangible results.", kosong: "Empty practical line: you live more in ideas and feelings. Keep fit and make a habit of finishing practical tasks." },
+      rencana: { n: "Planning line", penuh: "Full planning line (1-2-3): you are good at making plans and thinking in order. Suited to organising and strategy.", kosong: "Empty planning line: you are more spontaneous. Make lists and written plans so your steps are more orderly." },
+      kemauan: { n: "Willpower line", penuh: "Full willpower line (4-5-6): your determination is very strong. Once you decide, you work until you succeed.", kosong: "Empty willpower line: your motivation rises and falls easily. Set small, clear goals to keep yourself going." },
+      tindakan: { n: "Action line", penuh: "Full action line (7-8-9): you are energetic and quick to move. Ideas turn straight into action.", kosong: "Empty action line: you often delay because of too much deliberation. Start with one small step today." },
+      tekad: { n: "Determination line", penuh: "Full determination line (1-5-9): you are persistent and don't give up easily. Obstacles make you stronger.", kosong: "Empty determination line: you doubt yourself easily when facing obstacles. Surround yourself with people who encourage you." },
+      spiritual: { n: "Spiritual line", penuh: "Full spiritual line (3-5-7): your intuition and inner sensitivity are sharp. You are drawn to life's meaning and spiritual matters.", kosong: "Empty spiritual line: you trust what is visible and logical. Make quiet time to listen to your inner voice." }
+    },
+    GRID_ANGKA: {
+      1: ["No 1: you need to learn to express yourself and trust your own opinions.", "One 1: you express yourself reasonably well, though your deepest feelings can be hard to explain.", "Two 1s: balanced communication. You state your views well and understand others.", "Three or more 1s: very expressive and talkative, but sometimes hard to follow or too dominant."],
+      2: ["No 2: you are less in tune with your own and others' feelings. Train your intuition and patience.", "One 2: fairly sensitive and intuitive, but easily hurt when your feelings are ignored.", "Two 2s: sharp intuition; you read the room easily and judge people wisely.", "Three or more 2s: very sensitive and easily hurt. Protect your energy from negative surroundings."],
+      3: ["No 3: memory and imagination take more effort. You learn best by doing.", "One 3: good memory and imagination. You enjoy learning.", "Two 3s: very creative and clever, full of ideas. Take care not to drift off into the clouds.", "Three or more 3s: extraordinary imagination, but your mind can get too busy and anxious."],
+      4: ["No 4: you dislike order and routine. Practise patience and tidiness.", "One 4: practical, orderly, and good with your hands.", "Two 4s: very organised and hard-working. Watch out for rigidity.", "Three or more 4s: very precise and diligent, but can become materialistic or stubborn."],
+      5: ["No 5: you need to learn to manage emotions and set a firm direction in life.", "One 5: fairly balanced emotions and a drive to move forward.", "Two 5s: great determination and spirit. You are hard to stop.", "Three or more 5s: very strong energy that can turn hasty or emotional. Channel it through physical activity."],
+      6: ["No 6: you need to learn to carry household responsibility and stay close to family.", "One 6: you love your family and are creative at home.", "Two 6s: you care deeply for family, but can worry too much and be overprotective.", "Three or more 6s: prone to anxiety and carrying others' burdens. Learn to let go."],
+      7: ["No 7: you learn from books and advice, so you rarely need to learn through loss.", "One 7: you learn through personal experience, sometimes through small sacrifices.", "Two 7s: life teaches you through loss or disappointment, which makes you wise.", "Three or more 7s: your life lessons are deep and sometimes hard, but they make you a guide for others."],
+      8: ["No 8: be careful and attentive to detail, especially with money.", "One 8: careful, neat, and good at organising.", "Two 8s: very organised and gifted at managing money.", "Three or more 8s: a perfectionist who gets restless when things are off. Allow room for imperfection."],
+      9: ["No 9: broaden your horizons and your care for the wider world.", "One 9: you have ideals and care about others.", "Two 9s: idealistic, intelligent, and broad-minded.", "Three or more 9s: very high ideals that leave you easily disappointed by reality. Stay grounded."]
+    },
     EL_TAHUN: ["Metal", "Metal", "Water", "Water", "Wood", "Wood", "Fire", "Fire", "Earth", "Earth"]
   },
 
@@ -736,6 +757,18 @@ window.SERAT_EN = {
     "b.kekuatan": "Strength of your Day Master", "b.kuat": "Strong", "b.lembut": "Gentle", "b.skor": "{a} of {b} element points support your Day Master.",
     "b.baik": "Favourable elements", "b.caranya": "How to strengthen it:", "b.pilarJ": "Meaning of the four pillars", "b.istana": "Spouse palace ({s})",
     "z.cintaJ": "Love and relationships", "z.karierS": "career", "z.cocokJ": "Compatible signs", "z.warnaJ": "Lucky colours",
+    "g.judul": "Birth chart", "g.lead": "The digits of your birth date ({d}) are arranged in the Pythagorean grid. The numbers at the side are row totals, the numbers below are column totals. Green lines are full, red lines are empty.",
+    "g.pikiran": "Mind", "g.perasaan": "Emotion", "g.fisik": "Practical", "g.rencana": "Planning", "g.kemauan": "Willpower", "g.tindakan": "Action", "g.tekad": "Determination", "g.spiritual": "Spiritual",
+    "g.dominanBaris": "Your strongest plane", "g.dominanKolom": "How you work",
+    "g.dom.pikiran": "The mind row is the fullest. You are a thinker: analytical, full of ideas, and fond of learning. Your decisions come from logic.",
+    "g.dom.perasaan": "The emotion row is the fullest. You are led by the heart: sensitive, intuitive, and attentive to the mood around you.",
+    "g.dom.fisik": "The practical row is the fullest. You are practical and grounded: you like real work, are skilled, and resilient.",
+    "g.dom.rencana": "The planning column is strongest. You think before you move and are good at strategy.",
+    "g.dom.kemauan": "The willpower column is strongest. You are driven by determination and conviction, and stand firm on decisions.",
+    "g.dom.tindakan": "The action column is strongest. You move fast and prefer learning by doing.",
+    "g.dom.seimbangB": "No row stands out much more than the others. Your mind, emotions, and practical side are fairly balanced, so you adapt to many situations.",
+    "g.dom.seimbangK": "Your planning, willpower, and action columns are fairly balanced. You think, decide, and move in equal measure.",
+    "g.panah": "Lines of strength and weakness", "g.penuh": "full", "g.kosong": "empty", "g.tiapAngka": "Meaning of each number in the chart", "g.angkaJ": "Number {n} · appears {k}×",
     "n.misi": "Life mission", "n.kekuatan": "Strengths", "n.kelemahan": "Weaknesses to watch", "n.sikap": "Attitude number",
     "n.hidup": "Love, career, and money", "n.karier": "Suitable careers", "n.uang": "Finances", "n.sehat": "Health and energy",
     "n.kini": "Your current cycle", "n.bulanP": "Personal month {n} ({b})", "n.hariP": "Personal day {n} (today)", "n.hariPIsi": "Today's energy is good for {k}.",
