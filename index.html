@@ -181,6 +181,7 @@ button.ghost:hover { background: var(--nila-soft) }
 .legend .lg-h::before { background: var(--good) } .legend .lg-t::before { background: var(--bad) }
 .ptable-wrap { overflow-x: auto; min-width: 0 }
 .ptable { width: 100%; border-collapse: collapse; font-size: 14px }
+.ptable tr.kini td { background: color-mix(in srgb, var(--accent) 12%, transparent); font-weight: 600 }
 .ptable th { text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--line) }
 .ptable td { padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap }
 .ptable tr.ang td { background: var(--nila-soft) }
@@ -404,7 +405,29 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     "z.noteTanpa": "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan.",
     "z.noteJam": "Ketelitian ascendant bergantung pada jam lahir yang tepat sampai menit.",
     "z.roda": "Roda bagan kelahiran",
-    "a.tabs": "Jenis bacaan astrologi", "a.natal": "Bagan lahir", "a.transit": "Transit", "a.sinastri": "Sinastri", "a.sr": "Solar return",
+    "a.tabs": "Jenis bacaan astrologi", "a.natal": "Bagan lahir", "a.transit": "Transit", "a.sinastri": "Sinastri", "a.sr": "Solar return", "a.pr": "Progresi", "a.kp": "Komposit", "a.lr": "Lunar return", "a.pf": "Profeksi tahunan",
+    "pr.tgl": "Tanggal", "pr.lihat": "Lihat progresi",
+    "pr.lead": "Pada {tgl} Anda berusia <b>{u} tahun</b>. Progresi sekunder memakai rumus satu hari setelah lahir sama dengan satu tahun hidup, jadi bagan di bawah adalah langit pada hari ke-{h} setelah Anda lahir.",
+    "pr.tema": "Bab hidup Anda saat ini", "pr.aspek": "Aspek progresi yang sedang aktif", "pr.sepi": "Tidak ada aspek progresi yang tepat (orb 1°) saat ini. Masa yang relatif stabil.",
+    "pr.kartu": "{p} progresi {j} {n} natal", "pr.posisi": "Posisi planet progresi", "pr.rumahN": "Rumah natal",
+    "pr.pindahTgl": "Bulan progresi pindah ke {r} sekitar {tgl}.",
+    "pr.note": "Ascendant dan MC progresi dihitung dengan busur Matahari (solar arc) dari bagan lahir. Bulan progresi bergerak sekitar 1° per bulan, sedangkan Matahari sekitar 1° per tahun.",
+    "kp.lead": "Bagan komposit adalah titik tengah antara planet Anda dan planet {nm}. Hasilnya menggambarkan hubungan kalian sebagai satu kesatuan, seolah hubungan itu punya kepribadian sendiri.",
+    "kp.tema": "Kepribadian hubungan", "kp.aspek": "Aspek dalam bagan komposit", "kp.sedikit": "Tidak banyak aspek kuat antara planet pribadi dalam bagan komposit.",
+    "kp.posisi": "Posisi planet komposit", "kp.tanpaJam": "Isi jam lahir kalian berdua untuk melihat Ascendant dan rumah komposit.",
+    "kp.note": "Komposit memakai metode titik tengah (midpoint). Ascendant komposit diturunkan dari titik tengah MC kedua bagan. Data pasangan sama dengan yang dipakai di tab Sinastri.",
+    "lr.butuhJam": "Lunar return membutuhkan jam lahir, karena posisi Bulan bergerak sekitar 13° per hari. Isi jam lahir di formulir atas, lalu tekan \"Baca ramalan saya\" lagi.",
+    "lr.mulai": "Mulai dari tanggal", "lr.kota": "Kota tempat Anda berada", "lr.hitung": "Hitung",
+    "lr.lead": "Bulan kembali ke posisi lahirnya ({r}) pada <b>{tgl}</b> waktu {k}. Bagan saat itu menggambarkan suasana sekitar 27 hari ke depan.",
+    "lr.tema": "Tema bulan ini", "lr.aspek": "Bulan dan planet lain", "lr.jadwal": "Lunar return berikutnya", "lr.tglKol": "Tanggal", "lr.ascKol": "Ascendant bulanan",
+    "lr.kartu": "Bulan {j} {n}",
+    "lr.note": "Lunar return berulang sekitar tiap 27,3 hari. Kota tempat Anda berada saat itu menentukan ascendant bulanan.",
+    "pf.tgl": "Tanggal", "pf.lihat": "Lihat profeksi",
+    "pf.lead": "Pada {tgl} Anda berusia <b>{u} tahun</b>. Dalam profeksi tahunan, setiap tahun usia mengaktifkan satu rumah secara berurutan, mulai dari rumah 1 saat lahir. Tahun ini giliran <b>rumah {n}</b>.",
+    "pf.tanpaJam": "Jam lahir tidak diisi, jadi rumah dihitung dari rasi Matahari (profeksi matahari). Isi jam lahir agar hasilnya memakai Ascendant.",
+    "pf.tema": "Tema tahun usia {u}", "pf.tabel": "Siklus 12 tahun", "pf.umur": "Usia", "pf.tahun": "Tahun", "pf.rumah": "Rumah", "pf.rasi": "Rasi", "pf.tuan": "Penguasa",
+    "pf.bulan": "Profeksi bulanan", "pf.bulanLead": "Dalam tahun ini, setiap bulan setelah ulang tahun bergeser satu rasi, sehingga penguasa bulannya ikut berganti.", "pf.bulanKe": "Bulan ke-{n}",
+    "pf.note": "Profeksi memakai rumah Whole Sign dan penguasa tradisional (Matahari sampai Saturnus). Tahun usia dihitung dari ulang tahun terakhir.",
     "tr.tgl": "Tanggal transit", "tr.lihat": "Lihat transit",
     "tr.lead": "Posisi planet pada {tgl} dibandingkan dengan bagan kelahiran Anda.",
     "tr.utama": "Pengaruh utama", "tr.tenang": "Tidak ada transit besar yang tepat pada tanggal ini. Masa yang relatif tenang.",
@@ -612,7 +635,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var hariIni = new Date();
   var state = { aktif: null, data: null, buka: {}, iklan: null, astro: "natal",
     tr: hariIni.getFullYear() + "-" + String(hariIni.getMonth() + 1).padStart(2, "0") + "-" + String(hariIni.getDate()).padStart(2, "0"),
-    tempat: N.KOTA[0], pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", tempat: N.KOTA[21] }, srTahun: hariIni.getFullYear(), srTempat: null, tglJodoh: "1992-03-09" };
+    tempat: N.KOTA[0], pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", tempat: N.KOTA[21] }, srTahun: hariIni.getFullYear(), srTempat: null, prTgl: null, lrTgl: null, pfTgl: null, tglJodoh: "1992-03-09" };
   if (location.hash && METHODS.some(function (m) { return "#" + m.id === location.hash; })) state.aktif = location.hash.slice(1);
 
   function bagan(dt, jam, menit, k) {
@@ -895,7 +918,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   }
 
   /* ===== Sub-bacaan astrologi: transit, sinastri, solar return ===== */
-  var ASTRO_TABS = ["natal", "transit", "sinastri", "sr"];
+  var ASTRO_TABS = ["natal", "transit", "pr", "sinastri", "kp", "sr", "lr", "pf"];
   function subAstro() {
     return '<div class="subnav" role="tablist" aria-label="' + t("a.tabs") + '">' + ASTRO_TABS.map(function (x) {
       return '<button type="button" role="tab" data-astro="' + x + '" aria-selected="' + (state.astro === x) + '">' + t("a." + x) + '</button>';
@@ -928,15 +951,9 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         note(t("tr.note", { k: d.kota.n }));
     },
     sinastri: function (d) {
-      var P = state.pas, tg = parse(P.tgl), jm = P.jam ? P.jam.split(":") : null, k = P.tempat;
-      var form = '<form class="sub-form" id="f-sin"><div class="field"><label for="ps-nama">' + t("sn.nama") + '</label><input id="ps-nama" value="' + esc(P.nama) + '"></div>' +
-        '<div class="field"><label for="ps-tgl">' + t("sn.tgl") + '</label><input id="ps-tgl" type="date" min="1900-01-01" max="2100-12-31" value="' + P.tgl + '"></div>' +
-        '<div class="field"><label for="ps-jam">' + t("sn.jam") + '</label><input id="ps-jam" type="time" value="' + P.jam + '"></div>' +
-        kotaField("ps-kota", t("sn.kota")) +
-        '<button class="primary" type="submit">' + t("sn.banding") + '</button></form>';
-      if (!tg) return form + '<p class="note">' + t("sn.isiTgl") + '</p>';
-      var b = bagan(tg, jm ? +jm[0] : null, jm ? +jm[1] : 0, k);
-      var s = N.sinastri(d.nc, b), nm = esc(P.nama || t("sn.pasangan"));
+      var ps = pasangan(); if (!ps.b) return ps.form;
+      var form = ps.form, b = ps.b;
+      var s = N.sinastri(d.nc, b), nm = esc(state.pas.nama || t("sn.pasangan"));
       var tingkat = s.persen >= 75 ? t("sn.t1") : s.persen >= 60 ? t("sn.t2") : s.persen >= 45 ? t("sn.t3") : t("sn.t4");
       var cards = s.aspek.slice(0, 8).map(function (a) { return '<div class="block asp ' + (a.baik ? "harmonis" : "tegang") + '"><h3>' + t("sn.kartu", { p: a.p.n, j: a.jenis.n.toLowerCase(), q: a.q.n, nm: nm }) + '</h3><p>' + a.isi + '</p></div>'; }).join("");
       return form +
@@ -944,6 +961,29 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         '<h3 class="sec">' + t("sn.aspek") + '</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">' + t("sn.sedikit") + '</p>') +
         '<h3 class="sec">' + t("sn.planet", { nm: nm }) + '</h3>' + ptable(b.planets, null) +
         note(t("sn.note"));
+    },
+    kp: function (d) {
+      var ps = pasangan(); if (!ps.b) return ps.form;
+      var k = N.komposit(d.nc, ps.b), nm = esc(state.pas.nama || t("sn.pasangan")), c = k.chart;
+      var cards = k.aspek.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + a.p1.n + ' ' + a.jenis.n.toLowerCase() + ' ' + a.p2.n + '</h3><p>' + a.isi + '</p></div>'; }).join("");
+      return ps.form + '<p class="sub-lead">' + t("kp.lead", { nm: nm }) + '</p>' +
+        '<div class="natal"><div class="wheel-wrap">' + roda(c) + '</div>' + ptable(c.planets, c.angles ? "rumah" : null, t("z.rumah")) + '</div>' +
+        (c.angles ? "" : '<p class="muted">' + t("kp.tanpaJam") + '</p>') +
+        '<h3 class="sec">' + t("kp.tema") + '</h3><div class="grid2">' + k.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
+        '<h3 class="sec">' + t("kp.aspek") + '</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">' + t("kp.sedikit") + '</p>') +
+        note(t("kp.note"));
+    },
+    pr: function (d) {
+      var tg = parse(state.prTgl || state.tr), ms = Date.UTC(tg.y, tg.m - 1, tg.d, 12) - d.nc.tz * 3600000;
+      var pr = N.progresi(d.nc, ms), c = pr.chart, u = Math.floor(pr.umur);
+      var cards = pr.aspek.slice(0, 8).map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + t("pr.kartu", { p: a.p.n, j: a.jenis.n.toLowerCase(), n: a.n.n }) + '</h3><p>' + a.isi + '</p></div>'; }).join("");
+      return '<form class="sub-form" id="f-pr"><div class="field"><label for="pr-tgl">' + t("pr.tgl") + '</label><input id="pr-tgl" type="date" value="' + (state.prTgl || state.tr) + '"></div><button class="primary" type="submit">' + t("pr.lihat") + '</button></form>' +
+        '<p class="sub-lead">' + t("pr.lead", { tgl: fmt(tg), u: u, h: Math.floor(pr.umur) + 1 }) + '</p>' +
+        '<div class="natal"><div class="wheel-wrap">' + roda(c) + '</div>' + ptable(c.planets, c.angles ? "rumahNatal" : null, t("pr.rumahN")) + '</div>' +
+        '<h3 class="sec">' + t("pr.tema") + '</h3><div class="grid2">' + pr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
+        (pr.pindah ? '<p class="muted">' + t("pr.pindahTgl", { r: N.RASI[pr.pindah.rasi], tgl: fmtBulan(pr.pindah.ms) }) + '</p>' : "") +
+        '<h3 class="sec">' + t("pr.aspek") + '</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">' + t("pr.sepi") + '</p>') +
+        note(t("pr.note"));
     },
     sr: function (d) {
       if (!d.nc.adaJam) return '<p class="sub-lead">' + t("sr.butuhJam") + '</p>';
@@ -956,13 +996,63 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         '<div class="natal"><div class="wheel-wrap">' + roda(sr.chart) + '</div>' + ptable(sr.chart.planets, "rumah", t("z.rumah")) + '</div>' +
         '<h3 class="sec">' + t("sr.tema", { a: state.srTahun, b: state.srTahun + 1 }) + '</h3><div class="grid2">' + sr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
         note(t("sr.note"));
+    },
+    lr: function (d) {
+      if (!d.nc.adaJam) return '<p class="sub-lead">' + t("lr.butuhJam") + '</p>';
+      var k = state.srTempat || d.kota, tg = parse(state.lrTgl || state.tr);
+      var ms = Date.UTC(tg.y, tg.m - 1, tg.d) - offsetLokal(k.zona, tg.y, tg.m, tg.d, 0, 0) * 3600000;
+      var lr = N.lunarReturn(d.nc, ms, k.lat, k.lon), c = lr.chart;
+      var cards = lr.aspek.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + t("lr.kartu", { j: a.jenis.n.toLowerCase(), n: a.n.n }) + '</h3><p>' + a.isi + '</p></div>'; }).join("");
+      return '<form class="sub-form" id="f-lr"><div class="field"><label for="lr-tgl">' + t("lr.mulai") + '</label><input id="lr-tgl" type="date" value="' + (state.lrTgl || state.tr) + '"></div>' +
+        kotaField("sr-kota", t("lr.kota")) + '<button class="primary" type="submit">' + t("lr.hitung") + '</button></form>' +
+        '<p class="sub-lead">' + t("lr.lead", { r: d.nc.planets[1].pos.teks, tgl: fmtTgl(c.ms, offsetAt(k.zona, c.ms)), k: k.n }) + '</p>' +
+        '<div class="natal"><div class="wheel-wrap">' + roda(c) + '</div>' + ptable(c.planets, "rumah", t("z.rumah")) + '</div>' +
+        '<h3 class="sec">' + t("lr.tema") + '</h3><div class="grid2">' + lr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
+        (cards ? '<h3 class="sec">' + t("lr.aspek") + '</h3><div class="grid2">' + cards + '</div>' : "") +
+        '<h3 class="sec">' + t("lr.jadwal") + '</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th>' + t("lr.tglKol") + '</th><th>' + t("lr.ascKol") + '</th></tr></thead><tbody>' +
+        lr.jadwal.map(function (j) { return '<tr><td class="mono">' + fmtTgl(j.ms, offsetAt(k.zona, j.ms)) + '</td><td>' + N.RASI_SYM[j.asc] + '︎ ' + N.RASI[j.asc] + '</td></tr>'; }).join("") + '</tbody></table></div>' +
+        note(t("lr.note"));
+    },
+    pf: function (d) {
+      var tg = parse(state.pfTgl || state.tr), ms = Date.UTC(tg.y, tg.m - 1, tg.d, 12) - d.nc.tz * 3600000;
+      var pf = N.profeksi(d.nc, ms), nama = function (id) { return N.PLANETS.filter(function (p) { return p.id === id; })[0]; };
+      var lahirY = new Date(d.nc.ms + d.nc.tz * 3600000).getUTCFullYear();
+      var rows = pf.tahun.map(function (x, i) { var pl = nama(x.tuan);
+        return '<tr' + (i === 0 ? ' class="kini"' : "") + '><td class="mono">' + x.umur + '</td><td class="mono">' + (lahirY + x.umur) + '</td><td class="mono">' + x.rumah + '</td><td>' + N.RASI_SYM[x.rasi] + '︎ ' + N.RASI[x.rasi] + '</td><td><span class="pg">' + pl.s + '︎</span> ' + pl.n + '</td></tr>'; }).join("");
+      var bln = pf.bulan.map(function (x) { var pl = nama(x.tuan);
+        return '<tr><td>' + t("pf.bulanKe", { n: x.ke + 1 }) + '</td><td>' + N.RASI_SYM[x.rasi] + '︎ ' + N.RASI[x.rasi] + '</td><td><span class="pg">' + pl.s + '︎</span> ' + pl.n + '</td></tr>'; }).join("");
+      return '<form class="sub-form" id="f-pf"><div class="field"><label for="pf-tgl">' + t("pf.tgl") + '</label><input id="pf-tgl" type="date" value="' + (state.pfTgl || state.tr) + '"></div><button class="primary" type="submit">' + t("pf.lihat") + '</button></form>' +
+        '<p class="sub-lead">' + t("pf.lead", { tgl: fmt(tg), u: pf.umur, n: pf.ini.rumah }) + '</p>' +
+        (pf.adaAsc ? "" : '<p class="muted">' + t("pf.tanpaJam") + '</p>') +
+        '<h3 class="sec">' + t("pf.tema", { u: pf.umur }) + '</h3><div class="grid2">' + pf.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
+        '<h3 class="sec">' + t("pf.tabel") + '</h3><div class="ptable-wrap"><table class="ptable"><thead><tr><th>' + t("pf.umur") + '</th><th>' + t("pf.tahun") + '</th><th>' + t("pf.rumah") + '</th><th>' + t("pf.rasi") + '</th><th>' + t("pf.tuan") + '</th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+        '<h3 class="sec">' + t("pf.bulan") + '</h3><p class="muted">' + t("pf.bulanLead") + '</p><div class="ptable-wrap"><table class="ptable"><tbody>' + bln + '</tbody></table></div>' +
+        note(t("pf.note"));
     }
   };
+  function pasangan() {
+    var P = state.pas, tg = parse(P.tgl), jm = P.jam ? P.jam.split(":") : null;
+    var form = '<form class="sub-form" id="f-sin"><div class="field"><label for="ps-nama">' + t("sn.nama") + '</label><input id="ps-nama" value="' + esc(P.nama) + '"></div>' +
+      '<div class="field"><label for="ps-tgl">' + t("sn.tgl") + '</label><input id="ps-tgl" type="date" min="1900-01-01" max="2100-12-31" value="' + P.tgl + '"></div>' +
+      '<div class="field"><label for="ps-jam">' + t("sn.jam") + '</label><input id="ps-jam" type="time" value="' + P.jam + '"></div>' +
+      kotaField("ps-kota", t("sn.kota")) +
+      '<button class="primary" type="submit">' + t("sn.banding") + '</button></form>';
+    if (!tg) return { form: form + '<p class="note">' + t("sn.isiTgl") + '</p>', b: null };
+    return { form: form, b: bagan(tg, jm ? +jm[0] : null, jm ? +jm[1] : 0, P.tempat) };
+  }
+  function fmtBulan(ms) { var w = new Date(ms); return fmt({ y: w.getUTCFullYear(), m: w.getUTCMonth() + 1, d: w.getUTCDate() }); }
   function bindAstro() {
     var ft = $("f-transit"); if (ft) ft.addEventListener("submit", function (e) { e.preventDefault(); state.tr = $("tr-tgl").value || state.tr; renderPanel(); });
     var fs = $("f-sin"); if (fs) {
       pasangCari($("ps-kota"), function () { return state.pas.tempat; }, function (k) { state.pas.tempat = k; });
       fs.addEventListener("submit", function (e) { e.preventDefault(); state.pas = { nama: $("ps-nama").value.trim(), tgl: $("ps-tgl").value, jam: $("ps-jam").value, tempat: state.pas.tempat }; renderPanel(); });
+    }
+    var fp = $("f-pr"); if (fp) fp.addEventListener("submit", function (e) { e.preventDefault(); state.prTgl = $("pr-tgl").value || state.prTgl; renderPanel(); });
+    var ff = $("f-pf"); if (ff) ff.addEventListener("submit", function (e) { e.preventDefault(); state.pfTgl = $("pf-tgl").value || state.pfTgl; renderPanel(); });
+    var fl = $("f-lr"); if (fl) {
+      var lrBaru = state.srTempat;
+      pasangCari($("sr-kota"), function () { return lrBaru || state.data.kota; }, function (k) { lrBaru = k; });
+      fl.addEventListener("submit", function (e) { e.preventDefault(); state.lrTgl = $("lr-tgl").value || state.lrTgl; state.srTempat = lrBaru; renderPanel(); });
     }
     var fr = $("f-sr"); if (fr) {
       var srBaru = state.srTempat;

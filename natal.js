@@ -168,7 +168,7 @@
     var el = { Api: 0, Tanah: 0, Udara: 0, Air: 0 }, kw = { Kardinal: 0, Tetap: 0, Mutabel: 0 };
     planets.forEach(function (p) { el[ELEMEN[p.pos.rasi % 4]] += bobot[p.id]; kw[KUALITAS[p.pos.rasi % 3]] += bobot[p.id]; });
     if (ang) { el[ELEMEN[ascRasi % 4]] += 2; kw[KUALITAS[ascRasi % 3]] += 2; }
-    return { planets: planets, angles: ang, ascRasi: ascRasi, aspek: aspek, elemen: el, kualitas: kw, adaJam: adaJam, jd: jd };
+    return { planets: planets, angles: ang, ascRasi: ascRasi, aspek: aspek, elemen: el, kualitas: kw, adaJam: adaJam, jd: jd, lat: lat, lon: lonEast };
   }
 
   // ---------- Teks analisa ----------
@@ -331,7 +331,24 @@
     srJup: "Keberuntungan tahun ini paling mudah datang lewat {u}.", srSat: "Pelajaran dan kerja keras tahun ini ada pada {u}.",
     rumah7: "Rumah 7 (pasangan) di {r}", mcJudul: "MC (puncak karier) di {r}",
     r10: "Planet di rumah karier: {p}", r10Isi: "Planet di rumah 10 membuat karier dan nama baik menjadi bagian penting hidup Anda. Anda berpeluang dikenal luas lewat pekerjaan.",
-    r2: "Planet di rumah uang: {p}", r2Isi: "Planet di rumah 2 membuat urusan penghasilan dan harta sangat menonjol. Anda punya bakat menghasilkan uang dari keahlian sendiri."
+    r2: "Planet di rumah uang: {p}", r2Isi: "Planet di rumah 2 membuat urusan penghasilan dan harta sangat menonjol. Anda punya bakat menghasilkan uang dari keahlian sendiri.",
+    prSunJ: "Matahari progresi di {r}", prMoonJ: "Bulan progresi di {r}", prFaseJ: "Fase Bulan progresi: {f}", prAscJ: "Ascendant progresi di {r}", prMcJ: "MC progresi di {r}", prVenJ: "Venus progresi di {r}",
+    prPindah: "Matahari progresi Anda sudah pindah dari {a} ke {b} sekitar usia {u}.", prSunBerikut: "Matahari progresi masuk {r} sekitar usia {u}.",
+    prSorot: "Bab ini paling terasa dalam urusan {u}.", prMoonRumah: "Selama sekitar dua setengah tahun, perasaan Anda banyak tertuju pada {u}.",
+    prMoonPindah: "Berikutnya Bulan progresi masuk {r}, dan suasana hati Anda ikut berganti.",
+    prAscIsi: "Cara Anda tampil dan memulai sesuatu sedang bergeser.", prMcIsi: "Arah karier yang sedang berkembang:",
+    prRetroVen: "Venus progresi yang retrograde membuat Anda menilai ulang cinta dan nilai-nilai lama.",
+    prAspIsi: "{p} progresi {tema} {k} Anda ({n} natal). {nada} Pengaruhnya terasa {lama}.", prLama: "sekitar satu sampai dua tahun", prLamaMoon: "sekitar dua bulan",
+    kpSunJ: "Matahari komposit di {r}", kpMoonJ: "Bulan komposit di {r}", kpVenJ: "Venus komposit di {r}", kpMarJ: "Mars komposit di {r}", kpAscJ: "Ascendant komposit di {r}", kpElJ: "Elemen hubungan",
+    kpRumah: "Hubungan ini paling hidup dalam urusan {u}.", kpMarIsi: "Kalian mengejar tujuan bersama {g}. Cara kalian berselisih juga mengikuti gaya ini.",
+    kpAspIsi: "Unsur {a} dan {b} {arti} (orb {o}°)",
+    lrAscJ: "Ascendant bulanan {r}", lrSun: "Energi dan perhatian utama bulan ini mengarah ke urusan {u}.", lrVen: "Kesenangan, cinta, dan rezeki kecil bulan ini datang lewat {u}.",
+    lrMar: "Dorongan dan potensi gesekan bulan ini ada pada {u}. Salurkan energi ini dengan sadar.",
+    lrAspIsi: "Bulan menyentuh {k} Anda bulan ini. {nada}",
+    pfRumahJ: "Tahun rumah {n} ({r})", pfTuanJ: "Penguasa tahun: {p}", pfTuanPos: "Dalam bagan lahir, {p} ada di {r} rumah {n}, jadi peristiwa tahun ini banyak datang lewat {u}.",
+    pfRetro: "Karena planet ini lahir dalam keadaan retrograde, tahun ini lebih banyak berisi peninjauan ulang daripada langkah baru.",
+    pfAktifJ: "Planet yang aktif: {p}", pfAktifIsi: "{p} ada di rumah ini sejak lahir, jadi urusan {k} ikut menonjol tahun ini.",
+    pfKosongJ: "Tidak ada planet lahir di rumah ini", pfKosongIsi: "Rumah yang kosong bukan berarti tahun yang sepi. Pengaruh tahun ini dibawa terutama oleh penguasa tahun di atas."
   };
   function F(tpl, v) { return tpl.replace(/\{(\w+)\}/g, function (_, k) { return v[k] !== undefined ? v[k] : ""; }); }
 
@@ -553,15 +570,347 @@
     return { chart: c, tema: tema };
   }
 
+  // ---------- Alat bantu bersama ----------
+  var TAHUN_MS = 365.2422 * 86400000;
+  function selisih(a, b) { return ((a - b + 540) % 360) - 180; } // a - b, -180..180
+  function tengah(a, b) { return norm(b + selisih(a, b) / 2); }
+  function ascDariMC(mc, lat, jd) {
+    var T = (jd - 2451545) / 36525, eps = 23.4392911 - 0.0130042 * T;
+    var ramc = norm(Math.atan2(sind(mc) * cosd(eps), cosd(mc)) / RAD);
+    return norm(Math.atan2(cosd(ramc), -(sind(ramc) * cosd(eps) + Math.tan(lat * RAD) * sind(eps))) / RAD);
+  }
+  function rumahDari(lon, ascRasi) { return ((Math.floor(lon / 30) - ascRasi + 12) % 12) + 1; }
+  var PENGUASA = ["mars", "venus", "mercury", "moon", "sun", "mercury", "venus", "mars", "jupiter", "saturn", "saturn", "jupiter"];
+  function planetById(c, id) { return c.planets.filter(function (p) { return p.id === id; })[0]; }
+
+  // ---------- Progresi sekunder: satu hari setelah lahir = satu tahun hidup ----------
+  var PR_SUN = [
+    "Bab hidup yang menuntut keberanian dan kemandirian. Anda terdorong memulai hal baru, mengambil keputusan sendiri, dan berhenti menunggu izin orang lain.",
+    "Bab hidup untuk membangun kestabilan. Uang, aset, tubuh, dan rasa aman menjadi prioritas, dan Anda lebih menghargai hal yang pelan tetapi pasti.",
+    "Bab hidup yang penuh rasa ingin tahu. Belajar, menulis, berjejaring, dan berpindah-pindah membuat Anda merasa hidup.",
+    "Bab hidup yang berpusat pada akar. Rumah, keluarga, dan rasa memiliki menjadi tema utama, dan Anda ingin tempat yang benar-benar terasa milik sendiri.",
+    "Bab hidup untuk bersinar. Anda ingin berkarya, dikenal, dan menikmati hidup. Cinta, anak, dan kreativitas mengambil panggung.",
+    "Bab hidup untuk merapikan diri. Pekerjaan, kesehatan, dan keahlian diasah, dan Anda belajar melayani tanpa kehilangan diri.",
+    "Bab hidup yang menyorot hubungan. Pasangan, mitra, dan kerja sama menjadi cermin bagi pertumbuhan Anda.",
+    "Bab hidup yang dalam dan mengubah. Ada hal lama yang dilepas, dan Anda menemukan kekuatan batin yang sebelumnya tersembunyi.",
+    "Bab hidup untuk memperluas cakrawala. Perjalanan, studi, dan pencarian makna hidup membuat Anda tumbuh.",
+    "Bab hidup untuk membangun pencapaian. Anda lebih serius, ambisius, dan siap memikul tanggung jawab besar.",
+    "Bab hidup untuk menjadi diri yang unik. Anda ingin bebas, bergaul dengan komunitas yang sepaham, dan mencoba cara baru.",
+    "Bab hidup yang lembut dan spiritual. Intuisi, seni, dan kepedulian kepada sesama menguat, dan Anda belajar melepaskan kendali."
+  ];
+  var PR_MOON = [
+    "Hati Anda sedang gelisah ingin bergerak. Ini masa yang baik untuk memulai proyek pribadi dan berani mengatakan apa yang Anda mau.",
+    "Hati Anda mencari ketenangan. Anda butuh rutinitas yang nyaman, keuangan yang tertata, dan waktu untuk menikmati hal sederhana.",
+    "Hati Anda haus informasi dan obrolan. Banyak ide baru datang, dan hubungan dengan saudara atau tetangga lebih aktif.",
+    "Hati Anda ingin pulang. Keluarga, rumah, dan orang terdekat menjadi pusat perhatian, dan perasaan lebih peka dari biasanya.",
+    "Hati Anda ingin bersenang-senang dan dihargai. Romansa, hobi, dan kegiatan kreatif terasa menggembirakan.",
+    "Hati Anda ingin semuanya teratur. Ini masa yang baik untuk memperbaiki pola makan, kebiasaan kerja, dan kesehatan.",
+    "Hati Anda mencari teman sejalan. Hubungan dekat, pernikahan, atau kemitraan menjadi pusat perasaan Anda.",
+    "Hati Anda sedang menyelam ke dalam. Emosi lebih intens, dan Anda siap menghadapi hal yang selama ini dihindari.",
+    "Hati Anda ingin bebas dan belajar. Perjalanan, kursus, atau keyakinan baru memberi semangat.",
+    "Hati Anda fokus pada tujuan. Anda lebih serius soal karier dan ingin hasil yang nyata.",
+    "Hati Anda butuh ruang dan teman. Komunitas, persahabatan, dan rencana masa depan sedang menguat.",
+    "Hati Anda butuh istirahat batin. Masa yang reflektif: tutup bab lama, perbanyak waktu tenang, dan dengarkan intuisi."
+  ];
+  var FASE = [
+    { n: "Bulan baru", isi: "Awal siklus 30 tahun yang baru. Anda menanam benih arah hidup berikutnya, meski bentuknya belum jelas." },
+    { n: "Bulan sabit awal", isi: "Benih baru mulai tumbuh. Anda berjuang melepaskan kebiasaan lama agar rencana baru bisa berjalan." },
+    { n: "Kuartal pertama", isi: "Masa krisis tindakan. Anda harus mengambil keputusan tegas dan membangun struktur untuk rencana Anda." },
+    { n: "Bulan cembung awal", isi: "Masa menyempurnakan. Anda memperbaiki, belajar, dan menyiapkan diri untuk hasil yang lebih besar." },
+    { n: "Purnama", isi: "Puncak siklus. Hasil usaha mulai terlihat, hubungan menjadi sorotan, dan Anda melihat diri dengan lebih jernih." },
+    { n: "Bulan cembung akhir", isi: "Masa berbagi. Anda membagikan pengalaman dan ilmu, dan sering berperan sebagai pembimbing." },
+    { n: "Kuartal akhir", isi: "Krisis keyakinan. Anda menilai ulang apa yang masih berarti dan mulai melepaskan yang tidak lagi cocok." },
+    { n: "Bulan sabit akhir", isi: "Masa menutup siklus. Waktu untuk melepaskan, beristirahat, dan bersiap bagi awal baru." }
+  ];
+  var PR_TEMA = {
+    sun: "menyorot dan memberi arah baru pada", moon: "membuat perasaan Anda sibuk dengan", mercury: "mengubah cara Anda memikirkan",
+    venus: "membawa cinta dan keindahan pada", mars: "menyalakan semangat dan dorongan pada"
+  };
+  function progresi(natal, msTarget) {
+    var umur = (msTarget - natal.ms) / TAHUN_MS;
+    var msP = natal.ms + umur * 86400000;
+    var c = hitungUTC(msP, natal.lat, natal.lon, false); c.ms = msP;
+    var sunN = natal.planets[0], sun = c.planets[0], moon = c.planets[1];
+    var arc = norm(sun.lon - sunN.lon);
+    if (natal.angles) {
+      var mc = norm(natal.angles.mc + arc), asc = ascDariMC(mc, natal.lat, natal.jd);
+      c.angles = { asc: asc, mc: mc };
+      c.planets.forEach(function (p) { p.rumahNatal = rumahDari(p.lon, natal.ascRasi); });
+    }
+    // fase bulan progresi
+    var fi = Math.floor(norm(moon.lon - sun.lon) / 45), fase = FASE[fi];
+    // kapan Bulan progresi pindah rasi berikutnya (bergerak sekitar 1° per bulan)
+    var T0 = (julianDay(msP) - 2451545) / 36525, r0 = Math.floor(moon.lon / 30), pindah = null;
+    for (var b = 1; b <= 40; b++) {
+      var lon = moonLon(T0 + (b / 12) / 36525);
+      if (Math.floor(lon / 30) !== r0) { pindah = { ms: msTarget + b / 12 * TAHUN_MS, rasi: Math.floor(lon / 30) }; break; }
+    }
+    var sisaSun = 30 - sun.lon % 30, umurSun = Math.floor(umur + sisaSun / 0.9856);
+    var tema = [];
+    var tSun = PR_SUN[sun.pos.rasi];
+    if (sun.pos.rasi !== sunN.pos.rasi) tSun = F(S.prPindah, { a: sunN.pos.nama, b: sun.pos.nama, u: Math.round(umur - (sun.lon % 30) / 0.9856) }) + " " + tSun;
+    tSun += " " + F(S.prSunBerikut, { r: RASI[(sun.pos.rasi + 1) % 12], u: umurSun });
+    tema.push({ judul: F(S.prSunJ, { r: sun.pos.nama }) + (sun.rumahNatal ? F(S.rumahN, { n: sun.rumahNatal }) : ""), isi: tSun + (sun.rumahNatal ? " " + F(S.prSorot, { u: RUMAH[sun.rumahNatal - 1] }) : "") });
+    tema.push({ judul: F(S.prMoonJ, { r: moon.pos.nama }) + (moon.rumahNatal ? F(S.rumahN, { n: moon.rumahNatal }) : ""),
+      isi: PR_MOON[moon.pos.rasi] + (moon.rumahNatal ? " " + F(S.prMoonRumah, { u: RUMAH[moon.rumahNatal - 1] }) : "") + (pindah ? " " + F(S.prMoonPindah, { r: RASI[pindah.rasi] }) : "") });
+    tema.push({ judul: F(S.prFaseJ, { f: fase.n }), isi: fase.isi });
+    if (c.angles) {
+      var ra = Math.floor(c.angles.asc / 30), rm = Math.floor(c.angles.mc / 30);
+      tema.push({ judul: F(S.prAscJ, { r: RASI[ra] }), isi: S.prAscIsi + " " + ASC_RASI[ra] });
+      tema.push({ judul: F(S.prMcJ, { r: RASI[rm] }), isi: S.prMcIsi + " " + MC_RASI[rm] });
+    }
+    var ven = c.planets[3], venN = natal.planets[3];
+    if (ven.retro !== venN.retro || ven.pos.rasi !== venN.pos.rasi)
+      tema.push({ judul: F(S.prVenJ, { r: ven.pos.nama }) + (ven.retro ? S.retroTag : ""), isi: VENUS_RASI[ven.pos.rasi] + (ven.retro ? " " + S.prRetroVen : "") });
+    // aspek progresi ke natal (orb 1°)
+    var aspek = [];
+    ["sun", "moon", "mercury", "venus", "mars"].forEach(function (id) {
+      var p = planetById(c, id);
+      natal.planets.forEach(function (n) {
+        if (n.id === id) return;
+        var a = cariAspek(p.lon, n.lon, 1); if (!a) return;
+        aspek.push({ p: p, n: n, jenis: a.jenis, orb: a.orb, bobot: (id === "sun" ? 4 : id === "moon" ? 2 : 3) - a.orb + (a.jenis.a === 0 ? 0.5 : 0),
+          isi: F(S.prAspIsi, { p: p.n, tema: PR_TEMA[id], k: KATA[n.id], n: n.n, nada: NADA[a.jenis.sifat], lama: id === "moon" ? S.prLamaMoon : S.prLama }) });
+      });
+      if (natal.angles) ["asc", "mc"].forEach(function (k) {
+        var a = cariAspek(p.lon, natal.angles[k], 1); if (!a) return;
+        aspek.push({ p: p, n: { id: k, n: k === "asc" ? S.ascNama : S.mcNama }, jenis: a.jenis, orb: a.orb, bobot: 4 - a.orb,
+          isi: F(S.prAspIsi, { p: p.n, tema: PR_TEMA[id], k: k === "asc" ? S.citraDiri : S.karierRep, n: k === "asc" ? S.ascNama : S.mcNama, nada: NADA[a.jenis.sifat], lama: id === "moon" ? S.prLamaMoon : S.prLama }) });
+      });
+    });
+    aspek.sort(function (a, b) { return b.bobot - a.bobot; });
+    return { chart: c, umur: umur, tema: tema, aspek: aspek, fase: fi, pindah: pindah };
+  }
+
+  // ---------- Bagan komposit: titik tengah dua bagan ----------
+  var KOMP_SUN = [
+    "Hubungan ini lahir untuk bergerak dan memulai. Bersama, kalian lebih berani mencoba hal baru, tetapi perlu belajar agar tidak saling berebut memimpin.",
+    "Hubungan ini dibangun untuk bertahan. Tujuan bersamanya adalah rasa aman, rumah yang nyaman, dan kesejahteraan yang tumbuh pelan-pelan.",
+    "Hubungan ini hidup lewat obrolan. Kalian saling mengasah pikiran, banyak bertukar ide, dan senang melakukan banyak hal bersama.",
+    "Hubungan ini terasa seperti keluarga. Tujuannya saling menjaga, membangun rumah, dan memberi tempat pulang bagi satu sama lain.",
+    "Hubungan ini ingin bersinar. Kalian tampak serasi di mata orang, saling membanggakan, dan menikmati hidup dengan penuh gaya.",
+    "Hubungan ini bekerja lewat kepedulian nyata. Kalian saling membantu, membangun kebiasaan sehat, dan menjadi tim yang rapi.",
+    "Hubungan ini berpusat pada kemitraan. Keadilan, keseimbangan, dan keindahan menjadi nilai utama yang kalian jaga bersama.",
+    "Hubungan ini dalam dan mengubah hidup. Ikatannya kuat dan intens, dan kalian saling membawa ke versi diri yang lebih jujur.",
+    "Hubungan ini adalah petualangan. Bersama, kalian ingin belajar, bepergian, dan menemukan makna hidup yang lebih luas.",
+    "Hubungan ini serius dan berorientasi masa depan. Kalian membangun sesuatu yang nyata, dari karier sampai keluarga, dengan komitmen tinggi.",
+    "Hubungan ini seperti sahabat dekat. Kalian saling memberi ruang, punya cita-cita bersama, dan sering terlibat dalam komunitas.",
+    "Hubungan ini terasa seperti takdir. Ada ikatan batin dan rasa saling memahami tanpa kata, tetapi kalian perlu tetap berpijak pada kenyataan."
+  ];
+  var KOMP_MOON = [
+    "Secara emosional kalian cepat panas dan cepat baikan. Hubungan butuh kegiatan bersama agar tidak terasa membosankan.",
+    "Secara emosional hubungan ini tenang dan stabil. Rasa nyaman tumbuh lewat kebersamaan sederhana dan rutinitas.",
+    "Secara emosional kalian butuh banyak bicara. Perasaan diolah lewat obrolan, pesan, dan candaan.",
+    "Secara emosional hubungan ini sangat hangat dan protektif. Kalian saling mengasuh, kadang sampai terlalu sensitif.",
+    "Secara emosional kalian butuh saling memuji dan merasa istimewa. Kehangatan dan kemesraan perlu diungkapkan terang-terangan.",
+    "Secara emosional kalian menunjukkan sayang lewat perhatian kecil. Hati-hati agar tidak saling mengkritik.",
+    "Secara emosional hubungan ini mencari harmoni. Kalian menghindari konflik, jadi biasakan membicarakan masalah sebelum menumpuk.",
+    "Secara emosional ikatan kalian sangat dalam. Kesetiaan tinggi, tetapi cemburu dan rahasia perlu dikelola dengan jujur.",
+    "Secara emosional kalian butuh kebebasan dan tawa. Hubungan terasa paling baik saat ada rencana dan petualangan baru.",
+    "Secara emosional hubungan ini dewasa dan bertanggung jawab. Kehangatan kadang perlu ditunjukkan lebih sering.",
+    "Secara emosional kalian butuh ruang pribadi. Persahabatan adalah fondasi, dan kalian tidak suka saling mengekang.",
+    "Secara emosional kalian sangat peka satu sama lain. Ada empati besar, tetapi jaga agar tidak larut dalam perasaan pasangan."
+  ];
+  var KOMP_VENUS = [
+    "Cinta kalian spontan dan bergairah. Romantisme muncul lewat kejutan dan keberanian menyatakan perasaan.",
+    "Cinta kalian sensual dan setia. Makan enak, sentuhan, dan kenyamanan fisik adalah bahasa cinta bersama.",
+    "Cinta kalian ringan dan menyenangkan. Kalian saling menggoda lewat kata dan suka melakukan hal baru bersama.",
+    "Cinta kalian lembut dan mengayomi. Kebersamaan di rumah dan perhatian sehari-hari membuat hubungan kuat.",
+    "Cinta kalian hangat dan penuh perayaan. Kalian suka memanjakan satu sama lain dan tampil mesra.",
+    "Cinta kalian tulus dan praktis. Sayang ditunjukkan lewat tindakan nyata dan saling menolong.",
+    "Cinta kalian manis dan seimbang. Kalian menghargai sopan santun, keindahan, dan keadilan dalam hubungan.",
+    "Cinta kalian intens dan total. Daya tarik sangat kuat, dan hubungan menuntut kejujuran penuh.",
+    "Cinta kalian riang dan bebas. Kalian paling dekat saat belajar atau bepergian bersama.",
+    "Cinta kalian serius dan setia. Komitmen dan rencana jangka panjang adalah bentuk kasih sayang kalian.",
+    "Cinta kalian bersahabat dan unik. Kalian tidak mengikuti aturan umum dan saling memberi kebebasan.",
+    "Cinta kalian romantis dan penuh pengorbanan. Kalian saling menginspirasi, tetapi perlu batas yang sehat."
+  ];
+  var KOMP_ASC = [
+    "Di mata orang, kalian pasangan yang energik dan berani.", "Di mata orang, kalian pasangan yang tenang, mapan, dan bisa diandalkan.",
+    "Di mata orang, kalian pasangan yang ramah, lucu, dan selalu punya cerita.", "Di mata orang, kalian pasangan yang hangat dan kekeluargaan.",
+    "Di mata orang, kalian pasangan yang mencolok dan berkarisma.", "Di mata orang, kalian pasangan yang rapi, sopan, dan cakap.",
+    "Di mata orang, kalian pasangan yang serasi dan menawan.", "Di mata orang, kalian pasangan yang misterius dan kuat.",
+    "Di mata orang, kalian pasangan yang ceria dan suka bertualang.", "Di mata orang, kalian pasangan yang serius dan terhormat.",
+    "Di mata orang, kalian pasangan yang unik dan tidak biasa.", "Di mata orang, kalian pasangan yang lembut dan penuh pengertian."
+  ];
+  var KOMP_ARTI = {
+    "Konjungsi": "menyatu dalam hubungan ini, sehingga menjadi ciri khas yang sangat terasa bagi kalian berdua.",
+    "Sekstil": "bekerja sama dengan mudah. Ada peluang yang terbuka bila kalian mau mengusahakannya bersama.",
+    "Kuadratur": "saling menekan. Ketegangan ini menjadi bahan pertengkaran sekaligus pendorong hubungan untuk tumbuh.",
+    "Trigon": "mengalir harmonis. Bagian ini terasa mudah dan menjadi kekuatan alami hubungan kalian.",
+    "Oposisi": "saling tarik-menarik. Kalian belajar menyeimbangkan dua kebutuhan yang berbeda."
+  };
+  var KOMP_EL = {
+    Api: "Hubungan ini didominasi elemen Api: penuh semangat, spontan, dan suka tantangan.",
+    Tanah: "Hubungan ini didominasi elemen Tanah: praktis, setia, dan fokus membangun hal nyata.",
+    Udara: "Hubungan ini didominasi elemen Udara: komunikatif, sosial, dan kaya ide.",
+    Air: "Hubungan ini didominasi elemen Air: emosional, intuitif, dan sangat dekat secara batin."
+  };
+  function hitungAspek(planets) {
+    var aspek = [];
+    for (var i = 0; i < planets.length; i++) for (var j = i + 1; j < planets.length; j++) {
+      var diff = bedaSudut(planets[i].lon, planets[j].lon);
+      for (var k = 0; k < ASPEK.length; k++) {
+        var A = ASPEK[k], orb = A.orb + ((planets[i].id === "sun" || planets[i].id === "moon") ? 1 : 0);
+        if (Math.abs(diff - A.a) <= orb) { aspek.push({ p1: planets[i], p2: planets[j], jenis: A, orb: Math.abs(diff - A.a) }); break; }
+      }
+    }
+    return aspek.sort(function (x, y) { return x.orb - y.orb; });
+  }
+  function komposit(a, b) {
+    var planets = a.planets.map(function (p, i) {
+      var lon = tengah(p.lon, b.planets[i].lon);
+      return { id: p.id, n: p.n, s: p.s, lon: lon, retro: false, pos: posisi(lon) };
+    });
+    var c = { planets: planets, angles: null, ascRasi: null };
+    if (a.angles && b.angles) {
+      var mc = tengah(a.angles.mc, b.angles.mc), asc = ascDariMC(mc, (a.lat + b.lat) / 2, (a.jd + b.jd) / 2);
+      c.angles = { asc: asc, mc: mc }; c.ascRasi = Math.floor(asc / 30);
+      planets.forEach(function (p) { p.rumah = rumahDari(p.lon, c.ascRasi); });
+    }
+    c.aspek = hitungAspek(planets);
+    var bobot = { sun: 3, moon: 3, mercury: 2, venus: 2, mars: 2, jupiter: 1, saturn: 1, uranus: 0.5, neptune: 0.5, pluto: 0.5 };
+    var el = { Api: 0, Tanah: 0, Udara: 0, Air: 0 };
+    planets.forEach(function (p) { el[ELEMEN[p.pos.rasi % 4]] += bobot[p.id]; });
+    var maxEl = Object.keys(el).sort(function (x, y) { return el[y] - el[x]; })[0];
+    var sun = planets[0], moon = planets[1], ven = planets[3], mar = planets[4];
+    var tema = [
+      { judul: F(S.kpSunJ, { r: sun.pos.nama }) + (sun.rumah ? F(S.rumahN, { n: sun.rumah }) : ""), isi: KOMP_SUN[sun.pos.rasi] + (sun.rumah ? " " + F(S.kpRumah, { u: RUMAH[sun.rumah - 1] }) : "") },
+      { judul: F(S.kpMoonJ, { r: moon.pos.nama }), isi: KOMP_MOON[moon.pos.rasi] },
+      { judul: F(S.kpVenJ, { r: ven.pos.nama }), isi: KOMP_VENUS[ven.pos.rasi] },
+      { judul: F(S.kpMarJ, { r: mar.pos.nama }), isi: F(S.kpMarIsi, { g: GAYA[mar.pos.rasi] }) }
+    ];
+    if (c.angles) tema.splice(1, 0, { judul: F(S.kpAscJ, { r: RASI[c.ascRasi] }), isi: KOMP_ASC[c.ascRasi] });
+    tema.push({ judul: S.kpElJ, isi: KOMP_EL[maxEl] });
+    var aspek = c.aspek.filter(function (x) { return PRIBADI.indexOf(x.p1.id) >= 0 && PRIBADI.indexOf(x.p2.id) >= 0; }).slice(0, 8).map(function (x) {
+      return { p1: x.p1, p2: x.p2, jenis: x.jenis, orb: x.orb, isi: F(S.kpAspIsi, { a: KATA[x.p1.id], b: KATA[x.p2.id], arti: KOMP_ARTI[x.jenis.k], o: x.orb.toFixed(1) }) };
+    });
+    return { chart: c, tema: tema, aspek: aspek };
+  }
+
+  // ---------- Lunar return: Bulan kembali ke posisi lahirnya (sekitar tiap 27,3 hari) ----------
+  var LR_ASC = [
+    "Bulan yang cepat dan penuh inisiatif. Anda lebih berani, tidak sabar, dan ingin segera bertindak.",
+    "Bulan yang pelan dan membumi. Fokus pada uang, kenyamanan, dan menikmati hal sederhana.",
+    "Bulan yang sibuk. Banyak pesan, janji temu, perjalanan pendek, dan hal baru untuk dipelajari.",
+    "Bulan yang emosional dan dekat dengan keluarga. Rumah menjadi pusat perhatian Anda.",
+    "Bulan untuk tampil. Anda lebih percaya diri, ingin diperhatikan, dan mudah menikmati romansa.",
+    "Bulan untuk beres-beres. Pekerjaan, kesehatan, dan detail kecil menuntut perhatian.",
+    "Bulan yang sosial. Hubungan dan kerja sama menjadi tema utama, dan orang lain banyak memengaruhi suasana hati.",
+    "Bulan yang intens. Perasaan dalam muncul ke permukaan, dan ada hal yang ingin Anda ubah sampai tuntas.",
+    "Bulan yang optimis. Anda ingin belajar, bepergian, atau mencari pengalaman yang memperluas wawasan.",
+    "Bulan yang serius dan produktif. Tanggung jawab bertambah, tetapi kerja keras terlihat hasilnya.",
+    "Bulan untuk teman dan komunitas. Anda ingin bebas, mencoba hal baru, dan bertemu orang yang sepaham.",
+    "Bulan yang tenang dan reflektif. Perbanyak istirahat, dengarkan intuisi, dan jaga batas energi Anda."
+  ];
+  var LR_RUMAH = [
+    "Perasaan bulan ini berpusat pada diri sendiri. Waktu yang tepat untuk merawat diri dan memulai kebiasaan baru.",
+    "Perasaan bulan ini terkait uang dan rasa aman. Perhatikan pengeluaran dan hargai apa yang sudah Anda punya.",
+    "Pikiran bulan ini sangat aktif. Banyak obrolan, urusan saudara, dan keinginan belajar hal baru.",
+    "Hati bulan ini ingin di rumah. Keluarga, orang tua, atau urusan tempat tinggal paling menyita perasaan.",
+    "Hati bulan ini ingin bersenang-senang. Cinta, anak, hobi, dan kreativitas membawa kebahagiaan.",
+    "Perasaan bulan ini tertuju pada pekerjaan dan kesehatan. Atur ritme harian agar tidak kelelahan.",
+    "Perasaan bulan ini tertuju pada pasangan dan mitra. Hubungan dekat membutuhkan perhatian lebih.",
+    "Perasaan bulan ini dalam dan intens. Urusan keuangan bersama, kepercayaan, dan perubahan batin muncul.",
+    "Hati bulan ini ingin menjelajah. Perjalanan, studi, atau pencarian makna membuat Anda bersemangat.",
+    "Perasaan bulan ini tertuju pada karier dan nama baik. Anda lebih terlihat oleh atasan atau publik.",
+    "Perasaan bulan ini tertuju pada teman dan harapan. Lingkaran sosial memberi dukungan dan peluang.",
+    "Perasaan bulan ini lebih ke dalam. Butuh waktu menyendiri, tidur cukup, dan menutup urusan yang menggantung."
+  ];
+  function cariBulanKembali(lon0, msMulai) {
+    var ms = msMulai;
+    var T = (julianDay(ms) - 2451545) / 36525;
+    ms += norm(lon0 - moonLon(T)) / 13.176 * 86400000;
+    for (var i = 0; i < 8; i++) {
+      T = (julianDay(ms) - 2451545) / 36525;
+      var d = selisih(lon0, moonLon(T));
+      ms += d / 13.176 * 86400000;
+      if (Math.abs(d) < 1e-4) break;
+    }
+    return ms;
+  }
+  function lunarReturn(natal, msMulai, lat, lonEast) {
+    var lon0 = natal.planets[1].lon, ms = cariBulanKembali(lon0, msMulai);
+    var c = hitungUTC(ms, lat, lonEast, true); c.ms = ms;
+    var by = {}; c.planets.forEach(function (p) { by[p.id] = p; });
+    var ra = Math.floor(c.angles.asc / 30), moon = by.moon;
+    var tema = [
+      { judul: F(S.lrAscJ, { r: RASI[ra] }), isi: LR_ASC[ra] },
+      { judul: F(S.diRumah, { p: moon.n, n: moon.rumah }), isi: LR_RUMAH[moon.rumah - 1] },
+      { judul: F(S.diRumah, { p: by.sun.n, n: by.sun.rumah }), isi: F(S.lrSun, { u: RUMAH[by.sun.rumah - 1] }) },
+      { judul: F(S.diRumah, { p: by.venus.n, n: by.venus.rumah }), isi: F(S.lrVen, { u: RUMAH[by.venus.rumah - 1] }) },
+      { judul: F(S.diRumah, { p: by.mars.n, n: by.mars.rumah }), isi: F(S.lrMar, { u: RUMAH[by.mars.rumah - 1] }) }
+    ];
+    var aspek = [];
+    c.planets.forEach(function (p) {
+      if (p.id === "moon") return;
+      var a = cariAspek(moon.lon, p.lon, 6); if (!a) return;
+      aspek.push({ p: moon, n: p, jenis: a.jenis, orb: a.orb, isi: F(S.lrAspIsi, { k: KATA[p.id], nada: NADA[a.jenis.sifat] }) });
+    });
+    aspek.sort(function (x, y) { return x.orb - y.orb; });
+    // jadwal beberapa lunar return berikutnya
+    var jadwal = [], m = ms;
+    for (var i = 0; i < 6; i++) {
+      m = cariBulanKembali(lon0, m + 20 * 86400000);
+      var ci = hitungUTC(m, lat, lonEast, true);
+      jadwal.push({ ms: m, asc: Math.floor(ci.angles.asc / 30) });
+    }
+    return { chart: c, tema: tema, aspek: aspek.slice(0, 5), jadwal: jadwal };
+  }
+
+  // ---------- Profeksi tahunan: satu rumah per tahun usia ----------
+  var PROF_RUMAH = [
+    "Tahun diri sendiri. Siklus 12 tahun baru dimulai. Tubuh, penampilan, dan arah hidup pribadi menjadi sorotan. Bagus untuk memulai hal besar atas nama diri sendiri.",
+    "Tahun uang dan nilai diri. Penghasilan, tabungan, dan apa yang benar-benar Anda hargai menjadi tema utama. Waktu yang baik untuk menata keuangan.",
+    "Tahun belajar dan berkomunikasi. Saudara, tetangga, kursus, tulisan, dan perjalanan pendek mengisi tahun ini. Pikiran Anda sangat aktif.",
+    "Tahun rumah dan keluarga. Urusan tempat tinggal, orang tua, dan akar keluarga menonjol. Ada keinginan membangun fondasi yang kokoh.",
+    "Tahun kesenangan dan kreativitas. Cinta, anak, hobi, dan karya pribadi membawa kebahagiaan. Beri diri izin untuk menikmati hidup.",
+    "Tahun kerja dan kesehatan. Rutinitas, pekerjaan harian, dan kondisi tubuh menuntut perhatian. Tahun untuk memperbaiki kebiasaan.",
+    "Tahun hubungan. Pasangan, pernikahan, mitra bisnis, atau bahkan lawan menjadi tema besar. Banyak pelajaran datang lewat orang lain.",
+    "Tahun perubahan mendalam. Keuangan bersama, utang, warisan, dan hal yang tersembunyi muncul. Tahun untuk melepaskan dan bertransformasi.",
+    "Tahun memperluas wawasan. Perjalanan jauh, pendidikan tinggi, keyakinan, dan urusan hukum atau luar negeri terbuka lebar.",
+    "Tahun karier dan pencapaian. Reputasi, jabatan, dan tujuan hidup sedang disorot. Kerja keras tahun ini paling mudah terlihat orang.",
+    "Tahun teman dan harapan. Jaringan, komunitas, dan rencana masa depan membawa peluang. Dukungan datang dari lingkaran sosial.",
+    "Tahun batin dan penutupan. Waktu untuk refleksi, istirahat, dan menyelesaikan siklus lama sebelum siklus baru dimulai tahun depan."
+  ];
+  var PROF_TUAN = {
+    sun: "Matahari sebagai penguasa tahun membuat jati diri, kepemimpinan, dan pengakuan menjadi tema utama. Anda ingin bersinar dan diakui.",
+    moon: "Bulan sebagai penguasa tahun membuat perasaan, keluarga, dan kebutuhan batin sangat menonjol. Suasana hati menjadi kompas Anda.",
+    mercury: "Merkurius sebagai penguasa tahun membuat pikiran, komunikasi, belajar, dan perdagangan menjadi kunci. Tahun yang sibuk dan penuh informasi.",
+    venus: "Venus sebagai penguasa tahun membawa cinta, keindahan, kesenangan, dan uang. Hubungan dan kenyamanan menjadi fokus.",
+    mars: "Mars sebagai penguasa tahun membawa energi, keberanian, dan persaingan. Tahun untuk berjuang, tetapi jaga emosi dan keselamatan.",
+    jupiter: "Jupiter sebagai penguasa tahun membawa pertumbuhan, keberuntungan, dan perluasan. Tahun yang murah hati bila Anda berani melangkah.",
+    saturn: "Saturnus sebagai penguasa tahun membawa disiplin, tanggung jawab, dan ujian kesabaran. Yang dibangun dengan sungguh-sungguh tahun ini akan bertahan lama."
+  };
+  function profeksi(natal, msTarget) {
+    var umur = Math.floor((msTarget - natal.ms) / TAHUN_MS);
+    var adaAsc = !!natal.angles, dasar = adaAsc ? natal.ascRasi : natal.planets[0].pos.rasi;
+    function satu(u) { var n = ((u % 12) + 12) % 12, r = (dasar + n) % 12; return { umur: u, rumah: n + 1, rasi: r, tuan: PENGUASA[r] }; }
+    var ini = satu(umur), tuan = planetById(natal, ini.tuan);
+    var rumahTuan = adaAsc ? tuan.rumah : rumahDari(tuan.lon, dasar);
+    var tema = [
+      { judul: F(S.pfRumahJ, { n: ini.rumah, r: RASI[ini.rasi] }), isi: PROF_RUMAH[ini.rumah - 1] },
+      { judul: F(S.pfTuanJ, { p: tuan.n }), isi: PROF_TUAN[ini.tuan] + " " + F(S.pfTuanPos, { p: tuan.n, r: tuan.pos.nama, n: rumahTuan, u: RUMAH[rumahTuan - 1] }) + (tuan.retro ? " " + S.pfRetro : "") }
+    ];
+    var aktif = natal.planets.filter(function (p) { return p.pos.rasi === ini.rasi; });
+    if (aktif.length) tema.push({ judul: F(S.pfAktifJ, { p: aktif.map(function (p) { return p.n; }).join(", ") }), isi: aktif.map(function (p) { return F(S.pfAktifIsi, { p: p.n, k: KATA[p.id] }); }).join(" ") });
+    else tema.push({ judul: S.pfKosongJ, isi: S.pfKosongIsi });
+    var tahun = []; for (var u = umur; u < umur + 12; u++) tahun.push(satu(u));
+    var bulan = []; for (var k = 0; k < 12; k++) { var r = (ini.rasi + k) % 12; bulan.push({ ke: k, rasi: r, tuan: PENGUASA[r] }); }
+    return { umur: umur, ini: ini, tema: tema, tahun: tahun, bulan: bulan, adaAsc: adaAsc };
+  }
+
   // ---------- Bahasa ----------
   var TABEL = { RASI: RASI, PLANETS: PLANETS, ASPEK: ASPEK, GAYA: GAYA, BULAN_RASI: BULAN_RASI, ASC_RASI: ASC_RASI, PLANET_MAKNA: PLANET_MAKNA, RUMAH: RUMAH,
     KATA: KATA, ASPEK_ARTI: ASPEK_ARTI, ELEMEN_ARTI: ELEMEN_ARTI, KUALITAS_ARTI: KUALITAS_ARTI, TR_TEMA: TR_TEMA, TR_LAMA: TR_LAMA, NADA: NADA,
     PASANGAN: PASANGAN, SR_ASC: SR_ASC, S: S,
-    VENUS_RASI: VENUS_RASI, MARS_RASI: MARS_RASI, R7_RASI: R7_RASI, MC_RASI: MC_RASI, SAT_RASI: SAT_RASI, JUP_RASI: JUP_RASI };
+    VENUS_RASI: VENUS_RASI, MARS_RASI: MARS_RASI, R7_RASI: R7_RASI, MC_RASI: MC_RASI, SAT_RASI: SAT_RASI, JUP_RASI: JUP_RASI,
+    PR_SUN: PR_SUN, PR_MOON: PR_MOON, FASE: FASE, PR_TEMA: PR_TEMA, KOMP_SUN: KOMP_SUN, KOMP_MOON: KOMP_MOON, KOMP_VENUS: KOMP_VENUS, KOMP_ASC: KOMP_ASC, KOMP_ARTI: KOMP_ARTI, KOMP_EL: KOMP_EL,
+    LR_ASC: LR_ASC, LR_RUMAH: LR_RUMAH, PROF_RUMAH: PROF_RUMAH, PROF_TUAN: PROF_TUAN };
   var ASLI = JSON.parse(JSON.stringify(TABEL));
   function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
   function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
 
-  var api = { setLang: setLang, S: S, hitung: hitung, hitungUTC: hitungUTC, transit: transit, sinastri: sinastri, solarReturn: solarReturn, analisa: analisa, posisi: posisi, KOTA: KOTA, RASI: RASI, RASI_SYM: RASI_SYM, ASPEK: ASPEK, PLANETS: PLANETS, _sunLon: sunLon, _moonLon: moonLon, _planetLon: planetLon };
+  var api = { setLang: setLang, S: S, hitung: hitung, hitungUTC: hitungUTC, transit: transit, sinastri: sinastri, solarReturn: solarReturn, progresi: progresi, komposit: komposit, lunarReturn: lunarReturn, profeksi: profeksi, PENGUASA: PENGUASA, analisa: analisa, posisi: posisi, KOTA: KOTA, RASI: RASI, RASI_SYM: RASI_SYM, ASPEK: ASPEK, PLANETS: PLANETS, _sunLon: sunLon, _moonLon: moonLon, _planetLon: planetLon };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Natal = api;
 })(this);
