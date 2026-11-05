@@ -77,8 +77,174 @@
     var total = a + b + c, lp = reduceNum(total, true);
     var now = new Date();
     var personalYear = reduceNum(reduceNum(dt.d) + reduceNum(dt.m) + reduceNum(digitSum(now.getFullYear())));
-    return { angka: lp, rumus: a + " + " + b + " + " + c + " = " + total + (total !== lp ? " → " + lp : ""), info: ANGKA[lp], tahunPersonal: personalYear, tahunIni: now.getFullYear(), hariLahir: reduceNum(dt.d, true) };
+    var bulanP = reduceNum(personalYear + now.getMonth() + 1), hariP = reduceNum(bulanP + now.getDate());
+    // puncak & tantangan (komponen direduksi ke satu digit)
+    var md = reduceNum(dt.m), dd = reduceNum(dt.d), yd = reduceNum(digitSum(dt.y)), lpBase = reduceNum(lp);
+    var p1 = reduceNum(md + dd, true), p2 = reduceNum(dd + yd, true), p3 = reduceNum(reduceNum(p1) + reduceNum(p2), true), p4 = reduceNum(md + yd, true);
+    var akhir1 = 36 - lpBase;
+    var puncak = [
+      { n: p1, dari: 0, sampai: akhir1, tahun: dt.y }, { n: p2, dari: akhir1 + 1, sampai: akhir1 + 9 },
+      { n: p3, dari: akhir1 + 10, sampai: akhir1 + 18 }, { n: p4, dari: akhir1 + 19, sampai: null }
+    ];
+    var usia = now.getFullYear() - dt.y - ((now.getMonth() + 1) * 100 + now.getDate() < dt.m * 100 + dt.d ? 1 : 0);
+    puncak.forEach(function (p, i) { p.aktif = usia >= p.dari && (p.sampai === null || usia <= p.sampai); p.isi = PUNCAK[p.n]; p.ke = i + 1; });
+    var c1 = Math.abs(md - dd), c2 = Math.abs(dd - yd), c3 = Math.abs(c1 - c2), c4 = Math.abs(md - yd);
+    var tantangan = [c1, c2, c3, c4].map(function (n, i) { return { n: n, ke: i + 1, isi: TANTANGAN[n] }; });
+    var sikap = reduceNum(dt.d + dt.m);
+    return { angka: lp, rumus: a + " + " + b + " + " + c + " = " + total + (total !== lp ? " → " + lp : ""), info: ANGKA[lp], detail: LP_DETAIL[lp],
+      tahunPersonal: personalYear, tahunIni: now.getFullYear(), hariLahir: reduceNum(dt.d, true),
+      bulanPersonal: bulanP, bulanIsi: BULAN_PERSONAL[bulanP], bulanIni: now.getMonth() + 1, hariPersonal: hariP, hariKunci: KATA_KUNCI[hariP],
+      usia: usia, puncak: puncak, tantangan: tantangan, sikap: sikap, sikapIsi: SIKAP[sikap] };
   }
+  // Analisa mendalam angka jalan hidup
+  var LP_DETAIL = {
+    1: { kekuatan: "Berani mengambil keputusan, mandiri, kreatif dalam mencari jalan baru, dan punya daya dorong yang kuat. Anda sering menjadi orang pertama yang mencoba sesuatu.",
+      kelemahan: "Mudah tidak sabar, sulit menerima bantuan, dan bisa terkesan egois atau keras kepala. Saat tertekan, Anda cenderung memikul semuanya sendirian.",
+      cinta: "Anda butuh pasangan yang menghargai kemandirian Anda dan tidak merasa tersaingi. Anda setia dan protektif, tetapi perlu belajar mendengarkan dan berbagi kendali.",
+      karier: "Paling bersinar saat memimpin atau bekerja dengan kebebasan penuh: wirausaha, manajer, perintis bisnis, desainer, konsultan, atau bidang yang menuntut inovasi.",
+      uang: "Rezeki datang lewat inisiatif sendiri. Anda pandai menghasilkan uang tetapi kadang boros untuk ide baru. Sisihkan dana cadangan sebelum memulai proyek berikutnya.",
+      kesehatan: "Energi tinggi membuat Anda lupa istirahat. Waspadai stres, sakit kepala, dan tekanan darah. Olahraga kompetitif menjadi penyaluran yang sehat.",
+      misi: "Belajar memimpin dengan teladan, bukan dengan paksaan, dan membuka jalan agar orang lain ikut maju.",
+      cocok: "1, 3, 5", sulit: "6, 8", hari: "Minggu", warna: "Merah, emas" },
+    2: { kekuatan: "Peka, sabar, diplomatis, dan pandai membaca perasaan orang. Anda perekat dalam keluarga dan tim, serta penengah yang dipercaya.",
+      kelemahan: "Mudah ragu, terlalu memikirkan pendapat orang, dan sulit berkata tidak. Perasaan yang dipendam bisa berubah menjadi kecewa.",
+      cinta: "Anda pasangan yang lembut, romantis, dan penuh perhatian. Hubungan adalah pusat hidup Anda, jadi pilih pasangan yang juga mau memberi, bukan hanya menerima.",
+      karier: "Cocok sebagai mediator, konselor, HRD, guru, perawat, diplomat, asisten pimpinan, musisi, atau dalam kemitraan bisnis yang saling melengkapi.",
+      uang: "Keuangan paling stabil lewat kerja sama dan kemitraan. Anda hemat dan teliti, tetapi jangan mudah meminjamkan uang karena sungkan.",
+      kesehatan: "Emosi sangat memengaruhi tubuh Anda. Jaga pencernaan dan kualitas tidur, dan cari waktu tenang untuk memulihkan diri dari keramaian.",
+      misi: "Menjadi jembatan perdamaian dan belajar percaya bahwa kelembutan Anda juga sebuah kekuatan.",
+      cocok: "2, 4, 8", sulit: "1, 5", hari: "Senin", warna: "Putih, perak, hijau muda" },
+    3: { kekuatan: "Ekspresif, ceria, kreatif, dan pandai berkomunikasi. Anda membawa semangat ke mana pun dan mudah membuat orang tertawa.",
+      kelemahan: "Mudah bosan, kurang fokus, dan kadang menghindari masalah dengan bercanda. Bakat yang banyak bisa tercecer jika tidak dikelola.",
+      cinta: "Anda pasangan yang menyenangkan dan penuh kejutan. Anda butuh hubungan yang hidup, penuh obrolan, dan saling memuji. Kecemburuan membuat Anda menjauh.",
+      karier: "Bersinar di dunia kata dan panggung: penulis, konten kreator, MC, pemasaran, desain, seni, mengajar, public relations, atau penjualan.",
+      uang: "Uang mudah datang dan mudah pergi. Penghasilan dari kreativitas bisa besar, asalkan Anda membuat anggaran dan tidak belanja karena suasana hati.",
+      kesehatan: "Jaga tenggorokan, kulit, dan pola makan. Suasana hati sangat berpengaruh, jadi tetap berkarya agar pikiran tidak murung.",
+      misi: "Menginspirasi dan menghibur lewat karya, serta belajar menyelesaikan apa yang sudah dimulai.",
+      cocok: "1, 5, 9", sulit: "4, 7", hari: "Kamis", warna: "Kuning, oranye" },
+    4: { kekuatan: "Disiplin, jujur, teratur, dan pekerja keras. Anda membangun sesuatu dengan pondasi kuat, dan orang mempercayakan tanggung jawab besar kepada Anda.",
+      kelemahan: "Kaku, terlalu serius, dan sulit menerima perubahan mendadak. Anda bisa terlalu keras pada diri sendiri dan orang lain.",
+      cinta: "Anda setia, bisa diandalkan, dan menunjukkan cinta lewat tindakan nyata. Anda butuh pasangan yang menghargai komitmen dan rencana masa depan yang jelas.",
+      karier: "Cocok di bidang yang butuh ketelitian dan sistem: teknik, arsitektur, akuntansi, perbankan, properti, IT, manajemen proyek, atau pemerintahan.",
+      uang: "Anda penabung alami dan membangun kekayaan pelan tetapi pasti. Investasi jangka panjang seperti properti sangat cocok untuk Anda.",
+      kesehatan: "Waspadai pegal, punggung, dan sendi karena terlalu lama bekerja. Selingi dengan liburan dan aktivitas yang membuat Anda rileks.",
+      misi: "Membangun sesuatu yang bertahan lama dan belajar bahwa kelenturan tidak sama dengan kelemahan.",
+      cocok: "2, 6, 8", sulit: "3, 5", hari: "Sabtu", warna: "Hijau tua, cokelat, biru" },
+    5: { kekuatan: "Serba bisa, cepat beradaptasi, berani, dan pandai bergaul. Anda menyukai kebebasan dan selalu membawa ide segar.",
+      kelemahan: "Gelisah, mudah bosan, impulsif, dan sulit berkomitmen. Godaan kesenangan sesaat bisa mengganggu tujuan jangka panjang.",
+      cinta: "Anda pasangan yang seru dan penuh petualangan. Anda butuh ruang pribadi dan pasangan yang mau diajak menjelajah, bukan yang terlalu mengekang.",
+      karier: "Cocok di pekerjaan dinamis: penjualan, pemasaran, pariwisata, jurnalistik, media, perdagangan, event organizer, atau usaha yang sering berganti suasana.",
+      uang: "Penghasilan bisa naik turun. Anda pandai mencari peluang baru, jadi buat pos tabungan otomatis agar tidak habis untuk hal spontan.",
+      kesehatan: "Jaga saraf dan pola tidur. Hindari kebiasaan berlebihan seperti begadang, kopi, atau makanan tidak teratur.",
+      misi: "Mengalami hidup sepenuhnya dan membagikan pelajarannya, sambil belajar bahwa disiplin justru memberi kebebasan sejati.",
+      cocok: "1, 3, 7", sulit: "2, 4", hari: "Rabu", warna: "Biru muda, abu-abu" },
+    6: { kekuatan: "Penyayang, bertanggung jawab, setia, dan murah hati. Anda pelindung keluarga dan tempat orang bercerita.",
+      kelemahan: "Terlalu ikut campur, sulit melepaskan, dan cenderung mengorbankan diri sampai lelah. Standar tinggi bisa membuat Anda kecewa pada orang lain.",
+      cinta: "Anda pasangan yang hangat dan berbakti, dan cinta serta keluarga adalah prioritas utama. Pastikan Anda juga menerima perhatian, bukan hanya memberi.",
+      karier: "Cocok di bidang pelayanan dan keindahan: guru, dokter, perawat, psikolog, desain interior, kuliner, kecantikan, atau usaha keluarga.",
+      uang: "Rezeki datang lewat kepercayaan orang. Anda dermawan, jadi atur batas bantuan untuk keluarga agar keuangan sendiri tetap sehat.",
+      kesehatan: "Jaga jantung, tenggorokan, dan berat badan. Beri waktu khusus untuk diri sendiri agar tidak kehabisan tenaga.",
+      misi: "Merawat dan menyembuhkan dengan cinta, sambil belajar bahwa merawat diri sendiri juga bentuk tanggung jawab.",
+      cocok: "2, 4, 9", sulit: "1, 5", hari: "Jumat", warna: "Biru, merah muda" },
+    7: { kekuatan: "Cerdas, analitis, intuitif, dan berpikir mendalam. Anda pencari kebenaran yang tidak puas dengan jawaban dangkal.",
+      kelemahan: "Mudah menarik diri, curiga, dan sulit terbuka. Perfeksionis yang terlalu banyak berpikir bisa membuat Anda kesepian.",
+      cinta: "Anda butuh pasangan yang setara secara pikiran dan menghargai waktu sendiri Anda. Sekali percaya, Anda sangat setia dan dalam.",
+      karier: "Cocok sebagai peneliti, ilmuwan, analis, programmer, dokter, penulis, ahli keuangan, rohaniwan, atau spesialis di bidang tertentu.",
+      uang: "Uang datang lewat keahlian khusus. Anda berhati-hati dalam investasi, dan itu bagus, asalkan tidak terlalu ragu sampai peluang lewat.",
+      kesehatan: "Pikiran yang terus bekerja bisa mengganggu tidur. Meditasi, alam terbuka, dan menulis jurnal sangat membantu Anda.",
+      misi: "Mencari makna hidup dan membagikan kebijaksanaan, serta belajar mempercayai orang lain.",
+      cocok: "4, 5, 7", sulit: "3, 8", hari: "Senin", warna: "Ungu, hijau laut" },
+    8: { kekuatan: "Ambisius, berwibawa, tegas, dan pandai mengelola uang serta orang. Anda punya naluri bisnis dan daya tahan luar biasa.",
+      kelemahan: "Bisa gila kerja, terlalu mengukur segalanya dengan materi, dan mendominasi. Kegagalan terasa sangat berat bagi Anda.",
+      cinta: "Anda pasangan yang melindungi dan memberi rasa aman. Jangan biarkan pekerjaan menggeser waktu untuk orang tersayang.",
+      karier: "Cocok sebagai pengusaha, direktur, bankir, investor, pengacara, properti, politik, atau posisi pimpinan di organisasi besar.",
+      uang: "Angka ini paling erat dengan kemakmuran. Kekayaan bisa besar, tetapi naik turunnya juga tajam. Kelola risiko dan bersedekahlah agar aliran rezeki lancar.",
+      kesehatan: "Waspadai stres, tekanan darah, dan kelelahan. Jadwalkan istirahat seperti Anda menjadwalkan rapat penting.",
+      misi: "Menggunakan kekuatan dan materi untuk kebaikan banyak orang, serta menyeimbangkan dunia luar dan dunia batin.",
+      cocok: "2, 4, 6", sulit: "1, 7", hari: "Sabtu", warna: "Hitam, biru tua, emas" },
+    9: { kekuatan: "Murah hati, bijak, penuh kasih, dan berwawasan luas. Anda peduli pada sesama dan mudah memaafkan.",
+      kelemahan: "Sulit melepaskan masa lalu, mudah kecewa pada dunia, dan kadang lupa pada kebutuhan sendiri. Emosi bisa meledak setelah lama dipendam.",
+      cinta: "Anda mencintai dengan tulus dan luas. Anda butuh pasangan yang punya nilai hidup sama dan mendukung panggilan Anda untuk membantu orang lain.",
+      karier: "Cocok di bidang kemanusiaan dan seni: aktivis, guru, dokter, pekerja sosial, seniman, penulis, hukum, atau organisasi internasional.",
+      uang: "Uang mengalir ketika Anda bekerja dengan tujuan. Anda cenderung memberi terlalu banyak, jadi pastikan masa depan Anda sendiri terjamin.",
+      kesehatan: "Jaga daya tahan tubuh dan kesehatan emosi. Kegiatan seni dan pelayanan memberi Anda energi baru.",
+      misi: "Melayani kemanusiaan dan menutup siklus lama dengan ikhlas.",
+      cocok: "3, 6, 9", sulit: "4, 8", hari: "Selasa", warna: "Merah tua, ungu" },
+    11: { kekuatan: "Intuisi sangat tajam, visioner, inspiratif, dan peka secara spiritual. Kehadiran Anda bisa membangkitkan semangat orang lain.",
+      kelemahan: "Gugup, mudah cemas, dan terbebani harapan tinggi. Energi besar ini kadang terasa seperti tekanan, sehingga Anda bisa ragu pada diri sendiri.",
+      cinta: "Anda pasangan yang penuh pengertian dan idealis. Anda butuh pasangan yang tenang, membumi, dan memahami kepekaan Anda.",
+      karier: "Cocok sebagai pembicara, motivator, guru spiritual, seniman, penasihat, terapis, inovator, atau pemimpin gerakan sosial.",
+      uang: "Uang datang ketika Anda bekerja sesuai panggilan jiwa. Libatkan mitra yang praktis untuk urusan keuangan.",
+      kesehatan: "Sistem saraf Anda sensitif. Batasi kafein, jaga tidur, dan beri ruang hening setiap hari.",
+      misi: "Menjadi pembawa terang dan inspirasi. Saat lelah, Anda bisa hidup dengan energi angka 2 yang lebih lembut.",
+      cocok: "2, 4, 22", sulit: "8", hari: "Senin", warna: "Perak, putih, ungu muda" },
+    22: { kekuatan: "Visi besar dipadu kemampuan praktis. Anda mampu mengubah mimpi menjadi sistem, bangunan, atau organisasi yang nyata.",
+      kelemahan: "Tekanan dan tuntutan pada diri sendiri sangat tinggi. Anda bisa menjadi perfeksionis atau malah takut memulai karena tujuannya terlalu besar.",
+      cinta: "Anda pasangan yang bisa diandalkan dan membangun masa depan bersama. Jangan sampai proyek besar membuat pasangan merasa nomor dua.",
+      karier: "Cocok sebagai arsitek, insinyur, pendiri perusahaan, pemimpin organisasi, perencana kota, diplomat, atau penggerak proyek berskala besar.",
+      uang: "Potensi kekayaan besar lewat proyek jangka panjang. Bangun tim yang kuat, karena Anda tidak harus melakukan semuanya sendiri.",
+      kesehatan: "Waspadai kelelahan dan ketegangan otot. Rutinitas olahraga ringan dan liburan berkala menjaga stamina Anda.",
+      misi: "Membangun warisan yang bermanfaat bagi banyak orang. Saat lelah, Anda bisa hidup dengan energi angka 4 yang lebih sederhana.",
+      cocok: "4, 6, 11", sulit: "5", hari: "Sabtu", warna: "Hijau, krem, emas" },
+    33: { kekuatan: "Kasih sayang tanpa syarat, kebijaksanaan, dan kemampuan menyembuhkan. Anda guru alami yang membimbing dengan hati.",
+      kelemahan: "Mudah memikul beban orang lain sampai lupa diri. Rasa tanggung jawab yang besar bisa berubah menjadi rasa bersalah.",
+      cinta: "Anda pasangan yang sangat setia, penuh pengorbanan, dan mengayomi. Pilih pasangan yang juga menjaga dan merawat Anda.",
+      karier: "Cocok sebagai guru, penyembuh, dokter, psikolog, pemuka agama, seniman, atau pemimpin lembaga sosial dan pendidikan.",
+      uang: "Rezeki datang lewat pelayanan dan ketulusan. Tetapkan batas yang jelas agar kebaikan Anda tidak dimanfaatkan.",
+      kesehatan: "Jaga jantung dan kesehatan emosi. Anda perlu waktu untuk diri sendiri agar bisa terus memberi.",
+      misi: "Mengangkat orang lain dengan cinta. Saat lelah, Anda bisa hidup dengan energi angka 6 yang lebih membumi.",
+      cocok: "6, 9, 22", sulit: "1", hari: "Jumat", warna: "Biru langit, merah muda" }
+  };
+  // Empat puncak hidup (pinnacle) dan empat tantangan
+  var PUNCAK = {
+    1: "Masa membangun kemandirian dan keberanian. Anda didorong berdiri di atas kaki sendiri dan memimpin.",
+    2: "Masa kerja sama, kesabaran, dan hubungan. Kemitraan dan pasangan memegang peran besar.",
+    3: "Masa ekspresi diri, kreativitas, dan pergaulan. Bakat bicara dan berkarya mendapat panggung.",
+    4: "Masa kerja keras dan membangun pondasi: karier, rumah, dan keuangan yang stabil.",
+    5: "Masa perubahan, perjalanan, dan kebebasan. Banyak pengalaman baru yang memperluas wawasan.",
+    6: "Masa keluarga dan tanggung jawab. Rumah tangga, anak, dan komunitas menjadi pusat hidup.",
+    7: "Masa belajar, merenung, dan mendalami spiritualitas. Kebijaksanaan tumbuh dari dalam.",
+    8: "Masa pencapaian materi, karier, dan pengaruh. Kesempatan memegang kendali dan mengelola kekayaan.",
+    9: "Masa memberi dan melepas. Wawasan luas, kepedulian sosial, dan penyelesaian bab lama.",
+    11: "Masa pencerahan dan inspirasi. Intuisi tajam membawa Anda tampil sebagai panutan.",
+    22: "Masa membangun hal besar yang bermanfaat bagi banyak orang.",
+    33: "Masa pelayanan dan penyembuhan. Anda menjadi tempat bersandar bagi banyak orang."
+  };
+  var TANTANGAN = {
+    0: "Tantangan pilihan: semua jalan terbuka, sehingga Anda perlu menentukan sendiri arah yang paling bermakna.",
+    1: "Belajar percaya diri dan berani bersikap tanpa menjadi keras kepala.",
+    2: "Belajar tidak terlalu sensitif dan tidak bergantung pada persetujuan orang lain.",
+    3: "Belajar mengekspresikan diri dengan jujur dan tidak menghamburkan bakat.",
+    4: "Belajar disiplin dan sabar, tanpa menjadi kaku terhadap perubahan.",
+    5: "Belajar mengendalikan keinginan dan menggunakan kebebasan secara bertanggung jawab.",
+    6: "Belajar menerima orang apa adanya dan tidak memikul tanggung jawab yang bukan milik Anda.",
+    7: "Belajar membuka diri, percaya pada orang lain, dan tidak tenggelam dalam keraguan.",
+    8: "Belajar menyeimbangkan uang, kekuasaan, dan nilai batin."
+  };
+  var BULAN_PERSONAL = {
+    1: "Bulan untuk memulai. Ajukan ide, lamar pekerjaan, atau mulai kebiasaan baru.",
+    2: "Bulan untuk bersabar dan bekerja sama. Hal-hal bergerak pelan, jadi rawat hubungan.",
+    3: "Bulan sosial dan kreatif. Bagus untuk promosi, acara, dan menyampaikan pendapat.",
+    4: "Bulan kerja keras. Rapikan urusan, buat jadwal, dan selesaikan tugas tertunda.",
+    5: "Bulan perubahan. Terbuka pada kejutan, perjalanan, dan peluang mendadak.",
+    6: "Bulan keluarga dan rumah. Perhatikan orang terdekat dan urusan rumah tangga.",
+    7: "Bulan untuk merenung. Kurangi keramaian, perbanyak belajar dan istirahat.",
+    8: "Bulan bisnis dan keuangan. Waktu tepat untuk negosiasi dan keputusan besar.",
+    9: "Bulan penutupan. Selesaikan, bersihkan, dan lepaskan yang tidak diperlukan."
+  };
+  var KATA_KUNCI = { 1: "memulai", 2: "kerja sama", 3: "berekspresi", 4: "merapikan", 5: "perubahan", 6: "keluarga", 7: "merenung", 8: "keuangan", 9: "menyelesaikan" };
+  var SIKAP = {
+    1: "Kesan pertama Anda tegas, percaya diri, dan siap memimpin.",
+    2: "Kesan pertama Anda ramah, lembut, dan mudah didekati.",
+    3: "Kesan pertama Anda ceria, lucu, dan menyenangkan.",
+    4: "Kesan pertama Anda serius, rapi, dan bisa dipercaya.",
+    5: "Kesan pertama Anda energik, bebas, dan penuh rasa ingin tahu.",
+    6: "Kesan pertama Anda hangat, peduli, dan mengayomi.",
+    7: "Kesan pertama Anda tenang, cerdas, dan agak misterius.",
+    8: "Kesan pertama Anda berwibawa, mapan, dan berkelas.",
+    9: "Kesan pertama Anda bijak, murah hati, dan terbuka."
+  };
+
   var TAHUN_PERSONAL = {
     1: "Tahun awal baru. Saat tepat memulai usaha, proyek, atau kebiasaan baru.",
     2: "Tahun kesabaran dan kerja sama. Hubungan dan kemitraan menjadi sorotan.",
@@ -363,7 +529,8 @@
   // ---------- Bahasa ----------
   var TABEL = { ZODIAK: ZODIAK, ANGKA: ANGKA, TAHUN_PERSONAL: TAHUN_PERSONAL, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN,
     GAN: GAN, ZHI: ZHI, DAY_MASTER: DAY_MASTER, EL_SARAN: EL_SARAN, HARI: HARI, PASARAN: PASARAN, WATAK_HARI: WATAK_HARI, LAKU: LAKU,
-    JODOH: JODOH, SHIO: SHIO, EL_TAHUN: EL_TAHUN, S: S };
+    JODOH: JODOH, SHIO: SHIO, EL_TAHUN: EL_TAHUN, S: S,
+    LP_DETAIL: LP_DETAIL, PUNCAK: PUNCAK, TANTANGAN: TANTANGAN, BULAN_PERSONAL: BULAN_PERSONAL, SIKAP: SIKAP, KATA_KUNCI: KATA_KUNCI };
   var ASLI = JSON.parse(JSON.stringify(TABEL));
   function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
   function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
