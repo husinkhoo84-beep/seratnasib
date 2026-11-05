@@ -1,0 +1,45 @@
+# Serat Nasib
+
+Website ramalan nasib statis (HTML + CSS + JavaScript murni, tanpa build).
+
+- `index.html` – halaman siap hosting (GitHub Pages, Netlify, Vercel, cPanel).
+- `ramalan.js` – mesin perhitungan: zodiak, angka jalan hidup, numerologi nama (Pythagoras),
+  Ba Zi empat pilar, weton Jawa + cek jodoh, shio (tanggal Imlek dihitung dari fase bulan).
+- `page.html` – versi pratinjau untuk Artifact claude.ai (isi sama dengan index.html).
+
+Buka `index.html` langsung di browser untuk mencoba. Semua perhitungan di sisi klien.
+
+## Iklan untuk membuka bacaan
+
+Setiap bacaan terkunci dan dibuka satu per satu setelah pengunjung menonton iklan berhadiah
+(rewarded ad) dari Google Ad Manager (GPT). Selama unit iklan belum diisi, situs memakai mode demo
+(hitung mundur 5 detik).
+
+Cara mengaktifkan iklan asli:
+1. Daftar Google Ad Manager (bisa ditautkan dengan akun AdSense) dan buat unit iklan format **Rewarded**.
+2. Tambahkan baris ini di `index.html` sebelum `<script src="ramalan.js">`:
+   `<script>window.SERAT_IKLAN = { adUnitPath: "/KODE_JARINGAN/nama_unit_rewarded" };</script>`
+3. Hosting di domain sendiri dan tambahkan domain itu di Ad Manager.
+
+Jika iklan tidak tersedia, diblokir, atau gagal dimuat, bacaan tetap dibuka agar pengunjung tidak terjebak.
+Jika pengunjung menutup iklan sebelum selesai, bacaan tetap terkunci.
+
+## Langganan ramalan mingguan (email)
+
+Formulir langganan mengirim email, nama, tanggal lahir, serta kelompok ZODIAK, SHIO, WETON, dan ANGKA
+ke layanan newsletter, supaya pelanggan bisa dikirimi ramalan per kelompok. Selama belum tersambung, formulir berjalan dalam mode demo.
+
+Cara menyambungkan (contoh Brevo):
+1. Buat akun Brevo, lalu buat atribut kontak TGL_LAHIR, ZODIAK, SHIO, WETON, ANGKA (teks).
+2. Buat formulir pendaftaran (Contacts > Forms) dan salin URL `action` formulirnya (…sibforms.com/serve/…).
+3. Tambahkan di `index.html` sebelum `<script src="ramalan.js">`:
+   `<script>window.SERAT_LANGGANAN = { provider: "brevo", actionUrl: "URL_ACTION_FORMULIR" };</script>`
+Untuk MailerLite pakai `provider: "mailerlite"` dengan URL `…/jsonp/<akun>/forms/<id>/subscribe` dan field zodiak, shio, weton, angka, tgl_lahir.
+
+## Hosting (Vercel)
+
+1. Hubungkan repo GitHub di vercel.com > Add New Project, pilih repo ini.
+2. Framework Preset: **Other**. Build command kosong, output directory `.` (root).
+3. Setelah tayang, pasang domain sendiri di Settings > Domains, lalu daftarkan domain itu di Google Ad Manager.
+
+Bahan newsletter mingguan ada di folder `konten/`.
