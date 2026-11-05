@@ -133,6 +133,13 @@
     var adaJam = inp.jam !== null && inp.jam !== undefined;
     var h = adaJam ? inp.jam : 12, mi = adaJam ? (inp.menit || 0) : 0;
     var ms = Date.UTC(inp.y, inp.m - 1, inp.d, h, mi) - (inp.tz || 0) * 3600000;
+    var c = hitungUTC(ms, inp.lat, inp.lon, adaJam);
+    c.ms = ms; c.tz = inp.tz || 0;
+    return c;
+  }
+  // bagan untuk satu momen UTC (milidetik)
+  function hitungUTC(ms, lat, lonEast, adaJam) {
+    var inp = { lat: lat, lon: lonEast };
     var jd = julianDay(ms), T = (jd - 2451545) / 36525, dT = 1 / 36525;
     var planets = PLANETS.map(function (p) {
       var lon = lonAt(p.id, T);
@@ -271,6 +278,132 @@
     ["Singapura", 1.35, 103.82, 8], ["Kuala Lumpur", 3.14, 101.69, 8], ["Hong Kong", 22.32, 114.17, 8], ["Taipei", 25.03, 121.57, 8], ["Tokyo", 35.68, 139.69, 9]
   ].map(function (k) { return { n: k[0], lat: k[1], lon: k[2], tz: k[3] }; });
 
-  var api = { hitung: hitung, analisa: analisa, posisi: posisi, KOTA: KOTA, RASI: RASI, RASI_SYM: RASI_SYM, ASPEK: ASPEK, PLANETS: PLANETS, _sunLon: sunLon, _moonLon: moonLon, _planetLon: planetLon };
+  function bedaSudut(a, b) { var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
+  function cariAspek(l1, l2, orbMax) {
+    var diff = bedaSudut(l1, l2);
+    for (var k = 0; k < ASPEK.length; k++) { var o = Math.abs(diff - ASPEK[k].a); if (o <= orbMax) return { jenis: ASPEK[k], orb: o }; }
+    return null;
+  }
+
+  // ---------- Transit: planet hari ini terhadap bagan kelahiran ----------
+  var TR_ORB = { sun: 2, moon: 3, mercury: 2, venus: 2, mars: 2, jupiter: 2, saturn: 2, uranus: 1.5, neptune: 1.5, pluto: 1.5 };
+  var TR_TEMA = {
+    sun: "menyorot", moon: "menyentuh suasana hati soal", mercury: "membawa banyak pikiran dan obrolan soal", venus: "membawa suasana manis pada",
+    mars: "memberi dorongan energi pada", jupiter: "membuka peluang dan pertumbuhan pada", saturn: "menguji dan mematangkan",
+    uranus: "membawa perubahan mendadak pada", neptune: "membawa inspirasi sekaligus kebingungan pada", pluto: "mengubah secara mendalam"
+  };
+  var TR_LAMA = { sun: "sekitar 2–3 hari", moon: "beberapa jam", mercury: "2–4 hari", venus: "2–4 hari", mars: "sekitar seminggu", jupiter: "beberapa minggu", saturn: "1–3 bulan", uranus: "beberapa bulan", neptune: "beberapa bulan", pluto: "berbulan-bulan" };
+  var NADA = { harmonis: "Pengaruhnya mendukung, manfaatkan untuk melangkah.", tegang: "Pengaruhnya menantang, jalani dengan sabar dan jangan terburu-buru.", netral: "Pengaruhnya sangat terasa, arahkan ke hal yang positif." };
+  function transit(natal, ms, lat, lonEast) {
+    var now = hitungUTC(ms, lat, lonEast, false), hasil = [];
+    now.planets.forEach(function (t) {
+      if (natal.ascRasi !== null) t.rumahNatal = ((t.pos.rasi - natal.ascRasi + 12) % 12) + 1;
+      natal.planets.forEach(function (n) {
+        var a = cariAspek(t.lon, n.lon, TR_ORB[t.id]); if (!a) return;
+        hasil.push({ t: t, n: n, jenis: a.jenis, orb: a.orb, bobot: ({ pluto: 6, neptune: 5, uranus: 5, saturn: 5, jupiter: 4, mars: 3, sun: 2, venus: 2, mercury: 2, moon: 1 })[t.id] * (a.jenis.a === 0 ? 1.2 : 1) - a.orb,
+          isi: t.n + " transit " + TR_TEMA[t.id] + " " + KATA[n.id] + " Anda (" + n.n + " natal di " + n.pos.nama + "). " + NADA[a.jenis.sifat] + " Berlangsung " + TR_LAMA[t.id] + "." });
+      });
+    });
+    natal.angles && ["asc", "mc"].forEach(function (k) {
+      now.planets.forEach(function (t) {
+        if (["jupiter", "saturn", "uranus", "neptune", "pluto"].indexOf(t.id) < 0) return;
+        var a = cariAspek(t.lon, natal.angles[k], 1.5); if (!a) return;
+        hasil.push({ t: t, n: { id: k, n: k === "asc" ? "Ascendant" : "MC" }, jenis: a.jenis, orb: a.orb, bobot: 6 - a.orb,
+          isi: t.n + " transit " + TR_TEMA[t.id] + " " + (k === "asc" ? "citra diri dan penampilan" : "karier dan reputasi") + " Anda. " + NADA[a.jenis.sifat] + " Berlangsung " + TR_LAMA[t.id] + "." });
+      });
+    });
+    hasil.sort(function (a, b) { return b.bobot - a.bobot; });
+    return { planets: now.planets, aspek: hasil };
+  }
+
+  // ---------- Sinastri: kecocokan dua bagan ----------
+  var PASANGAN = {
+    "sun-moon": ["Matahari dan Bulan saling bertemu: tanda klasik pasangan yang saling memahami secara alami.", "Matahari dan Bulan saling menekan: kebutuhan hati satu orang sering berbenturan dengan ego yang lain."],
+    "venus-mars": ["Venus dan Mars bertemu: ketertarikan romantis dan fisik yang kuat.", "Venus dan Mars bergesekan: ketertarikannya kuat, tetapi mudah memicu pertengkaran."],
+    "moon-moon": ["Bulan dan Bulan selaras: suasana hati kalian mudah nyambung dan nyaman bersama.", "Bulan dan Bulan bertentangan: cara kalian mengolah perasaan berbeda, perlu saling memahami."],
+    "mercury-mercury": ["Merkurius dan Merkurius selaras: obrolan kalian mengalir dan mudah sepakat.", "Merkurius dan Merkurius bertentangan: sering salah paham, biasakan bicara pelan dan jelas."],
+    "sun-sun": ["Matahari dan Matahari selaras: tujuan hidup dan semangat kalian searah.", "Matahari dan Matahari bertentangan: dua ego kuat yang perlu saling memberi ruang."],
+    "venus-venus": ["Venus dan Venus selaras: selera, cara menyayangi, dan hobi kalian mirip.", "Venus dan Venus bertentangan: cara menunjukkan sayang berbeda, perlu dibicarakan."],
+    "moon-venus": ["Bulan dan Venus bertemu: hubungan yang lembut, hangat, dan penuh perhatian.", "Bulan dan Venus bergesekan: kasih sayang ada, tetapi harapan sering tidak terucap."],
+    "saturn-sun": ["Saturnus menyentuh Matahari: hubungan serius yang membangun komitmen jangka panjang.", "Saturnus menekan Matahari: satu pihak bisa merasa dikekang atau terlalu diatur."],
+    "saturn-moon": ["Saturnus menyentuh Bulan: rasa aman dan kesetiaan yang tumbuh perlahan.", "Saturnus menekan Bulan: perasaan bisa terasa dingin, perlu kehangatan ekstra."],
+    "saturn-venus": ["Saturnus menyentuh Venus: cinta yang setia dan tahan lama.", "Saturnus menekan Venus: cinta diuji oleh tanggung jawab dan jarak emosional."],
+    "jupiter-sun": ["Jupiter menyentuh Matahari: saling membawa keberuntungan dan optimisme.", "Jupiter menekan Matahari: saling memanjakan, hati-hati berlebihan."],
+    "jupiter-venus": ["Jupiter menyentuh Venus: hubungan yang murah hati dan menyenangkan.", "Jupiter menekan Venus: senang-senang berlebihan, jaga keuangan bersama."],
+    "mars-mars": ["Mars dan Mars selaras: semangat kalian cocok untuk bekerja dan bergerak bersama.", "Mars dan Mars bertentangan: sama-sama keras, rawan adu argumen."],
+    "mars-sun": ["Mars dan Matahari bertemu: saling memacu semangat dan keberanian.", "Mars dan Matahari bergesekan: persaingan dan emosi mudah tersulut."],
+    "mars-moon": ["Mars dan Bulan bertemu: hubungan yang bergairah dan protektif.", "Mars dan Bulan bergesekan: satu pihak bisa merasa disakiti oleh sikap yang terlalu langsung."]
+  };
+  var PRIBADI = ["sun", "moon", "mercury", "venus", "mars", "jupiter", "saturn"];
+  function sinastri(a, b) {
+    var hasil = [], skor = 0;
+    a.planets.forEach(function (p) {
+      if (PRIBADI.indexOf(p.id) < 0) return;
+      b.planets.forEach(function (q) {
+        if (PRIBADI.indexOf(q.id) < 0) return;
+        var asp = cariAspek(p.lon, q.lon, 6); if (!asp) return;
+        var key = [p.id, q.id].sort().join("-"), teks = PASANGAN[key];
+        var baik = asp.jenis.sifat === "harmonis" || (asp.jenis.a === 0 && !/saturn|mars-mars/.test(key));
+        var penting = teks ? 3 : 1;
+        skor += (baik ? 1 : -0.8) * penting * (1 - asp.orb / 8);
+        hasil.push({ p: p, q: q, jenis: asp.jenis, orb: asp.orb, baik: baik, penting: penting,
+          isi: teks ? teks[baik ? 0 : 1] : "Unsur " + KATA[p.id] + " Anda dan " + KATA[q.id] + " pasangan " + ASPEK_ARTI[asp.jenis.n] });
+      });
+    });
+    if (a.angles && b.angles) {
+      [["asc", a, b], ["asc", b, a]].forEach(function (x) {
+        x[2].planets.forEach(function (q) {
+          if (["sun", "moon", "venus"].indexOf(q.id) < 0) return;
+          var asp = cariAspek(x[1].angles.asc, q.lon, 4); if (!asp || asp.jenis.a !== 0) return;
+          skor += 2;
+          hasil.push({ p: { n: "Ascendant" }, q: q, jenis: asp.jenis, orb: asp.orb, baik: true, penting: 3, isi: q.n + " satu orang jatuh di Ascendant yang lain: ada rasa langsung cocok sejak pertemuan pertama." });
+        });
+      });
+    }
+    hasil.sort(function (x, y) { return (y.penting - y.orb / 6) - (x.penting - x.orb / 6); });
+    var el = ["Api", "Tanah", "Udara", "Air"], ea = el[a.planets[0].pos.rasi % 4], eb = el[b.planets[0].pos.rasi % 4];
+    var cocokEl = (ea === eb) ? "sama" : ((ea === "Api" && eb === "Udara") || (ea === "Udara" && eb === "Api") || (ea === "Tanah" && eb === "Air") || (ea === "Air" && eb === "Tanah")) ? "saling melengkapi" : "berbeda";
+    var persen = Math.max(15, Math.min(96, Math.round(52 + skor * 3)));
+    return { aspek: hasil, persen: persen, elemen: { a: ea, b: eb, hubungan: cocokEl } };
+  }
+
+  // ---------- Solar return: saat Matahari kembali ke posisi lahirnya ----------
+  var SR_ASC = [
+    "Tahun yang penuh inisiatif dan awal baru. Anda lebih berani mengambil langkah sendiri.",
+    "Tahun untuk membangun kestabilan, terutama keuangan dan kenyamanan hidup.",
+    "Tahun yang sibuk dengan belajar, perjalanan pendek, dan banyak relasi baru.",
+    "Tahun yang berpusat pada keluarga, rumah, dan kebutuhan emosional.",
+    "Tahun untuk tampil, berkreasi, dan menikmati cinta. Anda lebih mudah dikenal orang.",
+    "Tahun untuk merapikan rutinitas, pekerjaan, dan kesehatan.",
+    "Tahun yang menyorot hubungan dan kerja sama. Pasangan dan mitra berperan besar.",
+    "Tahun perubahan mendalam. Ada hal lama yang berakhir dan memberi ruang bagi yang baru.",
+    "Tahun untuk memperluas wawasan: studi, perjalanan jauh, dan keyakinan.",
+    "Tahun karier. Kerja keras membuahkan pengakuan, tetapi tuntutannya juga besar.",
+    "Tahun pertemanan dan komunitas. Harapan dan rencana jangka panjang menguat.",
+    "Tahun reflektif. Waktu yang baik untuk istirahat batin, spiritualitas, dan menutup bab lama."
+  ];
+  function solarReturn(natal, tahun, lat, lonEast) {
+    var sun0 = natal.planets[0].lon, d0 = new Date(natal.ms);
+    var ms = Date.UTC(tahun, d0.getUTCMonth(), d0.getUTCDate(), d0.getUTCHours(), d0.getUTCMinutes());
+    for (var i = 0; i < 8; i++) {
+      var T = (julianDay(ms) - 2451545) / 36525;
+      var diff = ((sun0 - sunLon(T) + 540) % 360) - 180;
+      ms += diff / 0.98565 * 86400000;
+      if (Math.abs(diff) < 1e-5) break;
+    }
+    var c = hitungUTC(ms, lat, lonEast, true); c.ms = ms;
+    var sun = c.planets[0], moon = c.planets[1];
+    var tema = [
+      { judul: "Ascendant tahunan " + posisi(c.angles.asc).nama, isi: SR_ASC[Math.floor(c.angles.asc / 30)] },
+      { judul: "Matahari di rumah " + sun.rumah, isi: "Fokus utama tahun ini ada pada urusan " + RUMAH[sun.rumah - 1] + "." },
+      { judul: "Bulan di " + moon.pos.nama + ", rumah " + moon.rumah, isi: "Kebutuhan emosional tahun ini terasa dalam urusan " + RUMAH[moon.rumah - 1] + ". " + BULAN_RASI[moon.pos.rasi] }
+    ];
+    var jup = c.planets[5], sat = c.planets[6];
+    tema.push({ judul: "Jupiter di rumah " + jup.rumah, isi: "Keberuntungan tahun ini paling mudah datang lewat " + RUMAH[jup.rumah - 1] + "." });
+    tema.push({ judul: "Saturnus di rumah " + sat.rumah, isi: "Pelajaran dan kerja keras tahun ini ada pada " + RUMAH[sat.rumah - 1] + "." });
+    return { chart: c, tema: tema };
+  }
+
+  var api = { hitung: hitung, hitungUTC: hitungUTC, transit: transit, sinastri: sinastri, solarReturn: solarReturn, analisa: analisa, posisi: posisi, KOTA: KOTA, RASI: RASI, RASI_SYM: RASI_SYM, ASPEK: ASPEK, PLANETS: PLANETS, _sunLon: sunLon, _moonLon: moonLon, _planetLon: planetLon };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Natal = api;
 })(this);

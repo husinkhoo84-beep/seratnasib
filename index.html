@@ -181,6 +181,17 @@ button.ghost:hover { background: var(--nila-soft) }
 .ptable tr.ang td { background: var(--nila-soft) }
 .ptable .pg { display: inline-block; width: 20px; color: var(--nila); font-size: 16px }
 .retro { font-size: 11px; font-weight: 700; color: var(--bad); border: 1px solid var(--bad); border-radius: 4px; padding: 0 4px }
+.subnav { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin: 4px 0 20px }
+.subnav button { font: inherit; font-weight: 600; font-size: 14px; background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px; color: var(--muted); cursor: pointer; margin-bottom: -1px }
+.subnav button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent) }
+.subnav button:hover { color: var(--ink) }
+.sub-form { display: flex; flex-wrap: wrap; gap: 12px; align-items: end; margin-bottom: 14px }
+.sub-form .field { flex: 1 1 170px }
+.sub-lead { color: var(--muted); max-width: 70ch; margin-bottom: 6px }
+.muted { color: var(--muted) }
+.skor { display: flex; gap: 18px; align-items: center; padding: 16px 18px; background: var(--nila-soft); border-radius: var(--r); margin: 8px 0 4px }
+.skor-n { font-size: 44px; color: var(--nila); line-height: 1 }
+.skor p { color: var(--muted); margin-top: 2px }
 h3.sec { font-family: var(--f-display); font-size: 24px; margin: 26px 0 12px }
 .block.asp { border-left: 3px solid var(--line); padding-left: 12px }
 .block.asp.harmonis { border-color: var(--good) } .block.asp.tegang { border-color: var(--bad) }
@@ -323,7 +334,10 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     { id: "weton", k: "Weton Jawa", d: "Hari dan pasaran lahir, neptu, watak, serta cek jodoh weton." },
     { id: "shio", k: "Shio", d: "Shio Imlek, pasangan yang cocok, dan peruntungan tahun ini." }
   ];
-  var state = { aktif: null, data: null, buka: {}, iklan: null };
+  var hariIni = new Date();
+  var state = { aktif: null, data: null, buka: {}, iklan: null, astro: "natal",
+    tr: hariIni.getFullYear() + "-" + String(hariIni.getMonth() + 1).padStart(2, "0") + "-" + String(hariIni.getDate()).padStart(2, "0"),
+    pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", kota: 11 }, srTahun: hariIni.getFullYear(), srKota: null };
   if (location.hash && METHODS.some(function (m) { return "#" + m.id === location.hash; })) state.aktif = location.hash.slice(1);
 
   function hitung(nama, dt, jam, menit, kotaIdx) {
@@ -374,8 +388,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       }
       var list = function (arr) { return arr.map(function (x) { return '<div class="block"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join(""); };
       var asp = an.aspek.map(function (x) { return '<div class="block asp ' + x.sifat + '"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join("");
-      return head(z.s + "\uFE0E", "Bagan kelahiran", fmt(d.dt) + " · " + waktu + " · " + d.kota.n) +
-        '<div class="natal">' +
+      return head(z.s + "\uFE0E", "Astrologi", fmt(d.dt) + " · " + waktu + " · " + d.kota.n) + subAstro() +
+        (state.astro !== "natal" ? ASTRO[state.astro](d) : '<div class="natal">' +
           '<div class="wheel-wrap">' + roda(c) + '<div class="legend"><span class="lg-h">Harmonis</span><span class="lg-t">Tegang</span></div></div>' +
           '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Titik</th><th>Derajat</th><th>Rasi</th><th>Rumah</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
         '</div>' +
@@ -384,7 +398,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         (asp ? '<h3 class="sec">Aspek utama</h3><div class="grid2">' + asp + '</div>' : "") +
         '<h3 class="sec">Keseimbangan</h3><div class="grid2">' + blk("Elemen dan kualitas", an.keseimbangan.join(" ")) + blk("Cinta", z.cinta) + blk("Karier dan rezeki", z.karier) + '</div>' +
         note("Posisi planet dihitung dengan rumus astronomi (zodiak tropikal) untuk waktu lahir di zona waktu " + d.kota.n + ". Rumah memakai sistem Whole Sign. " +
-          (d.jam === null ? "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan." : "Ketelitian ascendant bergantung pada jam lahir yang tepat sampai menit."));
+          (d.jam === null ? "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan." : "Ketelitian ascendant bergantung pada jam lahir yang tepat sampai menit.")));
     },
     angka: function (d) {
       var lp = d.lp;
@@ -507,6 +521,76 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     return g + '</svg>';
   }
 
+  /* ===== Sub-bacaan astrologi: transit, sinastri, solar return ===== */
+  var ASTRO_TABS = [["natal", "Bagan lahir"], ["transit", "Transit"], ["sinastri", "Sinastri"], ["sr", "Solar return"]];
+  function subAstro() {
+    return '<div class="subnav" role="tablist" aria-label="Jenis bacaan astrologi">' + ASTRO_TABS.map(function (t) {
+      return '<button type="button" role="tab" data-astro="' + t[0] + '" aria-selected="' + (state.astro === t[0]) + '">' + t[1] + '</button>';
+    }).join("") + '</div>';
+  }
+  function kotaOpt(sel) { return N.KOTA.map(function (k, i) { return '<option value="' + i + '"' + (i === sel ? " selected" : "") + '>' + k.n + '</option>'; }).join(""); }
+  function ptable(planets, kolomRumah, labelRumah) {
+    return '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Planet</th><th>Derajat</th><th>Rasi</th>' + (kolomRumah ? '<th>' + labelRumah + '</th>' : "") + '<th></th></tr></thead><tbody>' +
+      planets.map(function (p) {
+        return '<tr><td><span class="pg">' + p.s + '\uFE0E</span> ' + p.n + '</td><td class="mono">' + p.pos.derajat + '°' + String(p.pos.menit).padStart(2, "0") + '′</td><td>' + p.pos.sym + '\uFE0E ' + p.pos.nama + '</td>' +
+          (kolomRumah ? '<td class="mono">' + (p[kolomRumah] || "–") + '</td>' : "") + '<td>' + (p.retro ? '<span class="retro">R</span>' : "") + '</td></tr>';
+      }).join("") + '</tbody></table></div>';
+  }
+  function fmtTgl(ms, tz) { var t = new Date(ms + tz * 3600000); return t.getUTCDate() + " " + BULAN[t.getUTCMonth()] + " " + t.getUTCFullYear() + ", " + String(t.getUTCHours()).padStart(2, "0") + ":" + String(t.getUTCMinutes()).padStart(2, "0"); }
+  var ASTRO = {
+    transit: function (d) {
+      var tg = parse(state.tr) || { y: hariIni.getFullYear(), m: hariIni.getMonth() + 1, d: hariIni.getDate() };
+      var ms = Date.UTC(tg.y, tg.m - 1, tg.d, 12) - d.kota.tz * 3600000;
+      var t = N.transit(d.nc, ms, d.kota.lat, d.kota.lon);
+      var utama = t.aspek.filter(function (a) { return a.t.id !== "moon"; }).slice(0, 8);
+      var bulan = t.aspek.filter(function (a) { return a.t.id === "moon"; }).slice(0, 2);
+      var cards = utama.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + a.t.n + ' ' + a.jenis.n.toLowerCase() + ' ' + a.n.n + ' natal</h3><p>' + a.isi + '</p></div>'; }).join("");
+      var jup = t.planets[5], sat = t.planets[6];
+      return '<form class="sub-form" id="f-transit"><div class="field"><label for="tr-tgl">Tanggal transit</label><input id="tr-tgl" type="date" value="' + state.tr + '"></div><button class="primary" type="submit">Lihat transit</button></form>' +
+        '<p class="sub-lead">Posisi planet pada ' + fmt(tg) + ' dibandingkan dengan bagan kelahiran Anda.</p>' +
+        '<h3 class="sec">Pengaruh utama</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">Tidak ada transit besar yang tepat pada tanggal ini. Masa yang relatif tenang.</p>') +
+        (bulan.length ? '<h3 class="sec">Suasana hari ini</h3><div class="grid2">' + bulan.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>Bulan ' + a.jenis.n.toLowerCase() + ' ' + a.n.n + '</h3><p>' + a.isi + '</p></div>'; }).join("") + '</div>' : "") +
+        (d.nc.angles ? '<h3 class="sec">Planet lambat di rumah Anda</h3><div class="grid2">' + blk("Jupiter di rumah " + jup.rumahNatal, "Peluang dan pertumbuhan sedang mengalir ke urusan rumah " + jup.rumahNatal + ".") + blk("Saturnus di rumah " + sat.rumahNatal, "Kerja keras dan tanggung jawab sedang diuji di rumah " + sat.rumahNatal + ".") + '</div>' : "") +
+        '<h3 class="sec">Posisi planet saat itu</h3>' + ptable(t.planets, d.nc.angles ? "rumahNatal" : null, "Rumah Anda") +
+        note("Transit dihitung untuk pukul 12.00 waktu " + d.kota.n + ". Orb yang dipakai 1,5–3°, jadi yang tampil hanya pengaruh yang sedang kuat.");
+    },
+    sinastri: function (d) {
+      var P = state.pas, tg = parse(P.tgl), jm = P.jam ? P.jam.split(":") : null, k = N.KOTA[P.kota] || N.KOTA[0];
+      var form = '<form class="sub-form" id="f-sin"><div class="field"><label for="ps-nama">Nama pasangan</label><input id="ps-nama" value="' + esc(P.nama) + '"></div>' +
+        '<div class="field"><label for="ps-tgl">Tanggal lahir</label><input id="ps-tgl" type="date" min="1900-01-01" max="2100-12-31" value="' + P.tgl + '"></div>' +
+        '<div class="field"><label for="ps-jam">Jam lahir</label><input id="ps-jam" type="time" value="' + P.jam + '"></div>' +
+        '<div class="field"><label for="ps-kota">Kota lahir</label><select id="ps-kota">' + kotaOpt(+P.kota) + '</select></div>' +
+        '<button class="primary" type="submit">Bandingkan</button></form>';
+      if (!tg) return form + '<p class="note">Isi tanggal lahir pasangan.</p>';
+      var b = N.hitung({ y: tg.y, m: tg.m, d: tg.d, jam: jm ? +jm[0] : null, menit: jm ? +jm[1] : 0, tz: k.tz, lat: k.lat, lon: k.lon });
+      var s = N.sinastri(d.nc, b), nm = esc(P.nama || "Pasangan");
+      var tingkat = s.persen >= 75 ? "Sangat cocok" : s.persen >= 60 ? "Cocok" : s.persen >= 45 ? "Cukup cocok, perlu usaha" : "Banyak tantangan";
+      var cards = s.aspek.slice(0, 8).map(function (a) { return '<div class="block asp ' + (a.baik ? "harmonis" : "tegang") + '"><h3>' + a.p.n + ' Anda ' + a.jenis.n.toLowerCase() + ' ' + a.q.n + ' ' + nm + '</h3><p>' + a.isi + '</p></div>'; }).join("");
+      return form +
+        '<div class="skor"><div class="skor-n mono">' + s.persen + '%</div><div><b>' + tingkat + '</b><p>Matahari Anda berelemen ' + s.elemen.a + ', Matahari ' + nm + ' berelemen ' + s.elemen.b + ': ' + s.elemen.hubungan + '.</p></div></div>' +
+        '<h3 class="sec">Aspek antara kalian</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">Tidak banyak aspek kuat di antara bagan kalian.</p>') +
+        '<h3 class="sec">Planet ' + nm + '</h3>' + ptable(b.planets, null) +
+        note("Sinastri membandingkan planet pribadi (Matahari sampai Saturnus) kedua bagan dengan orb sampai 6°. Persentase adalah ringkasan, bukan penentu hubungan.");
+    },
+    sr: function (d) {
+      if (!d.nc.adaJam) return '<p class="sub-lead">Solar return membutuhkan jam lahir. Isi jam lahir di formulir atas, lalu tekan "Baca ramalan saya" lagi.</p>';
+      var kIdx = state.srKota === null ? N.KOTA.indexOf(d.kota) : state.srKota, k = N.KOTA[kIdx] || d.kota;
+      var sr = N.solarReturn(d.nc, state.srTahun, k.lat, k.lon);
+      var thn = ""; for (var y = hariIni.getFullYear() - 1; y <= hariIni.getFullYear() + 2; y++) thn += '<option' + (y === state.srTahun ? " selected" : "") + '>' + y + '</option>';
+      return '<form class="sub-form" id="f-sr"><div class="field"><label for="sr-thn">Tahun</label><select id="sr-thn">' + thn + '</select></div>' +
+        '<div class="field"><label for="sr-kota">Kota tempat Anda berulang tahun</label><select id="sr-kota">' + kotaOpt(kIdx) + '</select></div><button class="primary" type="submit">Hitung</button></form>' +
+        '<p class="sub-lead">Matahari kembali ke posisi lahir Anda pada <b>' + fmtTgl(sr.chart.ms, k.tz) + '</b> waktu ' + k.n + '. Bagan saat itu menggambarkan tema satu tahun ke depan.</p>' +
+        '<div class="natal"><div class="wheel-wrap">' + roda(sr.chart) + '</div>' + ptable(sr.chart.planets, "rumah", "Rumah") + '</div>' +
+        '<h3 class="sec">Tema tahun ' + state.srTahun + '–' + (state.srTahun + 1) + '</h3><div class="grid2">' + sr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
+        note("Solar return berlaku dari ulang tahun ini sampai ulang tahun berikutnya. Kota tempat Anda berada saat ulang tahun mengubah ascendant tahunan.");
+    }
+  };
+  function bindAstro() {
+    var ft = $("f-transit"); if (ft) ft.addEventListener("submit", function (e) { e.preventDefault(); state.tr = $("tr-tgl").value || state.tr; renderPanel(); });
+    var fs = $("f-sin"); if (fs) fs.addEventListener("submit", function (e) { e.preventDefault(); state.pas = { nama: $("ps-nama").value.trim(), tgl: $("ps-tgl").value, jam: $("ps-jam").value, kota: +$("ps-kota").value }; renderPanel(); });
+    var fr = $("f-sr"); if (fr) fr.addEventListener("submit", function (e) { e.preventDefault(); state.srTahun = +$("sr-thn").value; state.srKota = +$("sr-kota").value; renderPanel(); });
+  }
+
   function methodById(id) { return METHODS.filter(function (m) { return m.id === id; })[0]; }
 
   // Tampilan awal: pilih satu bacaan
@@ -540,6 +624,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     p.innerHTML = PANELS[state.aktif](state.data) +
       '<div class="actions" style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" type="button" data-pilih="">Buka bacaan lain</button></div>';
     p.style.animation = "none"; void p.offsetWidth; p.style.animation = "";
+    if (state.aktif === "zodiak") bindAstro();
     var jf = $("jodoh-form");
     if (jf) {
       var run = function () {
@@ -564,6 +649,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     pilih(b.dataset.id);
   });
   $("panel").addEventListener("click", function (e) {
+    var sa = e.target.closest("[data-astro]");
+    if (sa) { state.astro = sa.dataset.astro; renderPanel(); return; }
     var b = e.target.closest("[data-pilih]"); if (!b) return;
     pilih(b.dataset.pilih || null);
   });
@@ -678,7 +765,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     $("contoh-badge").hidden = true;
     var tv = $("jam").value, jam = tv ? +tv.split(":")[0] : null, menit = tv ? +tv.split(":")[1] : 0;
     state.data = hitung(nama, dt, jam, menit, +$("kota").value);
-    state.buka = {}; Iklan.batal(); state.aktif = null;
+    state.buka = {}; Iklan.batal(); state.aktif = null; state.astro = "natal"; state.srKota = null;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (er) {}
     render();
     $("hasil").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
