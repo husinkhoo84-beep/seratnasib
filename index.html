@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Serat Nasib</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Baca ramalan nasib lewat zodiak, angka kelahiran, numerologi nama, Ba Zi, weton Jawa, dan shio.">
+<meta name="description" data-i18n-content="meta.desc" content="Baca ramalan nasib lewat zodiak, angka kelahiran, numerologi nama, Ba Zi, weton Jawa, dan shio.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Marcellus&family=Figtree:wght@400;500;600;700&family=Spline+Sans+Mono:wght@400;600&display=swap">
@@ -49,6 +49,11 @@ header.top { display: flex; align-items: baseline; justify-content: space-betwee
 .brand { font-family: var(--f-display); font-size: 26px; letter-spacing: .02em }
 .brand span { color: var(--accent) }
 .methods-mini { color: var(--muted); font-size: 13px }
+.top-r { display: flex; align-items: center; gap: 14px; flex-wrap: wrap }
+.lang { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; overflow: hidden; background: var(--surface) }
+.lang button { font: 600 12px/1 var(--f-body); letter-spacing: .04em; padding: 7px 11px; border: 0; background: none; color: var(--muted); cursor: pointer; min-height: 30px }
+.lang button[aria-pressed="true"] { background: var(--nila); color: var(--surface) }
+.lang button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px }
 
 .hero { display: grid; grid-template-columns: 1.1fr 1fr; gap: 32px; align-items: start; margin-bottom: 36px }
 .hero h1 { font-size: clamp(34px, 5.4vw, 54px) }
@@ -60,7 +65,7 @@ form.profil { background: var(--surface); border: 1px solid var(--line); border-
 .field { display: grid; gap: 6px; min-width: 0 }
 .field label { font-size: 13px; font-weight: 600 }
 .field small { color: var(--muted); font-size: 12px }
-.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px }
+.row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; align-items: start }
 input, select { font: inherit; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; width: 100%; min-width: 0 }
 input:focus-visible, select:focus-visible, button:focus-visible, a:focus-visible, [role="tab"]:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px }
 button.primary { font: inherit; font-weight: 600; border: 0; border-radius: 8px; padding: 12px 16px; background: var(--nila); color: var(--surface); cursor: pointer }
@@ -246,43 +251,46 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
 <div class="wrap">
   <header class="top">
     <div class="brand">Serat <span>Nasib</span></div>
-    <div class="methods-mini">Zodiak · Angka · Nama · Ba Zi · Weton · Shio</div>
+    <div class="top-r">
+      <div class="methods-mini" data-i18n="nav.methods">Zodiak · Angka · Nama · Ba Zi · Weton · Shio</div>
+      <div class="lang" role="group" aria-label="Bahasa / Language" id="lang"><button type="button" data-lang="id" aria-pressed="true" title="Bahasa Indonesia">ID</button><button type="button" data-lang="en" aria-pressed="false" title="English">EN</button></div>
+    </div>
   </header>
 
   <section class="hero">
     <div>
-      <div class="eyebrow">Enam cara membaca nasib</div>
-      <h1>Kenali watak dan peruntungan Anda dari tanggal lahir dan nama.</h1>
-      <p class="lead">Isi satu kali, baca enam sudut pandang: bintang Barat, angka kelahiran, getaran nama, empat pilar Tiongkok, weton Jawa, dan shio Imlek.</p>
+      <div class="eyebrow" data-i18n="hero.eyebrow">Enam cara membaca nasib</div>
+      <h1 data-i18n="hero.h1">Kenali watak dan peruntungan Anda dari tanggal lahir dan nama.</h1>
+      <p class="lead" data-i18n="hero.lead">Isi satu kali, baca enam sudut pandang: bintang Barat, angka kelahiran, getaran nama, empat pilar Tiongkok, weton Jawa, dan shio Imlek.</p>
       <div class="wheel" aria-hidden="true">
         <span>♈&#xFE0E; ♉&#xFE0E; ♊&#xFE0E; ♋&#xFE0E;</span><span>1 · 11 · 22</span><span>甲 乙 丙 丁</span><span>Legi · Pahing · Pon</span><span>鼠 牛 虎 兔</span>
       </div>
     </div>
     <form class="profil" id="profil" novalidate>
-      <div><span class="contoh" id="contoh-badge">Contoh terisi</span></div>
+      <div><span class="contoh" id="contoh-badge" data-i18n="form.contoh">Contoh terisi</span></div>
       <div class="field">
-        <label for="nama">Nama lengkap</label>
-        <input id="nama" name="nama" autocomplete="name" placeholder="Sesuai akta kelahiran" required>
+        <label for="nama" data-i18n="form.nama">Nama lengkap</label>
+        <input id="nama" name="nama" autocomplete="name" placeholder="Sesuai akta kelahiran" data-i18n-ph="form.nama.ph" required>
       </div>
       <div class="row2">
         <div class="field">
-          <label for="tgl">Tanggal lahir</label>
+          <label for="tgl" data-i18n="form.tgl">Tanggal lahir</label>
           <input id="tgl" name="tgl" type="date" min="1900-01-01" max="2100-12-31" required>
         </div>
         <div class="field">
-          <label for="jam">Jam lahir</label>
+          <label for="jam" data-i18n="form.jam">Jam lahir</label>
           <input id="jam" name="jam" type="time">
-          <small>Opsional. Dibutuhkan untuk ascendant, rumah, dan pilar jam Ba Zi</small>
+          <small data-i18n="form.jam.hint">Opsional. Dibutuhkan untuk ascendant, rumah, dan pilar jam Ba Zi</small>
         </div>
       </div>
       <div class="field">
-        <label for="kota">Kota lahir</label>
-        <div class="cari"><input id="kota" name="kota" autocomplete="off" placeholder="Ketik nama kota, mis. Medan atau London" role="combobox" aria-expanded="false" aria-autocomplete="list"></div>
-        <small>Kota mana pun di dunia. Zona waktu, termasuk musim panas, diatur otomatis.</small>
+        <label for="kota" data-i18n="form.kota">Kota lahir</label>
+        <div class="cari"><input id="kota" name="kota" autocomplete="off" placeholder="Ketik nama kota, mis. Medan atau London" data-i18n-ph="form.kota.ph" role="combobox" aria-expanded="false" aria-autocomplete="list"></div>
+        <small data-i18n="form.kota.hint">Kota mana pun di dunia. Zona waktu, termasuk musim panas, diatur otomatis.</small>
       </div>
       <p class="note" id="err" role="alert" hidden></p>
-      <button class="primary" type="submit">Baca ramalan saya</button>
-      <p class="note">Semua perhitungan berjalan di perangkat Anda. Data tidak dikirim ke mana pun.</p>
+      <button class="primary" type="submit" data-i18n="form.kirim">Baca ramalan saya</button>
+      <p class="note" data-i18n="form.privasi">Semua perhitungan berjalan di perangkat Anda. Data tidak dikirim ke mana pun.</p>
     </form>
   </section>
 
@@ -294,29 +302,30 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
 
   <section class="langganan" id="langganan">
     <div class="lg-copy">
-      <div class="eyebrow">Ramalan mingguan</div>
-      <h2>Dapatkan ramalan terbaru lewat email</h2>
-      <p>Setiap minggu kami kirim ramalan untuk zodiak, shio, dan weton Anda, ditambah hari baik di minggu itu. Gratis dan bisa berhenti kapan saja.</p>
+      <div class="eyebrow" data-i18n="lg.eyebrow">Ramalan mingguan</div>
+      <h2 data-i18n="lg.h2">Dapatkan ramalan terbaru lewat email</h2>
+      <p data-i18n="lg.p">Setiap minggu kami kirim ramalan untuk zodiak, shio, dan weton Anda, ditambah hari baik di minggu itu. Gratis dan bisa berhenti kapan saja.</p>
       <div class="lg-tags" id="lg-tags"></div>
     </div>
     <form id="lg-form" class="lg-form" novalidate>
       <div class="field">
         <label for="lg-email">Email</label>
-        <input id="lg-email" type="email" autocomplete="email" placeholder="nama@contoh.com" required>
+        <input id="lg-email" type="email" autocomplete="email" placeholder="nama@contoh.com" data-i18n-ph="lg.email.ph" required>
       </div>
-      <label class="lg-check" for="lg-setuju"><input id="lg-setuju" type="checkbox"> Saya setuju nama, email, dan tanggal lahir saya disimpan untuk mengirim ramalan.</label>
+      <label class="lg-check" for="lg-setuju"><input id="lg-setuju" type="checkbox"> <span data-i18n="lg.setuju">Saya setuju nama, email, dan tanggal lahir saya disimpan untuk mengirim ramalan.</span></label>
       <p class="note" id="lg-err" role="alert" hidden></p>
-      <button class="primary" type="submit" id="lg-kirim">Langganan gratis</button>
+      <button class="primary" type="submit" id="lg-kirim" data-i18n="lg.kirim">Langganan gratis</button>
       <div id="lg-ok" class="verdict s5" hidden></div>
     </form>
   </section>
 
   <footer>
-    <p>Ramalan di Serat Nasib disusun dari tradisi astrologi, numerologi Pythagoras, primbon Jawa, dan metafisika Tiongkok. Gunakan sebagai hiburan dan bahan refleksi, bukan pengganti keputusan medis, hukum, atau keuangan.</p>
+    <p data-i18n="footer">Ramalan di Serat Nasib disusun dari tradisi astrologi, numerologi Pythagoras, primbon Jawa, dan metafisika Tiongkok. Gunakan sebagai hiburan dan bahan refleksi, bukan pengganti keputusan medis, hukum, atau keuangan.</p>
   </footer>
 </div>
 
 <script src="ramalan.js"></script>
+<script src="en.js"></script>
 <script src="natal.js"></script>
 <script>
 (function () {
@@ -324,8 +333,119 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var R = window.Ramalan;
   var $ = function (id) { return document.getElementById(id); };
   var esc = function (s) { return String(s).replace(/[&<>"]/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]; }); };
-  var BULAN = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
-  var fmt = function (d) { return d.d + " " + BULAN[d.m - 1] + " " + d.y; };
+  /* ===== Bahasa (ID/EN) ===== */
+  var ID = {
+    "bulan": ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"],
+    "tgl": "{d} {b} {y}",
+    "m.zodiak": "Astrologi", "m.zodiak.d": "Bagan kelahiran: posisi planet, ascendant, rumah, dan aspek, lengkap dengan analisanya.",
+    "m.angka": "Angka kelahiran", "m.angka.d": "Power of number: angka jalan hidup dan tahun personal Anda.",
+    "m.nama": "Nama lengkap", "m.nama.d": "Getaran setiap huruf nama: angka ekspresi, jiwa, dan kepribadian.",
+    "m.bazi": "Ba Zi", "m.bazi.d": "Empat pilar Tiongkok, elemen diri, dan keseimbangan lima elemen.",
+    "m.weton": "Weton Jawa", "m.weton.d": "Hari dan pasaran lahir, neptu, watak, serta cek jodoh weton.",
+    "m.shio": "Shio", "m.shio.d": "Shio Imlek, pasangan yang cocok, dan peruntungan tahun ini.",
+    "kota.mencari": "Mencari kota lain…", "kota.kosong": "Kota tidak ditemukan. Coba ejaan lain atau kota terdekat.", "kota.ph": "Ketik nama kota",
+    "err.nama": "Tulis nama lengkap dengan huruf latin agar numerologi nama bisa dihitung.", "err.tgl": "Pilih tanggal lahir antara tahun 1900 dan 2100.",
+    "r.bulan": "Bulan {r}", "r.asc": "Asc {a} · Bulan {r}", "r.ekspresi": "Angka ekspresi",
+    "tab.kunci": "Terkunci", "tab.tonton": "Tonton iklan untuk membuka",
+    "hasil.untuk": "Ramalan untuk {nama} · {tgl}",
+    "z.jamTak": "jam tidak diketahui", "z.harmonis": "Harmonis", "z.tegang": "Tegang",
+    "z.titik": "Titik", "z.derajat": "Derajat", "z.rasi": "Rasi", "z.rumah": "Rumah", "z.planet": "Planet", "z.puncak": "Puncak langit",
+    "z.inti": "Inti kepribadian", "z.watak": "Watak {z}", "z.pribadi": "Planet pribadi", "z.aspek": "Aspek utama",
+    "z.seimbang": "Keseimbangan", "z.elkual": "Elemen dan kualitas", "z.cinta": "Cinta", "z.karier": "Karier dan rezeki",
+    "z.note": "Posisi planet dihitung dengan rumus astronomi (zodiak tropikal) untuk waktu lahir di zona waktu {k}. Rumah memakai sistem Whole Sign. ",
+    "z.noteTanpa": "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan.",
+    "z.noteJam": "Ketelitian ascendant bergantung pada jam lahir yang tepat sampai menit.",
+    "z.roda": "Roda bagan kelahiran",
+    "a.tabs": "Jenis bacaan astrologi", "a.natal": "Bagan lahir", "a.transit": "Transit", "a.sinastri": "Sinastri", "a.sr": "Solar return",
+    "tr.tgl": "Tanggal transit", "tr.lihat": "Lihat transit",
+    "tr.lead": "Posisi planet pada {tgl} dibandingkan dengan bagan kelahiran Anda.",
+    "tr.utama": "Pengaruh utama", "tr.tenang": "Tidak ada transit besar yang tepat pada tanggal ini. Masa yang relatif tenang.",
+    "tr.harian": "Suasana hari ini", "tr.kartu": "{t} {j} {n} natal", "tr.bulan": "Bulan {j} {n}",
+    "tr.lambat": "Planet lambat di rumah Anda",
+    "tr.jup": "Jupiter di rumah {n}", "tr.jupIsi": "Peluang dan pertumbuhan sedang mengalir ke urusan rumah {n}.",
+    "tr.sat": "Saturnus di rumah {n}", "tr.satIsi": "Kerja keras dan tanggung jawab sedang diuji di rumah {n}.",
+    "tr.posisi": "Posisi planet saat itu", "tr.rumahAnda": "Rumah Anda",
+    "tr.note": "Transit dihitung untuk pukul 12.00 waktu {k}. Orb yang dipakai 1,5–3°, jadi yang tampil hanya pengaruh yang sedang kuat.",
+    "sn.nama": "Nama pasangan", "sn.tgl": "Tanggal lahir", "sn.jam": "Jam lahir", "sn.kota": "Kota lahir", "sn.banding": "Bandingkan",
+    "sn.isiTgl": "Isi tanggal lahir pasangan.", "sn.pasangan": "Pasangan",
+    "sn.t1": "Sangat cocok", "sn.t2": "Cocok", "sn.t3": "Cukup cocok, perlu usaha", "sn.t4": "Banyak tantangan",
+    "sn.kartu": "{p} Anda {j} {q} {nm}",
+    "sn.elemen": "Matahari Anda berelemen {a}, Matahari {nm} berelemen {b}: {h}.",
+    "sn.aspek": "Aspek antara kalian", "sn.sedikit": "Tidak banyak aspek kuat di antara bagan kalian.", "sn.planet": "Planet {nm}",
+    "sn.note": "Sinastri membandingkan planet pribadi (Matahari sampai Saturnus) kedua bagan dengan orb sampai 6°. Persentase adalah ringkasan, bukan penentu hubungan.",
+    "sr.butuhJam": "Solar return membutuhkan jam lahir. Isi jam lahir di formulir atas, lalu tekan \"Baca ramalan saya\" lagi.",
+    "sr.tahun": "Tahun", "sr.kota": "Kota tempat Anda berulang tahun", "sr.hitung": "Hitung",
+    "sr.lead": "Matahari kembali ke posisi lahir Anda pada <b>{tgl}</b> waktu {k}. Bagan saat itu menggambarkan tema satu tahun ke depan.",
+    "sr.tema": "Tema tahun {a}–{b}",
+    "sr.note": "Solar return berlaku dari ulang tahun ini sampai ulang tahun berikutnya. Kota tempat Anda berada saat ulang tahun mengubah ascendant tahunan.",
+    "n.dari": "Angka jalan hidup dari {tgl}",
+    "n.rumus": "Rumus", "n.hariLahir": "Angka hari lahir", "n.tahunP": "Tahun personal {y}",
+    "n.makna": "Makna angka {n}", "n.tahunPj": "Tahun personal {n} ({y})", "n.bakat": "Bakat dari hari lahir",
+    "n.note": "Power of number memakai numerologi Pythagoras. Tanggal, bulan, dan tahun dijumlahkan sampai satu digit, kecuali angka master 11, 22, dan 33.",
+    "nm.judul": "Getaran nama", "nm.huruf": "Nilai tiap huruf",
+    "nm.ekspresi": "Angka ekspresi", "nm.jiwa": "Angka jiwa (vokal)", "nm.kepribadian": "Angka kepribadian",
+    "nm.selaras": "Keselarasan dengan angka kelahiran",
+    "nm.sama": "Angka nama sama dengan angka jalan hidup Anda ({n}). Nama ini sangat mendukung tujuan hidup Anda.",
+    "nm.beda": "Angka nama {a} dan angka jalan hidup {b}. ",
+    "nm.satu": "Keduanya satu kelompok getaran, sehingga saling menguatkan.",
+    "nm.lain": "Keduanya berbeda getaran. Nama memberi warna tambahan yang melengkapi bakat bawaan Anda.",
+    "nm.note": "Huruf bertanda garis emas adalah vokal. Nilai huruf memakai tabel Pythagoras (A=1 sampai I=9, lalu berulang). Tanda baca dan gelar diabaikan.",
+    "b.judul": "Empat Pilar Ba Zi", "b.sub": "Elemen diri (Day Master): {n}, {el} {yy}", "b.anda": " · Anda",
+    "b.watak": "Watak elemen diri", "b.seimbang": "Keseimbangan lima elemen",
+    "b.dominan": "Elemen dominan", "b.dominanIsi": "{e}. Sifat elemen ini paling menonjol dalam keseharian Anda.",
+    "b.tambah": "Elemen yang perlu ditambah",
+    "b.note": "Pilar tahun berganti pada Li Chun (sekitar 4 Februari) dan pilar bulan mengikuti 12 batas musim matahari. Untuk kelahiran 1 hari di sekitar batas musim, hasil bisa bergeser. ",
+    "b.noteJam": "Pilih jam lahir untuk melihat pilar jam.",
+    "w.hari": "Hari", "w.pasaran": "Pasaran", "w.jumlah": "Jumlah neptu",
+    "w.watakHari": "Watak hari {h}", "w.watakPas": "Watak pasaran {p}", "w.laku": "Laku neptu {n}",
+    "w.jodoh": "Cek jodoh weton", "w.tglPas": "Tanggal lahir pasangan", "w.hitung": "Hitung kecocokan",
+    "w.isiTgl": "Isi tanggal lahir pasangan.", "w.hasil": "Anda {a} ({na}) + pasangan {b} ({nb}) = {t}",
+    "w.note": "Weton dihitung dari siklus 7 hari dan 5 pasaran. Ingat, hari Jawa berganti saat matahari terbenam, sehingga orang yang lahir malam hari kadang memakai weton hari berikutnya.",
+    "s.judul": "Shio {s} {e}", "s.tahun": "Tahun Imlek {y}", "s.imlek": "Imlek tahun {y} jatuh pada <b>{tgl}</b>",
+    "s.sebelum": "Anda lahir <b>sebelum</b> Imlek, jadi ikut shio tahun sebelumnya", "s.setelah": "Anda lahir <b>setelah</b> Imlek",
+    "s.watak": "Watak", "s.cocok": "Cocok dengan", "s.hindari": "Kurang cocok (ciong)", "s.untung": "Peruntungan {y} (tahun {s})",
+    "s.note": "Shio ditentukan oleh tahun Imlek, bukan 1 Januari. Tanggal Imlek dihitung dari fase bulan baru waktu Beijing.",
+    "g.terbuka": "{n} dari 6 bacaan terbuka", "g.lanjut": "Langkah berikutnya", "g.pilih": "Pilih bacaan yang ingin Anda buka",
+    "g.pilihP": "Setiap bacaan dibuka satu per satu dengan menonton iklan singkat. Iklan inilah yang membuat Serat Nasib tetap gratis.",
+    "g.sudah": " · terbuka", "g.kunci": "Bacaan terkunci", "g.iklan": "Iklan",
+    "g.tontonP": "Tonton iklan singkat sampai selesai, lalu bacaan {m} Anda langsung terbuka.",
+    "g.tonton": "Tonton iklan &amp; buka bacaan", "g.lain": "Pilih bacaan lain", "g.bukaLain": "Buka bacaan lain",
+    "ad.ulang": "Coba lagi", "ad.demo": "Mode demo: di situs asli, di sini tampil iklan video Google.",
+    "ad.siap": "Iklan siap. Tonton sampai selesai untuk membuka bacaan.", "ad.putar": "Putar iklan",
+    "ad.tutup": "Iklan ditutup sebelum selesai, jadi bacaan belum terbuka.", "ad.muat": "Memuat iklan…",
+    "lg.mengirim": "Mengirim…",
+    "lg.err.email": "Tulis alamat email yang lengkap, misalnya nama@gmail.com.",
+    "lg.err.setuju": "Centang persetujuan agar kami boleh mengirim ramalan ke email Anda.",
+    "lg.err.kirim": "Pendaftaran gagal terkirim. Periksa koneksi internet lalu coba lagi.",
+    "lg.ok": "<b>Terima kasih, {nama}.</b> Ramalan mingguan untuk {zodiak}, shio {shio}, dan weton {weton} akan dikirim ke {email}.",
+    "lg.demo": "Mode demo: formulir belum tersambung ke layanan email, jadi data ini tidak dikirim.",
+    "lg.cek": "Cek kotak masuk Anda untuk konfirmasi langganan.",
+    "lg.tag.shio": "Shio {v}", "lg.tag.angka": "Angka {v}"
+  };
+  var EN = window.SERAT_EN || null;
+  var lang = "id";
+  try { var simpan = localStorage.getItem("serat-lang"); if (simpan === "id" || simpan === "en") lang = simpan; else if (!/^id|^ms|^jv|^su/i.test(navigator.language || "id")) lang = "en"; } catch (e) { if (!/^id/i.test(navigator.language || "id")) lang = "en"; }
+  if (!EN) lang = "id";
+  // teks statis asli (bahasa Indonesia) diambil dari HTML
+  document.querySelectorAll("[data-i18n]").forEach(function (el) { ID[el.dataset.i18n] = el.innerHTML; });
+  document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { ID[el.dataset.i18nPh] = el.getAttribute("placeholder"); });
+  document.querySelectorAll("[data-i18n-content]").forEach(function (el) { ID[el.dataset.i18nContent] = el.getAttribute("content"); });
+  function t(k, v) {
+    var src = (lang === "en" && EN && EN.ui[k] !== undefined) ? EN.ui[k] : ID[k];
+    if (typeof src !== "string") return src;
+    return v ? src.replace(/\{(\w+)\}/g, function (_, x) { return v[x] !== undefined ? v[x] : ""; }) : src;
+  }
+  function negT(n) { return (lang === "en" && EN && EN.negara[n]) || n; }
+  function terapkanBahasa() {
+    document.documentElement.lang = lang;
+    document.querySelectorAll("[data-i18n]").forEach(function (el) { el.innerHTML = t(el.dataset.i18n); });
+    document.querySelectorAll("[data-i18n-ph]").forEach(function (el) { el.setAttribute("placeholder", t(el.dataset.i18nPh)); });
+    document.querySelectorAll("[data-i18n-content]").forEach(function (el) { el.setAttribute("content", t(el.dataset.i18nContent)); });
+    document.querySelectorAll("#lang button").forEach(function (b) { b.setAttribute("aria-pressed", String(b.dataset.lang === lang)); });
+    R.setLang(lang, EN && EN.ramalan); window.Natal.setLang(lang, EN && EN.natal);
+  }
+  terapkanBahasa();
+  var fmt = function (d) { return t("tgl", { d: d.d, b: t("bulan")[d.m - 1], y: d.y }); };
   var parse = function (v) { var p = v.split("-"); return p.length === 3 ? { y: +p[0], m: +p[1], d: +p[2] } : null; };
 
   var N = window.Natal;
@@ -344,22 +464,23 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     off = offsetAt(zona, lokal - off * 3600000);
     return offsetAt(zona, lokal - off * 3600000);
   }
-  function labelKota(k) { return k.n + (k.wil ? ", " + k.wil : "") + (k.neg ? ", " + k.neg : ""); }
+  function labelKota(k) { return k.n + (k.wil ? ", " + negT(k.wil) : "") + (k.neg ? ", " + negT(k.neg) : ""); }
   function fmtOff(h) { var sgn = h < 0 ? "−" : "+", a = Math.abs(h), j = Math.floor(a), mm = Math.round((a - j) * 60); return "GMT" + sgn + j + (mm ? ":" + String(mm).padStart(2, "0") : ""); }
   var normal = function (t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, ""); };
   var cacheCari = {};
   function cariKota(q, cb) {
-    var nq = normal(q), lokal = N.KOTA.filter(function (k) { return normal(k.n).indexOf(nq) === 0 || normal(k.n + " " + k.neg).indexOf(nq) >= 0; }).slice(0, 6);
+    var nq = normal(q), lokal = N.KOTA.filter(function (k) { return normal(k.n).indexOf(nq) === 0 || normal(k.n + " " + k.neg + " " + negT(k.neg)).indexOf(nq) >= 0; }).slice(0, 6);
     cb(lokal, true);
     if (nq.length < 2) return;
-    if (cacheCari[nq]) return cb(gabung(lokal, cacheCari[nq]), false);
-    fetch("https://geocoding-api.open-meteo.com/v1/search?count=8&language=id&format=json&name=" + encodeURIComponent(q.trim()))
+    var ck = lang + ":" + nq;
+    if (cacheCari[ck]) return cb(gabung(lokal, cacheCari[ck]), false);
+    fetch("https://geocoding-api.open-meteo.com/v1/search?count=8&language=" + lang + "&format=json&name=" + encodeURIComponent(q.trim()))
       .then(function (r) { return r.json(); })
       .then(function (j) {
         var hasil = (j.results || []).filter(function (r) { return r.timezone; }).map(function (r) {
           return { n: r.name, wil: r.admin1 || "", neg: r.country || "", lat: r.latitude, lon: r.longitude, zona: r.timezone };
         });
-        cacheCari[nq] = hasil; cb(gabung(lokal, hasil), false);
+        cacheCari[ck] = hasil; cb(gabung(lokal, hasil), false);
       }).catch(function () { cb(lokal, false); });
   }
   function gabung(a, b) {
@@ -375,8 +496,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     function tutup() { list.hidden = true; input.setAttribute("aria-expanded", "false"); aktif = -1; }
     function tampil(arr, memuat) {
       items = arr;
-      list.innerHTML = arr.map(function (k, i) { return '<li role="option" data-i="' + i + '"' + (i === aktif ? ' class="on"' : "") + '><b>' + esc(k.n) + '</b><span>' + esc([k.wil, k.neg].filter(Boolean).join(", ")) + '</span></li>'; }).join("") +
-        (memuat ? '<li class="info">Mencari kota lain…</li>' : (!arr.length ? '<li class="info">Kota tidak ditemukan. Coba ejaan lain atau kota terdekat.</li>' : ""));
+      list.innerHTML = arr.map(function (k, i) { return '<li role="option" data-i="' + i + '"' + (i === aktif ? ' class="on"' : "") + '><b>' + esc(k.n) + '</b><span>' + esc([k.wil, k.neg].filter(Boolean).map(negT).join(", ")) + '</span></li>'; }).join("") +
+        (memuat ? '<li class="info">' + t("kota.mencari") + '</li>' : (!arr.length ? '<li class="info">' + t("kota.kosong") + '</li>' : ""));
       list.hidden = false; input.setAttribute("aria-expanded", "true");
     }
     function pilih(i) { var k = items[i]; if (!k) return; setP(k); input.value = labelKota(k); tutup(); }
@@ -396,18 +517,13 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     input.addEventListener("blur", function () { setTimeout(function () { tutup(); input.value = labelKota(getP()); }, 150); });
   }
 
-  var METHODS = [
-    { id: "zodiak", k: "Astrologi", d: "Bagan kelahiran: posisi planet, ascendant, rumah, dan aspek, lengkap dengan analisanya." },
-    { id: "angka", k: "Angka kelahiran", d: "Power of number: angka jalan hidup dan tahun personal Anda." },
-    { id: "nama", k: "Nama lengkap", d: "Getaran setiap huruf nama: angka ekspresi, jiwa, dan kepribadian." },
-    { id: "bazi", k: "Ba Zi", d: "Empat pilar Tiongkok, elemen diri, dan keseimbangan lima elemen." },
-    { id: "weton", k: "Weton Jawa", d: "Hari dan pasaran lahir, neptu, watak, serta cek jodoh weton." },
-    { id: "shio", k: "Shio", d: "Shio Imlek, pasangan yang cocok, dan peruntungan tahun ini." }
-  ];
+  var METHODS = ["zodiak", "angka", "nama", "bazi", "weton", "shio"].map(function (id) { return { id: id }; });
+  function labelMetode() { METHODS.forEach(function (m) { m.k = t("m." + m.id); m.d = t("m." + m.id + ".d"); }); }
+  labelMetode();
   var hariIni = new Date();
   var state = { aktif: null, data: null, buka: {}, iklan: null, astro: "natal",
     tr: hariIni.getFullYear() + "-" + String(hariIni.getMonth() + 1).padStart(2, "0") + "-" + String(hariIni.getDate()).padStart(2, "0"),
-    tempat: N.KOTA[0], pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", tempat: N.KOTA[21] }, srTahun: hariIni.getFullYear(), srTempat: null };
+    tempat: N.KOTA[0], pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", tempat: N.KOTA[21] }, srTahun: hariIni.getFullYear(), srTempat: null, tglJodoh: "1992-03-09" };
   if (location.hash && METHODS.some(function (m) { return "#" + m.id === location.hash; })) state.aktif = location.hash.slice(1);
 
   function bagan(dt, jam, menit, k) {
@@ -426,9 +542,9 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
 
   function ringkasan(d) {
     return {
-      zodiak: { v: d.z.s + "\uFE0E " + d.z.n, s: d.nc.angles ? "Asc " + N.posisi(d.nc.angles.asc).nama + " · Bulan " + d.nc.planets[1].pos.nama : "Bulan " + d.nc.planets[1].pos.nama },
-      angka: { v: String(d.lp.angka), s: d.lp.info.judul.replace(/^Angka Master \d+ · /, "") },
-      nama: { v: String(d.nm.ekspresi), s: "Angka ekspresi" },
+      zodiak: { v: d.z.s + "\uFE0E " + d.z.n, s: d.nc.angles ? t("r.asc", { a: N.posisi(d.nc.angles.asc).nama, r: d.nc.planets[1].pos.nama }) : t("r.bulan", { r: d.nc.planets[1].pos.nama }) },
+      angka: { v: String(d.lp.angka), s: d.lp.info.judul.replace(/^.*· /, "") },
+      nama: { v: String(d.nm.ekspresi), s: t("r.ekspresi") },
       bazi: { v: d.bz.dayMaster.h + " " + d.bz.dayMaster.n, s: d.bz.dayMaster.el + " " + d.bz.dayMaster.yy },
       weton: { v: d.wt.wetonLabel, s: "Neptu " + d.wt.neptu },
       shio: { v: d.sh.shio.n, s: d.sh.elemen + " · " + d.sh.tahunImlek }
@@ -443,7 +559,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       return '<button role="tab" id="tab-' + m.id + '" aria-controls="panel" aria-selected="' + (m.id === state.aktif) + '" data-id="' + m.id + '">' +
         '<span class="k">' + m.k + '</span>' +
         (open ? '<span class="v">' + esc(r[m.id].v) + '</span><span class="s">' + esc(r[m.id].s) + '</span>'
-              : '<span class="v"><span class="lock">' + LOCK + 'Terkunci</span></span><span class="s">Tonton iklan untuk membuka</span>') +
+              : '<span class="v"><span class="lock">' + LOCK + t("tab.kunci") + '</span></span><span class="s">' + t("tab.tonton") + '</span>') +
         '</button>';
     }).join("");
   }
@@ -451,37 +567,36 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var PANELS = {
     zodiak: function (d) {
       var z = d.z, c = d.nc, an = d.na;
-      var waktu = d.jam === null ? "jam tidak diketahui" : String(d.jam).padStart(2, "0") + ":" + String(d.menit).padStart(2, "0");
+      var waktu = d.jam === null ? t("z.jamTak") : String(d.jam).padStart(2, "0") + ":" + String(d.menit).padStart(2, "0");
       var rows = c.planets.map(function (p) {
         return '<tr><td><span class="pg">' + p.s + '\uFE0E</span> ' + p.n + '</td><td class="mono">' + p.pos.derajat + '°' + String(p.pos.menit).padStart(2, "0") + '′</td><td>' + p.pos.sym + '\uFE0E ' + p.pos.nama + '</td><td class="mono">' + (p.rumah || "–") + '</td><td>' + (p.retro ? '<span class="retro">R</span>' : "") + '</td></tr>';
       }).join("");
       if (c.angles) {
         var A = N.posisi(c.angles.asc), M = N.posisi(c.angles.mc);
-        rows = '<tr class="ang"><td><b>ASC</b> Ascendant</td><td class="mono">' + A.derajat + '°' + String(A.menit).padStart(2, "0") + '′</td><td>' + A.sym + '\uFE0E ' + A.nama + '</td><td class="mono">1</td><td></td></tr>' +
-          '<tr class="ang"><td><b>MC</b> Puncak langit</td><td class="mono">' + M.derajat + '°' + String(M.menit).padStart(2, "0") + '′</td><td>' + M.sym + '\uFE0E ' + M.nama + '</td><td class="mono">' + (((Math.floor(c.angles.mc / 30) - c.ascRasi + 12) % 12) + 1) + '</td><td></td></tr>' + rows;
+        rows = '<tr class="ang"><td><b>ASC</b> ' + N.S.ascNama + '</td><td class="mono">' + A.derajat + '°' + String(A.menit).padStart(2, "0") + '′</td><td>' + A.sym + '\uFE0E ' + A.nama + '</td><td class="mono">1</td><td></td></tr>' +
+          '<tr class="ang"><td><b>MC</b> ' + t("z.puncak") + '</td><td class="mono">' + M.derajat + '°' + String(M.menit).padStart(2, "0") + '′</td><td>' + M.sym + '\uFE0E ' + M.nama + '</td><td class="mono">' + (((Math.floor(c.angles.mc / 30) - c.ascRasi + 12) % 12) + 1) + '</td><td></td></tr>' + rows;
       }
       var list = function (arr) { return arr.map(function (x) { return '<div class="block"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join(""); };
       var asp = an.aspek.map(function (x) { return '<div class="block asp ' + x.sifat + '"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join("");
-      return head(z.s + "\uFE0E", "Astrologi", fmt(d.dt) + " · " + waktu + (d.jam === null ? "" : " " + fmtOff(d.nc.tzJam)) + " · " + d.kota.n) + subAstro() +
+      return head(z.s + "\uFE0E", t("m.zodiak"), fmt(d.dt) + " · " + waktu + (d.jam === null ? "" : " " + fmtOff(d.nc.tzJam)) + " · " + d.kota.n) + subAstro() +
         (state.astro !== "natal" ? ASTRO[state.astro](d) : '<div class="natal">' +
-          '<div class="wheel-wrap">' + roda(c) + '<div class="legend"><span class="lg-h">Harmonis</span><span class="lg-t">Tegang</span></div></div>' +
-          '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Titik</th><th>Derajat</th><th>Rasi</th><th>Rumah</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+          '<div class="wheel-wrap">' + roda(c) + '<div class="legend"><span class="lg-h">' + t("z.harmonis") + '</span><span class="lg-t">' + t("z.tegang") + '</span></div></div>' +
+          '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>' + t("z.titik") + '</th><th>' + t("z.derajat") + '</th><th>' + t("z.rasi") + '</th><th>' + t("z.rumah") + '</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
         '</div>' +
-        '<h3 class="sec">Inti kepribadian</h3><div class="grid2">' + list(an.inti) + blk("Watak " + z.n, z.sifat) + '</div>' +
-        '<h3 class="sec">Planet pribadi</h3><div class="grid2">' + list(an.planet) + '</div>' +
-        (asp ? '<h3 class="sec">Aspek utama</h3><div class="grid2">' + asp + '</div>' : "") +
-        '<h3 class="sec">Keseimbangan</h3><div class="grid2">' + blk("Elemen dan kualitas", an.keseimbangan.join(" ")) + blk("Cinta", z.cinta) + blk("Karier dan rezeki", z.karier) + '</div>' +
-        note("Posisi planet dihitung dengan rumus astronomi (zodiak tropikal) untuk waktu lahir di zona waktu " + d.kota.n + ". Rumah memakai sistem Whole Sign. " +
-          (d.jam === null ? "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan." : "Ketelitian ascendant bergantung pada jam lahir yang tepat sampai menit.")));
+        '<h3 class="sec">' + t("z.inti") + '</h3><div class="grid2">' + list(an.inti) + blk(t("z.watak", { z: z.n }), z.sifat) + '</div>' +
+        '<h3 class="sec">' + t("z.pribadi") + '</h3><div class="grid2">' + list(an.planet) + '</div>' +
+        (asp ? '<h3 class="sec">' + t("z.aspek") + '</h3><div class="grid2">' + asp + '</div>' : "") +
+        '<h3 class="sec">' + t("z.seimbang") + '</h3><div class="grid2">' + blk(t("z.elkual"), an.keseimbangan.join(" ")) + blk(t("z.cinta"), z.cinta) + blk(t("z.karier"), z.karier) + '</div>' +
+        note(t("z.note", { k: d.kota.n }) + (d.jam === null ? t("z.noteTanpa") : t("z.noteJam"))));
     },
     angka: function (d) {
       var lp = d.lp;
-      return head(lp.angka, lp.info.judul, "Angka jalan hidup dari " + fmt(d.dt)) +
-        '<div class="facts"><div>Rumus <b class="mono">' + lp.rumus + '</b></div><div>Angka hari lahir <b class="mono">' + lp.hariLahir + '</b></div><div>Tahun personal ' + lp.tahunIni + ' <b class="mono">' + lp.tahunPersonal + '</b></div></div>' +
-        '<div class="grid2">' + blk("Makna angka " + lp.angka, lp.info.isi) +
-        blk("Tahun personal " + lp.tahunPersonal + " (" + lp.tahunIni + ")", R.TAHUN_PERSONAL[lp.tahunPersonal]) +
-        blk("Bakat dari hari lahir", (R.ANGKA[lp.hariLahir] || R.ANGKA[R.reduceNum(lp.hariLahir)]).isi) + '</div>' +
-        note("Power of number memakai numerologi Pythagoras. Tanggal, bulan, dan tahun dijumlahkan sampai satu digit, kecuali angka master 11, 22, dan 33.");
+      return head(lp.angka, lp.info.judul, t("n.dari", { tgl: fmt(d.dt) })) +
+        '<div class="facts"><div>' + t("n.rumus") + ' <b class="mono">' + lp.rumus + '</b></div><div>' + t("n.hariLahir") + ' <b class="mono">' + lp.hariLahir + '</b></div><div>' + t("n.tahunP", { y: lp.tahunIni }) + ' <b class="mono">' + lp.tahunPersonal + '</b></div></div>' +
+        '<div class="grid2">' + blk(t("n.makna", { n: lp.angka }), lp.info.isi) +
+        blk(t("n.tahunPj", { n: lp.tahunPersonal, y: lp.tahunIni }), R.TAHUN_PERSONAL[lp.tahunPersonal]) +
+        blk(t("n.bakat"), (R.ANGKA[lp.hariLahir] || R.ANGKA[R.reduceNum(lp.hariLahir)]).isi) + '</div>' +
+        note(t("n.note"));
     },
     nama: function (d) {
       var n = d.nm;
@@ -491,53 +606,53 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         for (var i = 0; i < w.length; i++) html += '<span class="' + (vow(w, i) ? "v" : "") + '">' + w[i] + '<small>' + (((w.charCodeAt(i) - 65) % 9) + 1) + '</small></span>';
         if (wi < words.length - 1) html += '<span class="gap"></span>';
       });
-      return head(n.ekspresi, "Getaran nama", esc(d.nama)) +
-        '<div class="letters" aria-label="Nilai tiap huruf">' + html + '</div>' +
+      return head(n.ekspresi, t("nm.judul"), esc(d.nama)) +
+        '<div class="letters" aria-label="' + t("nm.huruf") + '">' + html + '</div>' +
         '<div class="num-trio">' +
-          '<div class="block"><h3>Angka ekspresi</h3><div class="big">' + n.ekspresi + '</div><p>' + R.EKSPRESI_BAKAT[n.ekspresi] + '</p></div>' +
-          '<div class="block"><h3>Angka jiwa (vokal)</h3><div class="big">' + n.jiwa + '</div><p>' + R.JIWA[n.jiwa] + '</p></div>' +
-          '<div class="block"><h3>Angka kepribadian</h3><div class="big">' + n.kepribadian + '</div><p>' + R.KEPRIBADIAN[n.kepribadian] + '</p></div>' +
+          '<div class="block"><h3>' + t("nm.ekspresi") + '</h3><div class="big">' + n.ekspresi + '</div><p>' + R.EKSPRESI_BAKAT[n.ekspresi] + '</p></div>' +
+          '<div class="block"><h3>' + t("nm.jiwa") + '</h3><div class="big">' + n.jiwa + '</div><p>' + R.JIWA[n.jiwa] + '</p></div>' +
+          '<div class="block"><h3>' + t("nm.kepribadian") + '</h3><div class="big">' + n.kepribadian + '</div><p>' + R.KEPRIBADIAN[n.kepribadian] + '</p></div>' +
         '</div>' +
-        blk("Keselarasan dengan angka kelahiran", n.ekspresi === d.lp.angka ? "Angka nama sama dengan angka jalan hidup Anda (" + d.lp.angka + "). Nama ini sangat mendukung tujuan hidup Anda." :
-          "Angka nama " + n.ekspresi + " dan angka jalan hidup " + d.lp.angka + ". " + (Math.abs(R.reduceNum(n.ekspresi) - R.reduceNum(d.lp.angka)) % 3 === 0 ? "Keduanya satu kelompok getaran, sehingga saling menguatkan." : "Keduanya berbeda getaran. Nama memberi warna tambahan yang melengkapi bakat bawaan Anda.")) +
-        note("Huruf bertanda garis emas adalah vokal. Nilai huruf memakai tabel Pythagoras (A=1 sampai I=9, lalu berulang). Tanda baca dan gelar diabaikan.");
+        blk(t("nm.selaras"), n.ekspresi === d.lp.angka ? t("nm.sama", { n: d.lp.angka }) :
+          t("nm.beda", { a: n.ekspresi, b: d.lp.angka }) + (Math.abs(R.reduceNum(n.ekspresi) - R.reduceNum(d.lp.angka)) % 3 === 0 ? t("nm.satu") : t("nm.lain"))) +
+        note(t("nm.note"));
     },
     bazi: function (d) {
       var b = d.bz, order = b.pilar.slice().reverse(); // tampilan tradisional: jam, hari, bulan, tahun
       var max = Math.max.apply(null, Object.values(b.elemen)) || 1;
       var cols = order.map(function (p) {
-        return '<div class="col' + (p.label === "Hari" ? " dm" : "") + '"><div class="lbl">' + p.label + (p.label === "Hari" ? " · Anda" : "") + '</div>' +
+        return '<div class="col' + (p.key === "d" ? " dm" : "") + '"><div class="lbl">' + p.label + (p.key === "d" ? t("b.anda") : "") + '</div>' +
           '<div class="hz">' + p.g.h + '</div><div class="py">' + p.g.n + '</div><div class="el">' + p.g.el + ' ' + p.g.yy + '</div>' +
           '<div class="hz">' + p.z.h + '</div><div class="py">' + p.z.n + ' · ' + p.z.shio + '</div><div class="el">' + p.z.el + '</div></div>';
       }).join("");
       var bars = Object.keys(b.elemen).map(function (e) {
         return '<div class="bar"><span>' + e + '</span><i><b style="width:' + (b.elemen[e] / max * 100) + '%"></b></i><span class="mono">' + b.elemen[e] + '</span></div>';
       }).join("");
-      return head(b.dayMaster.h, "Empat Pilar Ba Zi", "Elemen diri (Day Master): " + b.dayMaster.n + ", " + b.dayMaster.el + " " + b.dayMaster.yy) +
+      return head(b.dayMaster.h, t("b.judul"), t("b.sub", { n: b.dayMaster.n, el: b.dayMaster.el, yy: b.dayMaster.yy })) +
         '<div class="pilar-wrap"><div class="pilar" style="grid-template-columns:repeat(' + order.length + ',minmax(92px,1fr))">' + cols + '</div></div>' +
-        '<div class="grid2">' + blk("Watak elemen diri", b.dmInfo) +
-        '<div class="block"><h3>Keseimbangan lima elemen</h3><div class="bars">' + bars + '</div></div>' +
-        blk("Elemen dominan", b.kuat.join(", ") + ". Sifat elemen ini paling menonjol dalam keseharian Anda.") +
-        blk("Elemen yang perlu ditambah", b.saran.join(". ") + ".") + '</div>' +
-        note("Pilar tahun berganti pada Li Chun (sekitar 4 Februari) dan pilar bulan mengikuti 12 batas musim matahari. Untuk kelahiran 1 hari di sekitar batas musim, hasil bisa bergeser. " + (d.jam === null ? "Pilih jam lahir untuk melihat pilar jam." : ""));
+        '<div class="grid2">' + blk(t("b.watak"), b.dmInfo) +
+        '<div class="block"><h3>' + t("b.seimbang") + '</h3><div class="bars">' + bars + '</div></div>' +
+        blk(t("b.dominan"), t("b.dominanIsi", { e: b.kuat.join(", ") })) +
+        blk(t("b.tambah"), b.saran.join(". ") + ".") + '</div>' +
+        note(t("b.note") + (d.jam === null ? t("b.noteJam") : ""));
     },
     weton: function (d) {
       var w = d.wt;
       return head("☾", "Weton " + w.wetonLabel, "Neptu " + w.hari.neptu + " + " + w.pasaran.neptu + " = " + w.neptu) +
-        '<div class="facts"><div>Hari <b>' + w.hari.n + '</b> (neptu ' + w.hari.neptu + ')</div><div>Pasaran <b>' + w.pasaran.n + '</b> (neptu ' + w.pasaran.neptu + ')</div><div>Jumlah neptu <b class="mono">' + w.neptu + '</b></div></div>' +
-        '<div class="grid2">' + blk("Watak hari " + w.hari.n, w.watakHari) + blk("Watak pasaran " + w.pasaran.n, w.pasaran.watak) + blk("Laku neptu " + w.neptu, w.laku) + '</div>' +
-        '<div class="jodoh"><h3 style="font-size:24px">Cek jodoh weton</h3>' +
-        '<form id="jodoh-form"><div class="field"><label for="tgl-pasangan">Tanggal lahir pasangan</label><input id="tgl-pasangan" type="date" min="1900-01-01" max="2100-12-31" value="1992-03-09"></div>' +
-        '<button class="primary" type="submit">Hitung kecocokan</button></form><div id="jodoh-hasil"></div></div>' +
-        note("Weton dihitung dari siklus 7 hari dan 5 pasaran. Ingat, hari Jawa berganti saat matahari terbenam, sehingga orang yang lahir malam hari kadang memakai weton hari berikutnya.");
+        '<div class="facts"><div>' + t("w.hari") + ' <b>' + w.hari.n + '</b> (neptu ' + w.hari.neptu + ')</div><div>' + t("w.pasaran") + ' <b>' + w.pasaran.n + '</b> (neptu ' + w.pasaran.neptu + ')</div><div>' + t("w.jumlah") + ' <b class="mono">' + w.neptu + '</b></div></div>' +
+        '<div class="grid2">' + blk(t("w.watakHari", { h: w.hari.n }), w.watakHari) + blk(t("w.watakPas", { p: w.pasaran.n }), w.pasaran.watak) + blk(t("w.laku", { n: w.neptu }), w.laku) + '</div>' +
+        '<div class="jodoh"><h3 style="font-size:24px">' + t("w.jodoh") + '</h3>' +
+        '<form id="jodoh-form"><div class="field"><label for="tgl-pasangan">' + t("w.tglPas") + '</label><input id="tgl-pasangan" type="date" min="1900-01-01" max="2100-12-31" value="' + state.tglJodoh + '"></div>' +
+        '<button class="primary" type="submit">' + t("w.hitung") + '</button></form><div id="jodoh-hasil"></div></div>' +
+        note(t("w.note"));
     },
     shio: function (d) {
       var s = d.sh;
-      return head(s.shio.n.charAt(0), "Shio " + s.shio.n + " " + s.elemen, "Tahun Imlek " + s.tahunImlek) +
-        '<div class="facts"><div>Imlek tahun ' + d.dt.y + ' jatuh pada <b>' + fmt(s.imlekTanggal) + '</b></div><div>' + (s.sebelumImlek ? "Anda lahir <b>sebelum</b> Imlek, jadi ikut shio tahun sebelumnya" : "Anda lahir <b>setelah</b> Imlek") + '</div></div>' +
-        '<div class="grid2">' + blk("Watak", s.shio.sifat) + blk("Cocok dengan", s.shio.cocok) + blk("Kurang cocok (ciong)", s.shio.hindari) +
-        blk("Peruntungan " + s.tahunIni + " (tahun " + s.shioTahunIni + ")", s.ramalanTahunIni) + '</div>' +
-        note("Shio ditentukan oleh tahun Imlek, bukan 1 Januari. Tanggal Imlek dihitung dari fase bulan baru waktu Beijing.");
+      return head(s.shio.n.charAt(0), t("s.judul", { s: s.shio.n, e: s.elemen }), t("s.tahun", { y: s.tahunImlek })) +
+        '<div class="facts"><div>' + t("s.imlek", { y: d.dt.y, tgl: fmt(s.imlekTanggal) }) + '</div><div>' + (s.sebelumImlek ? t("s.sebelum") : t("s.setelah")) + '</div></div>' +
+        '<div class="grid2">' + blk(t("s.watak"), s.shio.sifat) + blk(t("s.cocok"), s.shio.cocok) + blk(t("s.hindari"), s.shio.hindari) +
+        blk(t("s.untung", { y: s.tahunIni, s: s.shioTahunIni }), s.ramalanTahunIni) + '</div>' +
+        note(t("s.note"));
     }
   };
   function head(g, t, sub) { return '<div class="panel-head"><div class="glyph" aria-hidden="true">' + g + '</div><div><h2>' + t + '</h2><p class="sub">' + sub + '</p></div></div>'; }
@@ -551,7 +666,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     var pt = function (lon, r) { var t = (180 + lon - base) * Math.PI / 180; return [C + r * Math.cos(t), C - r * Math.sin(t)]; };
     var f = function (n) { return n.toFixed(1); };
     var EL = ["api", "tanah", "udara", "air"];
-    var g = '<svg class="roda" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Roda bagan kelahiran">';
+    var g = '<svg class="roda" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="' + t("z.roda") + '">';
     g += '<circle cx="' + C + '" cy="' + C + '" r="' + R1 + '" class="r-bg"/><circle cx="' + C + '" cy="' + C + '" r="' + R2 + '" class="r-in"/><circle cx="' + C + '" cy="' + C + '" r="' + RA + '" class="r-asp"/>';
     for (var i = 0; i < 12; i++) {
       var a = pt(i * 30, R1), b = pt(i * 30, c.angles ? R3 * 0.6 : R2);
@@ -596,67 +711,67 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   }
 
   /* ===== Sub-bacaan astrologi: transit, sinastri, solar return ===== */
-  var ASTRO_TABS = [["natal", "Bagan lahir"], ["transit", "Transit"], ["sinastri", "Sinastri"], ["sr", "Solar return"]];
+  var ASTRO_TABS = ["natal", "transit", "sinastri", "sr"];
   function subAstro() {
-    return '<div class="subnav" role="tablist" aria-label="Jenis bacaan astrologi">' + ASTRO_TABS.map(function (t) {
-      return '<button type="button" role="tab" data-astro="' + t[0] + '" aria-selected="' + (state.astro === t[0]) + '">' + t[1] + '</button>';
+    return '<div class="subnav" role="tablist" aria-label="' + t("a.tabs") + '">' + ASTRO_TABS.map(function (x) {
+      return '<button type="button" role="tab" data-astro="' + x + '" aria-selected="' + (state.astro === x) + '">' + t("a." + x) + '</button>';
     }).join("") + '</div>';
   }
-  function kotaField(id, label) { return '<div class="field"><label for="' + id + '">' + label + '</label><div class="cari"><input id="' + id + '" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" placeholder="Ketik nama kota"></div></div>'; }
+  function kotaField(id, label) { return '<div class="field"><label for="' + id + '">' + label + '</label><div class="cari"><input id="' + id + '" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" placeholder="' + t("kota.ph") + '"></div></div>'; }
   function ptable(planets, kolomRumah, labelRumah) {
-    return '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Planet</th><th>Derajat</th><th>Rasi</th>' + (kolomRumah ? '<th>' + labelRumah + '</th>' : "") + '<th></th></tr></thead><tbody>' +
+    return '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>' + t("z.planet") + '</th><th>' + t("z.derajat") + '</th><th>' + t("z.rasi") + '</th>' + (kolomRumah ? '<th>' + labelRumah + '</th>' : "") + '<th></th></tr></thead><tbody>' +
       planets.map(function (p) {
         return '<tr><td><span class="pg">' + p.s + '\uFE0E</span> ' + p.n + '</td><td class="mono">' + p.pos.derajat + '°' + String(p.pos.menit).padStart(2, "0") + '′</td><td>' + p.pos.sym + '\uFE0E ' + p.pos.nama + '</td>' +
           (kolomRumah ? '<td class="mono">' + (p[kolomRumah] || "–") + '</td>' : "") + '<td>' + (p.retro ? '<span class="retro">R</span>' : "") + '</td></tr>';
       }).join("") + '</tbody></table></div>';
   }
-  function fmtTgl(ms, tz) { var t = new Date(ms + tz * 3600000); return t.getUTCDate() + " " + BULAN[t.getUTCMonth()] + " " + t.getUTCFullYear() + ", " + String(t.getUTCHours()).padStart(2, "0") + ":" + String(t.getUTCMinutes()).padStart(2, "0"); }
+  function fmtTgl(ms, tz) { var w = new Date(ms + tz * 3600000); return fmt({ y: w.getUTCFullYear(), m: w.getUTCMonth() + 1, d: w.getUTCDate() }) + ", " + String(w.getUTCHours()).padStart(2, "0") + ":" + String(w.getUTCMinutes()).padStart(2, "0"); }
   var ASTRO = {
     transit: function (d) {
       var tg = parse(state.tr) || { y: hariIni.getFullYear(), m: hariIni.getMonth() + 1, d: hariIni.getDate() };
       var ms = Date.UTC(tg.y, tg.m - 1, tg.d, 12) - offsetLokal(d.kota.zona, tg.y, tg.m, tg.d, 12, 0) * 3600000;
-      var t = N.transit(d.nc, ms, d.kota.lat, d.kota.lon);
-      var utama = t.aspek.filter(function (a) { return a.t.id !== "moon"; }).slice(0, 8);
-      var bulan = t.aspek.filter(function (a) { return a.t.id === "moon"; }).slice(0, 2);
-      var cards = utama.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + a.t.n + ' ' + a.jenis.n.toLowerCase() + ' ' + a.n.n + ' natal</h3><p>' + a.isi + '</p></div>'; }).join("");
-      var jup = t.planets[5], sat = t.planets[6];
-      return '<form class="sub-form" id="f-transit"><div class="field"><label for="tr-tgl">Tanggal transit</label><input id="tr-tgl" type="date" value="' + state.tr + '"></div><button class="primary" type="submit">Lihat transit</button></form>' +
-        '<p class="sub-lead">Posisi planet pada ' + fmt(tg) + ' dibandingkan dengan bagan kelahiran Anda.</p>' +
-        '<h3 class="sec">Pengaruh utama</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">Tidak ada transit besar yang tepat pada tanggal ini. Masa yang relatif tenang.</p>') +
-        (bulan.length ? '<h3 class="sec">Suasana hari ini</h3><div class="grid2">' + bulan.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>Bulan ' + a.jenis.n.toLowerCase() + ' ' + a.n.n + '</h3><p>' + a.isi + '</p></div>'; }).join("") + '</div>' : "") +
-        (d.nc.angles ? '<h3 class="sec">Planet lambat di rumah Anda</h3><div class="grid2">' + blk("Jupiter di rumah " + jup.rumahNatal, "Peluang dan pertumbuhan sedang mengalir ke urusan rumah " + jup.rumahNatal + ".") + blk("Saturnus di rumah " + sat.rumahNatal, "Kerja keras dan tanggung jawab sedang diuji di rumah " + sat.rumahNatal + ".") + '</div>' : "") +
-        '<h3 class="sec">Posisi planet saat itu</h3>' + ptable(t.planets, d.nc.angles ? "rumahNatal" : null, "Rumah Anda") +
-        note("Transit dihitung untuk pukul 12.00 waktu " + d.kota.n + ". Orb yang dipakai 1,5–3°, jadi yang tampil hanya pengaruh yang sedang kuat.");
+      var tt = N.transit(d.nc, ms, d.kota.lat, d.kota.lon);
+      var utama = tt.aspek.filter(function (a) { return a.t.id !== "moon"; }).slice(0, 8);
+      var bulan = tt.aspek.filter(function (a) { return a.t.id === "moon"; }).slice(0, 2);
+      var cards = utama.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + t("tr.kartu", { t: a.t.n, j: a.jenis.n.toLowerCase(), n: a.n.n }) + '</h3><p>' + a.isi + '</p></div>'; }).join("");
+      var jup = tt.planets[5], sat = tt.planets[6];
+      return '<form class="sub-form" id="f-transit"><div class="field"><label for="tr-tgl">' + t("tr.tgl") + '</label><input id="tr-tgl" type="date" value="' + state.tr + '"></div><button class="primary" type="submit">' + t("tr.lihat") + '</button></form>' +
+        '<p class="sub-lead">' + t("tr.lead", { tgl: fmt(tg) }) + '</p>' +
+        '<h3 class="sec">' + t("tr.utama") + '</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">' + t("tr.tenang") + '</p>') +
+        (bulan.length ? '<h3 class="sec">' + t("tr.harian") + '</h3><div class="grid2">' + bulan.map(function (a) { return '<div class="block asp ' + a.jenis.sifat + '"><h3>' + t("tr.bulan", { j: a.jenis.n.toLowerCase(), n: a.n.n }) + '</h3><p>' + a.isi + '</p></div>'; }).join("") + '</div>' : "") +
+        (d.nc.angles ? '<h3 class="sec">' + t("tr.lambat") + '</h3><div class="grid2">' + blk(t("tr.jup", { n: jup.rumahNatal }), t("tr.jupIsi", { n: jup.rumahNatal })) + blk(t("tr.sat", { n: sat.rumahNatal }), t("tr.satIsi", { n: sat.rumahNatal })) + '</div>' : "") +
+        '<h3 class="sec">' + t("tr.posisi") + '</h3>' + ptable(tt.planets, d.nc.angles ? "rumahNatal" : null, t("tr.rumahAnda")) +
+        note(t("tr.note", { k: d.kota.n }));
     },
     sinastri: function (d) {
       var P = state.pas, tg = parse(P.tgl), jm = P.jam ? P.jam.split(":") : null, k = P.tempat;
-      var form = '<form class="sub-form" id="f-sin"><div class="field"><label for="ps-nama">Nama pasangan</label><input id="ps-nama" value="' + esc(P.nama) + '"></div>' +
-        '<div class="field"><label for="ps-tgl">Tanggal lahir</label><input id="ps-tgl" type="date" min="1900-01-01" max="2100-12-31" value="' + P.tgl + '"></div>' +
-        '<div class="field"><label for="ps-jam">Jam lahir</label><input id="ps-jam" type="time" value="' + P.jam + '"></div>' +
-        kotaField("ps-kota", "Kota lahir") +
-        '<button class="primary" type="submit">Bandingkan</button></form>';
-      if (!tg) return form + '<p class="note">Isi tanggal lahir pasangan.</p>';
+      var form = '<form class="sub-form" id="f-sin"><div class="field"><label for="ps-nama">' + t("sn.nama") + '</label><input id="ps-nama" value="' + esc(P.nama) + '"></div>' +
+        '<div class="field"><label for="ps-tgl">' + t("sn.tgl") + '</label><input id="ps-tgl" type="date" min="1900-01-01" max="2100-12-31" value="' + P.tgl + '"></div>' +
+        '<div class="field"><label for="ps-jam">' + t("sn.jam") + '</label><input id="ps-jam" type="time" value="' + P.jam + '"></div>' +
+        kotaField("ps-kota", t("sn.kota")) +
+        '<button class="primary" type="submit">' + t("sn.banding") + '</button></form>';
+      if (!tg) return form + '<p class="note">' + t("sn.isiTgl") + '</p>';
       var b = bagan(tg, jm ? +jm[0] : null, jm ? +jm[1] : 0, k);
-      var s = N.sinastri(d.nc, b), nm = esc(P.nama || "Pasangan");
-      var tingkat = s.persen >= 75 ? "Sangat cocok" : s.persen >= 60 ? "Cocok" : s.persen >= 45 ? "Cukup cocok, perlu usaha" : "Banyak tantangan";
-      var cards = s.aspek.slice(0, 8).map(function (a) { return '<div class="block asp ' + (a.baik ? "harmonis" : "tegang") + '"><h3>' + a.p.n + ' Anda ' + a.jenis.n.toLowerCase() + ' ' + a.q.n + ' ' + nm + '</h3><p>' + a.isi + '</p></div>'; }).join("");
+      var s = N.sinastri(d.nc, b), nm = esc(P.nama || t("sn.pasangan"));
+      var tingkat = s.persen >= 75 ? t("sn.t1") : s.persen >= 60 ? t("sn.t2") : s.persen >= 45 ? t("sn.t3") : t("sn.t4");
+      var cards = s.aspek.slice(0, 8).map(function (a) { return '<div class="block asp ' + (a.baik ? "harmonis" : "tegang") + '"><h3>' + t("sn.kartu", { p: a.p.n, j: a.jenis.n.toLowerCase(), q: a.q.n, nm: nm }) + '</h3><p>' + a.isi + '</p></div>'; }).join("");
       return form +
-        '<div class="skor"><div class="skor-n mono">' + s.persen + '%</div><div><b>' + tingkat + '</b><p>Matahari Anda berelemen ' + s.elemen.a + ', Matahari ' + nm + ' berelemen ' + s.elemen.b + ': ' + s.elemen.hubungan + '.</p></div></div>' +
-        '<h3 class="sec">Aspek antara kalian</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">Tidak banyak aspek kuat di antara bagan kalian.</p>') +
-        '<h3 class="sec">Planet ' + nm + '</h3>' + ptable(b.planets, null) +
-        note("Sinastri membandingkan planet pribadi (Matahari sampai Saturnus) kedua bagan dengan orb sampai 6°. Persentase adalah ringkasan, bukan penentu hubungan.");
+        '<div class="skor"><div class="skor-n mono">' + s.persen + '%</div><div><b>' + tingkat + '</b><p>' + t("sn.elemen", { a: s.elemen.a, b: s.elemen.b, nm: nm, h: s.elemen.hubungan }) + '</p></div></div>' +
+        '<h3 class="sec">' + t("sn.aspek") + '</h3>' + (cards ? '<div class="grid2">' + cards + '</div>' : '<p class="muted">' + t("sn.sedikit") + '</p>') +
+        '<h3 class="sec">' + t("sn.planet", { nm: nm }) + '</h3>' + ptable(b.planets, null) +
+        note(t("sn.note"));
     },
     sr: function (d) {
-      if (!d.nc.adaJam) return '<p class="sub-lead">Solar return membutuhkan jam lahir. Isi jam lahir di formulir atas, lalu tekan "Baca ramalan saya" lagi.</p>';
+      if (!d.nc.adaJam) return '<p class="sub-lead">' + t("sr.butuhJam") + '</p>';
       var k = state.srTempat || d.kota;
       var sr = N.solarReturn(d.nc, state.srTahun, k.lat, k.lon);
       var thn = ""; for (var y = hariIni.getFullYear() - 1; y <= hariIni.getFullYear() + 2; y++) thn += '<option' + (y === state.srTahun ? " selected" : "") + '>' + y + '</option>';
-      return '<form class="sub-form" id="f-sr"><div class="field"><label for="sr-thn">Tahun</label><select id="sr-thn">' + thn + '</select></div>' +
-        kotaField("sr-kota", "Kota tempat Anda berulang tahun") + '<button class="primary" type="submit">Hitung</button></form>' +
-        '<p class="sub-lead">Matahari kembali ke posisi lahir Anda pada <b>' + fmtTgl(sr.chart.ms, offsetAt(k.zona, sr.chart.ms)) + '</b> waktu ' + k.n + '. Bagan saat itu menggambarkan tema satu tahun ke depan.</p>' +
-        '<div class="natal"><div class="wheel-wrap">' + roda(sr.chart) + '</div>' + ptable(sr.chart.planets, "rumah", "Rumah") + '</div>' +
-        '<h3 class="sec">Tema tahun ' + state.srTahun + '–' + (state.srTahun + 1) + '</h3><div class="grid2">' + sr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
-        note("Solar return berlaku dari ulang tahun ini sampai ulang tahun berikutnya. Kota tempat Anda berada saat ulang tahun mengubah ascendant tahunan.");
+      return '<form class="sub-form" id="f-sr"><div class="field"><label for="sr-thn">' + t("sr.tahun") + '</label><select id="sr-thn">' + thn + '</select></div>' +
+        kotaField("sr-kota", t("sr.kota")) + '<button class="primary" type="submit">' + t("sr.hitung") + '</button></form>' +
+        '<p class="sub-lead">' + t("sr.lead", { tgl: fmtTgl(sr.chart.ms, offsetAt(k.zona, sr.chart.ms)), k: k.n }) + '</p>' +
+        '<div class="natal"><div class="wheel-wrap">' + roda(sr.chart) + '</div>' + ptable(sr.chart.planets, "rumah", t("z.rumah")) + '</div>' +
+        '<h3 class="sec">' + t("sr.tema", { a: state.srTahun, b: state.srTahun + 1 }) + '</h3><div class="grid2">' + sr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
+        note(t("sr.note"));
     }
   };
   function bindAstro() {
@@ -677,20 +792,20 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   // Tampilan awal: pilih satu bacaan
   function viewPilih() {
     var sudah = METHODS.filter(function (m) { return state.buka[m.id]; }).length;
-    return '<div class="gate"><div class="eyebrow">' + (sudah ? sudah + " dari 6 bacaan terbuka" : "Langkah berikutnya") + '</div>' +
-      '<h2>Pilih bacaan yang ingin Anda buka</h2>' +
-      '<p>Setiap bacaan dibuka satu per satu dengan menonton iklan singkat. Iklan inilah yang membuat Serat Nasib tetap gratis.</p>' +
+    return '<div class="gate"><div class="eyebrow">' + (sudah ? t("g.terbuka", { n: sudah }) : t("g.lanjut")) + '</div>' +
+      '<h2>' + t("g.pilih") + '</h2>' +
+      '<p>' + t("g.pilihP") + '</p>' +
       '<div class="choose-list">' + METHODS.map(function (m) {
-        return '<button type="button" data-pilih="' + m.id + '"><b>' + m.k + (state.buka[m.id] ? " · terbuka" : "") + '</b><span>' + m.d + '</span></button>';
+        return '<button type="button" data-pilih="' + m.id + '"><b>' + m.k + (state.buka[m.id] ? t("g.sudah") : "") + '</b><span>' + m.d + '</span></button>';
       }).join("") + '</div></div>';
   }
   // Gerbang iklan untuk satu bacaan
   function viewGerbang(m) {
-    return '<div class="gate"><div class="eyebrow">Bacaan terkunci</div><h2>' + m.k + '</h2>' +
+    return '<div class="gate"><div class="eyebrow">' + t("g.kunci") + '</div><h2>' + m.k + '</h2>' +
       '<p class="desc">' + m.d + '</p>' +
-      '<div class="adbox" id="adbox"><div class="lbl">Iklan</div><p>Tonton iklan singkat sampai selesai, lalu bacaan ' + m.k.toLowerCase() + ' Anda langsung terbuka.</p>' +
-      '<div class="actions"><button class="primary" type="button" id="tonton">Tonton iklan &amp; buka bacaan</button>' +
-      '<button class="ghost" type="button" data-pilih="">Pilih bacaan lain</button></div></div></div>';
+      '<div class="adbox" id="adbox"><div class="lbl">' + t("g.iklan") + '</div><p>' + t("g.tontonP", { m: lang === "en" ? m.k : m.k.toLowerCase() }) + '</p>' +
+      '<div class="actions"><button class="primary" type="button" id="tonton">' + t("g.tonton") + '</button>' +
+      '<button class="ghost" type="button" data-pilih="">' + t("g.lain") + '</button></div></div></div>';
   }
 
   function renderPanel() {
@@ -703,24 +818,25 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       return;
     }
     p.innerHTML = PANELS[state.aktif](state.data) +
-      '<div class="actions" style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" type="button" data-pilih="">Buka bacaan lain</button></div>';
+      '<div class="actions" style="margin-top:22px;display:flex;gap:10px;flex-wrap:wrap"><button class="ghost" type="button" data-pilih="">' + t("g.bukaLain") + '</button></div>';
     p.style.animation = "none"; void p.offsetWidth; p.style.animation = "";
     if (state.aktif === "zodiak") bindAstro();
     var jf = $("jodoh-form");
     if (jf) {
       var run = function () {
+        state.tglJodoh = $("tgl-pasangan").value || state.tglJodoh;
         var b = parse($("tgl-pasangan").value);
-        if (!b) { $("jodoh-hasil").innerHTML = '<p class="note">Isi tanggal lahir pasangan.</p>'; return; }
+        if (!b) { $("jodoh-hasil").innerHTML = '<p class="note">' + t("w.isiTgl") + '</p>'; return; }
         var j = R.jodohWeton(state.data.dt, b);
         $("jodoh-hasil").innerHTML = '<div class="verdict s' + j.hasil.skor + '"><p><span class="pill">' + j.hasil.k + '</span> ' +
-          'Anda ' + j.a.wetonLabel + ' (' + j.a.neptu + ') + pasangan ' + j.b.wetonLabel + ' (' + j.b.neptu + ') = ' + j.total + '</p><p style="margin-top:6px">' + j.hasil.b + '</p></div>';
+          t("w.hasil", { a: j.a.wetonLabel, na: j.a.neptu, b: j.b.wetonLabel, nb: j.b.neptu, t: j.total }) + '</p><p style="margin-top:6px">' + j.hasil.b + '</p></div>';
       };
       jf.addEventListener("submit", function (e) { e.preventDefault(); run(); });
       run();
     }
   }
   function render() {
-    $("hasil-untuk").textContent = "Ramalan untuk " + state.data.nama + " · " + fmt(state.data.dt);
+    $("hasil-untuk").textContent = t("hasil.untuk", { nama: state.data.nama, tgl: fmt(state.data.dt) });
     renderTabs(); renderPanel();
     if (typeof renderTags === "function") renderTags();
   }
@@ -753,20 +869,20 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var Iklan = (function () {
     var pending = null, slot = null, granted = false, timer = null, gptSiap = false;
     function adbox() { return $("adbox"); }
-    function status(html) { var a = adbox(); if (a) a.innerHTML = '<div class="lbl">Iklan</div>' + html; }
+    function status(html) { var a = adbox(); if (a) a.innerHTML = '<div class="lbl">' + t("g.iklan") + '</div>' + html; }
     function selesai(ok, pesan) {
       var id = pending; pending = null;
       if (slot) { try { googletag.destroySlots([slot]); } catch (e) {} slot = null; }
       if (ok && id) { bukaBacaan(id); return; }
       if (id && state.aktif === id) {
-        status('<p>' + pesan + '</p><div class="actions"><button class="primary" type="button" id="tonton">Coba lagi</button></div>');
-        var t = $("tonton"); if (t) t.addEventListener("click", function () { tampilkan(id); });
+        status('<p>' + pesan + '</p><div class="actions"><button class="primary" type="button" id="tonton">' + t("ad.ulang") + '</button></div>');
+        var tb = $("tonton"); if (tb) tb.addEventListener("click", function () { tampilkan(id); });
       }
     }
     function demo(id) {
       var n = IKLAN_CONFIG.demoDetik || 5, sisa = n;
       status('<div class="count" id="ad-count">' + sisa + '</div><div class="progress"><b id="ad-bar"></b></div>' +
-        '<p class="note">Mode demo: di situs asli, di sini tampil iklan video Google.</p>');
+        '<p class="note">' + t("ad.demo") + '</p>');
       timer = setInterval(function () {
         sisa--;
         var c = $("ad-count"), b = $("ad-bar");
@@ -785,13 +901,13 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
           var pa = googletag.pubads();
           pa.addEventListener("rewardedSlotReady", function (e) {
             if (e.slot !== slot) return;
-            status('<p>Iklan siap. Tonton sampai selesai untuk membuka bacaan.</p><div class="actions"><button class="primary" type="button" id="putar">Putar iklan</button></div>');
+            status('<p>' + t("ad.siap") + '</p><div class="actions"><button class="primary" type="button" id="putar">' + t("ad.putar") + '</button></div>');
             $("putar").addEventListener("click", function () { e.makeRewardedVisible(); });
           });
           pa.addEventListener("rewardedSlotGranted", function (e) { if (e.slot === slot) granted = true; });
           pa.addEventListener("rewardedSlotClosed", function (e) {
             if (e.slot !== slot) return;
-            selesai(granted, "Iklan ditutup sebelum selesai, jadi bacaan belum terbuka.");
+            selesai(granted, t("ad.tutup"));
           });
           pa.addEventListener("slotRenderEnded", function (e) {
             if (e.slot === slot && e.isEmpty) selesai(true); // tidak ada iklan tersedia: jangan kunci pengunjung
@@ -807,7 +923,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       batal();
       pending = id; granted = false;
       if (!IKLAN_CONFIG.adUnitPath) return demo(id);
-      status('<p>Memuat iklan…</p>');
+      status('<p>' + t("ad.muat") + '</p>');
       muatGPT(function (ok) {
         if (!ok) return selesai(true); // pemblokir iklan / gagal memuat: buka saja
         googletag.cmd.push(function () {
@@ -840,8 +956,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     e.preventDefault();
     var nama = $("nama").value.trim(), dt = parse($("tgl").value), err = $("err");
     var huruf = nama.normalize("NFD").replace(/[^A-Za-z]/g, "");
-    if (!huruf.length) { err.textContent = "Tulis nama lengkap dengan huruf latin agar numerologi nama bisa dihitung."; err.hidden = false; $("nama").focus(); return; }
-    if (!dt || dt.y < 1900 || dt.y > 2100) { err.textContent = "Pilih tanggal lahir antara tahun 1900 dan 2100."; err.hidden = false; $("tgl").focus(); return; }
+    if (!huruf.length) { err.textContent = t("err.nama"); err.hidden = false; $("nama").focus(); return; }
+    if (!dt || dt.y < 1900 || dt.y > 2100) { err.textContent = t("err.tgl"); err.hidden = false; $("tgl").focus(); return; }
     err.hidden = true;
     $("contoh-badge").hidden = true;
     var tv = $("jam").value, jam = tv ? +tv.split(":")[0] : null, menit = tv ? +tv.split(":")[1] : 0;
@@ -857,39 +973,40 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
      Selama actionUrl kosong, formulir berjalan dalam mode demo. */
   var LG = window.SERAT_LANGGANAN || { provider: "brevo", actionUrl: "" };
   var FIELD_MAP = {
-    brevo: { email: "EMAIL", nama: "FIRSTNAME", tgl: "TGL_LAHIR", zodiak: "ZODIAK", shio: "SHIO", weton: "WETON", angka: "ANGKA" },
-    mailerlite: { email: "fields[email]", nama: "fields[name]", tgl: "fields[tgl_lahir]", zodiak: "fields[zodiak]", shio: "fields[shio]", weton: "fields[weton]", angka: "fields[angka]" }
+    brevo: { email: "EMAIL", nama: "FIRSTNAME", tgl: "TGL_LAHIR", zodiak: "ZODIAK", shio: "SHIO", weton: "WETON", angka: "ANGKA", bahasa: "BAHASA" },
+    mailerlite: { email: "fields[email]", nama: "fields[name]", tgl: "fields[tgl_lahir]", zodiak: "fields[zodiak]", shio: "fields[shio]", weton: "fields[weton]", angka: "fields[angka]", bahasa: "fields[bahasa]" }
   };
+  // nilai segmen selalu memakai nama Indonesia agar kelompok di layanan email tidak terpecah per bahasa
   function kelompok(d) {
-    return { zodiak: d.z.n, shio: d.sh.shio.n, weton: d.wt.wetonLabel, angka: String(d.lp.angka) };
+    return { zodiak: d.z.id, shio: d.sh.shio.id, weton: d.wt.wetonId, angka: String(d.lp.angka), bahasa: lang };
   }
   function renderTags() {
-    var k = kelompok(state.data);
-    $("lg-tags").innerHTML = '<span class="pill">' + esc(k.zodiak) + '</span><span class="pill">Shio ' + esc(k.shio) + '</span><span class="pill">' + esc(k.weton) + '</span><span class="pill">Angka ' + esc(k.angka) + '</span>';
+    var d = state.data;
+    $("lg-tags").innerHTML = '<span class="pill">' + esc(d.z.n) + '</span><span class="pill">' + esc(t("lg.tag.shio", { v: d.sh.shio.n })) + '</span><span class="pill">' + esc(d.wt.wetonLabel) + '</span><span class="pill">' + esc(t("lg.tag.angka", { v: d.lp.angka })) + '</span>';
   }
   $("lg-form").addEventListener("submit", function (e) {
     e.preventDefault();
     var email = $("lg-email").value.trim(), err = $("lg-err"), ok = $("lg-ok");
     ok.hidden = true;
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = "Tulis alamat email yang lengkap, misalnya nama@gmail.com."; err.hidden = false; $("lg-email").focus(); return; }
-    if (!$("lg-setuju").checked) { err.textContent = "Centang persetujuan agar kami boleh mengirim ramalan ke email Anda."; err.hidden = false; return; }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { err.textContent = t("lg.err.email"); err.hidden = false; $("lg-email").focus(); return; }
+    if (!$("lg-setuju").checked) { err.textContent = t("lg.err.setuju"); err.hidden = false; return; }
     err.hidden = true;
     var d = state.data, k = kelompok(d), map = FIELD_MAP[LG.provider] || FIELD_MAP.brevo;
-    var vals = { email: email, nama: d.nama, tgl: d.dt.y + "-" + String(d.dt.m).padStart(2, "0") + "-" + String(d.dt.d).padStart(2, "0"), zodiak: k.zodiak, shio: k.shio, weton: k.weton, angka: k.angka };
+    var vals = { email: email, nama: d.nama, tgl: d.dt.y + "-" + String(d.dt.m).padStart(2, "0") + "-" + String(d.dt.d).padStart(2, "0"), zodiak: k.zodiak, shio: k.shio, weton: k.weton, angka: k.angka, bahasa: k.bahasa };
     var done = function (demo) {
-      ok.innerHTML = '<p><b>Terima kasih, ' + esc(d.nama.split(" ")[0]) + '.</b> Ramalan mingguan untuk ' + esc(k.zodiak) + ', shio ' + esc(k.shio) + ', dan weton ' + esc(k.weton) + ' akan dikirim ke ' + esc(email) + '.</p>' +
-        (demo ? '<p class="note" style="margin-top:6px">Mode demo: formulir belum tersambung ke layanan email, jadi data ini tidak dikirim.</p>' : '<p class="note" style="margin-top:6px">Cek kotak masuk Anda untuk konfirmasi langganan.</p>');
+      ok.innerHTML = '<p>' + t("lg.ok", { nama: esc(d.nama.split(" ")[0]), zodiak: esc(d.z.n), shio: esc(d.sh.shio.n), weton: esc(d.wt.wetonLabel), email: esc(email) }) + '</p>' +
+        '<p class="note" style="margin-top:6px">' + (demo ? t("lg.demo") : t("lg.cek")) + '</p>';
       ok.hidden = false;
     };
     if (!LG.actionUrl) { done(true); return; }
     var fd = new FormData();
     Object.keys(map).forEach(function (key) { fd.append(map[key], vals[key]); });
-    if (LG.provider === "brevo") { fd.append("email_address_check", ""); fd.append("locale", "id"); }
-    var btn = $("lg-kirim"); btn.disabled = true; btn.textContent = "Mengirim…";
+    if (LG.provider === "brevo") { fd.append("email_address_check", ""); fd.append("locale", lang); }
+    var btn = $("lg-kirim"); btn.disabled = true; btn.textContent = t("lg.mengirim");
     fetch(LG.actionUrl, { method: "POST", body: fd, mode: "no-cors" })
       .then(function () { done(false); })
-      .catch(function () { err.textContent = "Pendaftaran gagal terkirim. Periksa koneksi internet lalu coba lagi."; err.hidden = false; })
-      .then(function () { btn.disabled = false; btn.textContent = "Langganan gratis"; });
+      .catch(function () { err.textContent = t("lg.err.kirim"); err.hidden = false; })
+      .then(function () { btn.disabled = false; btn.textContent = t("lg.kirim"); });
   });
 
   // contoh awal agar halaman langsung menunjukkan hasil
@@ -899,6 +1016,18 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   pasangCari($("kota"), function () { return state.tempat; }, function (k) { state.tempat = k; });
   state.data = hitung("Ayu Lestari Wulandari", { y: 1990, m: 5, d: 15 }, 8, 30, state.tempat);
   render();
+
+  // tombol ganti bahasa: hitung ulang hasil dengan teks bahasa baru, bacaan yang sudah terbuka tetap terbuka
+  $("lang").addEventListener("click", function (e) {
+    var b = e.target.closest("button[data-lang]"); if (!b || b.dataset.lang === lang || !EN) return;
+    lang = b.dataset.lang;
+    try { localStorage.setItem("serat-lang", lang); } catch (er) {}
+    terapkanBahasa(); labelMetode();
+    var d = state.data; state.data = hitung(d.nama, d.dt, d.jam, d.menit, d.kota);
+    ["kota"].forEach(function (id) { var el = $(id); if (el && document.activeElement !== el) el.value = labelKota(state.tempat); });
+    $("err").hidden = true; $("lg-err").hidden = true; $("lg-ok").hidden = true;
+    Iklan.batal(); render();
+  });
 })();
 </script>
 </body>

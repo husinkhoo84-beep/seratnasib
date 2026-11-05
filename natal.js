@@ -117,11 +117,11 @@
     { id: "pluto", n: "Pluto", s: "♇" }
   ];
   var ASPEK = [
-    { n: "Konjungsi", s: "☌", a: 0, orb: 8, sifat: "netral" },
-    { n: "Sekstil", s: "⚹", a: 60, orb: 5, sifat: "harmonis" },
-    { n: "Kuadratur", s: "□", a: 90, orb: 7, sifat: "tegang" },
-    { n: "Trigon", s: "△", a: 120, orb: 7, sifat: "harmonis" },
-    { n: "Oposisi", s: "☍", a: 180, orb: 8, sifat: "tegang" }
+    { k: "Konjungsi", n: "Konjungsi", s: "☌", a: 0, orb: 8, sifat: "netral" },
+    { k: "Sekstil", n: "Sekstil", s: "⚹", a: 60, orb: 5, sifat: "harmonis" },
+    { k: "Kuadratur", n: "Kuadratur", s: "□", a: 90, orb: 7, sifat: "tegang" },
+    { k: "Trigon", n: "Trigon", s: "△", a: 120, orb: 7, sifat: "harmonis" },
+    { k: "Oposisi", n: "Oposisi", s: "☍", a: 180, orb: 8, sifat: "tegang" }
   ];
   function posisi(lon) {
     var r = Math.floor(lon / 30), deg = lon - r * 30, d = Math.floor(deg), m = Math.floor((deg - d) * 60);
@@ -240,27 +240,47 @@
     Mutabel: "Kualitas Mutabel kuat: Anda luwes dan mudah beradaptasi dengan perubahan."
   };
 
+  // potongan kalimat (diterjemahkan lewat setLang)
+  var S = {
+    diRasi: "{p} di {r}", diRumah: "{p} di rumah {n}", rumahN: ", rumah {n}", perkiraan: " (perkiraan)", retroTag: " (retrograde)",
+    fokusHidup: " Fokus hidup Anda ada di rumah {n}: {u}.", ascJudul: "Ascendant {r}", mcArah: " MC di {r} menunjukkan arah karier: {g}.", gayaPrefix: "dengan ",
+    energiRumah: " Energi ini paling terasa dalam urusan {u}.", retroIsi: " Retrograde membuat energinya lebih ke dalam dan reflektif.",
+    aspJudul: "{a} {j} {b}", aspIsi: "Unsur {a} dan {b} {arti} (orb {o}°)",
+    elKurang: "Elemen {e} paling sedikit. Kegiatan yang bersifat {k} membantu menyeimbangkan diri Anda.",
+    elNama: { Api: "Api", Tanah: "Tanah", Udara: "Udara", Air: "Air" },
+    elKegiatan: { Api: "aktif dan berani", Tanah: "membumi dan teratur", Udara: "sosial dan intelektual", Air: "emosional dan reflektif" },
+    trIsi: "{t} transit {tema} {k} Anda ({n} natal di {r}). {nada} Berlangsung {lama}.",
+    trSudut: "{t} transit {tema} {k} Anda. {nada} Berlangsung {lama}.",
+    citraDiri: "citra diri dan penampilan", karierRep: "karier dan reputasi", ascNama: "Ascendant", mcNama: "MC",
+    sinGenerik: "Unsur {a} Anda dan {b} pasangan {arti}",
+    sinAsc: "{q} satu orang jatuh di Ascendant yang lain: ada rasa langsung cocok sejak pertemuan pertama.",
+    hub: { sama: "sama", lengkap: "saling melengkapi", beda: "berbeda" },
+    srAsc: "Ascendant tahunan {r}", srSun: "Fokus utama tahun ini ada pada urusan {u}.", srMoon: "Kebutuhan emosional tahun ini terasa dalam urusan {u}. ",
+    srJup: "Keberuntungan tahun ini paling mudah datang lewat {u}.", srSat: "Pelajaran dan kerja keras tahun ini ada pada {u}."
+  };
+  function F(tpl, v) { return tpl.replace(/\{(\w+)\}/g, function (_, k) { return v[k] !== undefined ? v[k] : ""; }); }
+
   function analisa(c) {
     var by = {}; c.planets.forEach(function (p) { by[p.id] = p; });
     var out = { inti: [], planet: [], aspek: [], keseimbangan: [] };
-    out.inti.push({ judul: "Matahari di " + by.sun.pos.nama, isi: PLANET_MAKNA.sun + " " + GAYA[by.sun.pos.rasi] + "." + (by.sun.rumah ? " Fokus hidup Anda ada di rumah " + by.sun.rumah + ": " + RUMAH[by.sun.rumah - 1] + "." : "") });
-    out.inti.push({ judul: "Bulan di " + by.moon.pos.nama + (c.adaJam ? "" : " (perkiraan)"), isi: BULAN_RASI[by.moon.pos.rasi] });
-    if (c.angles) out.inti.push({ judul: "Ascendant " + posisi(c.angles.asc).nama, isi: ASC_RASI[Math.floor(c.angles.asc / 30)] + " MC di " + posisi(c.angles.mc).nama + " menunjukkan arah karier: " + GAYA[Math.floor(c.angles.mc / 30)].replace("dengan ", "") + "." });
+    out.inti.push({ judul: F(S.diRasi, { p: by.sun.n, r: by.sun.pos.nama }), isi: PLANET_MAKNA.sun + " " + GAYA[by.sun.pos.rasi] + "." + (by.sun.rumah ? F(S.fokusHidup, { n: by.sun.rumah, u: RUMAH[by.sun.rumah - 1] }) : "") });
+    out.inti.push({ judul: F(S.diRasi, { p: by.moon.n, r: by.moon.pos.nama }) + (c.adaJam ? "" : S.perkiraan), isi: BULAN_RASI[by.moon.pos.rasi] });
+    if (c.angles) out.inti.push({ judul: F(S.ascJudul, { r: posisi(c.angles.asc).nama }), isi: ASC_RASI[Math.floor(c.angles.asc / 30)] + F(S.mcArah, { r: posisi(c.angles.mc).nama, g: GAYA[Math.floor(c.angles.mc / 30)].replace(S.gayaPrefix, "") }) });
     ["mercury", "venus", "mars", "jupiter", "saturn"].forEach(function (id) {
       var p = by[id];
-      out.planet.push({ judul: p.n + " di " + p.pos.nama + (p.rumah ? ", rumah " + p.rumah : "") + (p.retro ? " (retrograde)" : ""),
-        isi: PLANET_MAKNA[id] + " " + GAYA[p.pos.rasi] + "." + (p.rumah ? " Energi ini paling terasa dalam urusan " + RUMAH[p.rumah - 1] + "." : "") + (p.retro ? " Retrograde membuat energinya lebih ke dalam dan reflektif." : "") });
+      out.planet.push({ judul: F(S.diRasi, { p: p.n, r: p.pos.nama }) + (p.rumah ? F(S.rumahN, { n: p.rumah }) : "") + (p.retro ? S.retroTag : ""),
+        isi: PLANET_MAKNA[id] + " " + GAYA[p.pos.rasi] + "." + (p.rumah ? F(S.energiRumah, { u: RUMAH[p.rumah - 1] }) : "") + (p.retro ? S.retroIsi : "") });
     });
     c.aspek.filter(function (a) { return ["uranus", "neptune", "pluto"].indexOf(a.p1.id) < 0 || ["uranus", "neptune", "pluto"].indexOf(a.p2.id) < 0; })
       .slice(0, 6).forEach(function (a) {
-        out.aspek.push({ judul: a.p1.n + " " + a.jenis.n.toLowerCase() + " " + a.p2.n, sifat: a.jenis.sifat,
-          isi: "Unsur " + KATA[a.p1.id] + " dan " + KATA[a.p2.id] + " " + ASPEK_ARTI[a.jenis.n] + " (orb " + a.orb.toFixed(1) + "°)" });
+        out.aspek.push({ judul: F(S.aspJudul, { a: a.p1.n, j: a.jenis.n.toLowerCase(), b: a.p2.n }), sifat: a.jenis.sifat,
+          isi: F(S.aspIsi, { a: KATA[a.p1.id], b: KATA[a.p2.id], arti: ASPEK_ARTI[a.jenis.k], o: a.orb.toFixed(1) }) });
       });
     var maxEl = Object.keys(c.elemen).sort(function (a, b) { return c.elemen[b] - c.elemen[a]; })[0];
     var minEl = Object.keys(c.elemen).sort(function (a, b) { return c.elemen[a] - c.elemen[b]; })[0];
     var maxKw = Object.keys(c.kualitas).sort(function (a, b) { return c.kualitas[b] - c.kualitas[a]; })[0];
     out.keseimbangan.push(ELEMEN_ARTI[maxEl], KUALITAS_ARTI[maxKw]);
-    if (c.elemen[minEl] <= 2) out.keseimbangan.push("Elemen " + minEl + " paling sedikit. Kegiatan yang bersifat " + { Api: "aktif dan berani", Tanah: "membumi dan teratur", Udara: "sosial dan intelektual", Air: "emosional dan reflektif" }[minEl] + " membantu menyeimbangkan diri Anda.");
+    if (c.elemen[minEl] <= 2) out.keseimbangan.push(F(S.elKurang, { e: S.elNama[minEl], k: S.elKegiatan[minEl] }));
     return out;
   }
 
@@ -340,15 +360,15 @@
       natal.planets.forEach(function (n) {
         var a = cariAspek(t.lon, n.lon, TR_ORB[t.id]); if (!a) return;
         hasil.push({ t: t, n: n, jenis: a.jenis, orb: a.orb, bobot: ({ pluto: 6, neptune: 5, uranus: 5, saturn: 5, jupiter: 4, mars: 3, sun: 2, venus: 2, mercury: 2, moon: 1 })[t.id] * (a.jenis.a === 0 ? 1.2 : 1) - a.orb,
-          isi: t.n + " transit " + TR_TEMA[t.id] + " " + KATA[n.id] + " Anda (" + n.n + " natal di " + n.pos.nama + "). " + NADA[a.jenis.sifat] + " Berlangsung " + TR_LAMA[t.id] + "." });
+          isi: F(S.trIsi, { t: t.n, tema: TR_TEMA[t.id], k: KATA[n.id], n: n.n, r: n.pos.nama, nada: NADA[a.jenis.sifat], lama: TR_LAMA[t.id] }) });
       });
     });
     natal.angles && ["asc", "mc"].forEach(function (k) {
       now.planets.forEach(function (t) {
         if (["jupiter", "saturn", "uranus", "neptune", "pluto"].indexOf(t.id) < 0) return;
         var a = cariAspek(t.lon, natal.angles[k], 1.5); if (!a) return;
-        hasil.push({ t: t, n: { id: k, n: k === "asc" ? "Ascendant" : "MC" }, jenis: a.jenis, orb: a.orb, bobot: 6 - a.orb,
-          isi: t.n + " transit " + TR_TEMA[t.id] + " " + (k === "asc" ? "citra diri dan penampilan" : "karier dan reputasi") + " Anda. " + NADA[a.jenis.sifat] + " Berlangsung " + TR_LAMA[t.id] + "." });
+        hasil.push({ t: t, n: { id: k, n: k === "asc" ? S.ascNama : S.mcNama }, jenis: a.jenis, orb: a.orb, bobot: 6 - a.orb,
+          isi: F(S.trSudut, { t: t.n, tema: TR_TEMA[t.id], k: k === "asc" ? S.citraDiri : S.karierRep, nada: NADA[a.jenis.sifat], lama: TR_LAMA[t.id] }) });
       });
     });
     hasil.sort(function (a, b) { return b.bobot - a.bobot; });
@@ -386,7 +406,7 @@
         var penting = teks ? 3 : 1;
         skor += (baik ? 1 : -0.8) * penting * (1 - asp.orb / 8);
         hasil.push({ p: p, q: q, jenis: asp.jenis, orb: asp.orb, baik: baik, penting: penting,
-          isi: teks ? teks[baik ? 0 : 1] : "Unsur " + KATA[p.id] + " Anda dan " + KATA[q.id] + " pasangan " + ASPEK_ARTI[asp.jenis.n] });
+          isi: teks ? teks[baik ? 0 : 1] : F(S.sinGenerik, { a: KATA[p.id], b: KATA[q.id], arti: ASPEK_ARTI[asp.jenis.k] }) });
       });
     });
     if (a.angles && b.angles) {
@@ -395,15 +415,15 @@
           if (["sun", "moon", "venus"].indexOf(q.id) < 0) return;
           var asp = cariAspek(x[1].angles.asc, q.lon, 4); if (!asp || asp.jenis.a !== 0) return;
           skor += 2;
-          hasil.push({ p: { n: "Ascendant" }, q: q, jenis: asp.jenis, orb: asp.orb, baik: true, penting: 3, isi: q.n + " satu orang jatuh di Ascendant yang lain: ada rasa langsung cocok sejak pertemuan pertama." });
+          hasil.push({ p: { n: S.ascNama }, q: q, jenis: asp.jenis, orb: asp.orb, baik: true, penting: 3, isi: F(S.sinAsc, { q: q.n }) });
         });
       });
     }
     hasil.sort(function (x, y) { return (y.penting - y.orb / 6) - (x.penting - x.orb / 6); });
     var el = ["Api", "Tanah", "Udara", "Air"], ea = el[a.planets[0].pos.rasi % 4], eb = el[b.planets[0].pos.rasi % 4];
-    var cocokEl = (ea === eb) ? "sama" : ((ea === "Api" && eb === "Udara") || (ea === "Udara" && eb === "Api") || (ea === "Tanah" && eb === "Air") || (ea === "Air" && eb === "Tanah")) ? "saling melengkapi" : "berbeda";
+    var cocokEl = (ea === eb) ? S.hub.sama : ((ea === "Api" && eb === "Udara") || (ea === "Udara" && eb === "Api") || (ea === "Tanah" && eb === "Air") || (ea === "Air" && eb === "Tanah")) ? S.hub.lengkap : S.hub.beda;
     var persen = Math.max(15, Math.min(96, Math.round(52 + skor * 3)));
-    return { aspek: hasil, persen: persen, elemen: { a: ea, b: eb, hubungan: cocokEl } };
+    return { aspek: hasil, persen: persen, elemen: { a: S.elNama[ea], b: S.elNama[eb], hubungan: cocokEl } };
   }
 
   // ---------- Solar return: saat Matahari kembali ke posisi lahirnya ----------
@@ -433,16 +453,24 @@
     var c = hitungUTC(ms, lat, lonEast, true); c.ms = ms;
     var sun = c.planets[0], moon = c.planets[1];
     var tema = [
-      { judul: "Ascendant tahunan " + posisi(c.angles.asc).nama, isi: SR_ASC[Math.floor(c.angles.asc / 30)] },
-      { judul: "Matahari di rumah " + sun.rumah, isi: "Fokus utama tahun ini ada pada urusan " + RUMAH[sun.rumah - 1] + "." },
-      { judul: "Bulan di " + moon.pos.nama + ", rumah " + moon.rumah, isi: "Kebutuhan emosional tahun ini terasa dalam urusan " + RUMAH[moon.rumah - 1] + ". " + BULAN_RASI[moon.pos.rasi] }
+      { judul: F(S.srAsc, { r: posisi(c.angles.asc).nama }), isi: SR_ASC[Math.floor(c.angles.asc / 30)] },
+      { judul: F(S.diRumah, { p: sun.n, n: sun.rumah }), isi: F(S.srSun, { u: RUMAH[sun.rumah - 1] }) },
+      { judul: F(S.diRasi, { p: moon.n, r: moon.pos.nama }) + F(S.rumahN, { n: moon.rumah }), isi: F(S.srMoon, { u: RUMAH[moon.rumah - 1] }) + BULAN_RASI[moon.pos.rasi] }
     ];
     var jup = c.planets[5], sat = c.planets[6];
-    tema.push({ judul: "Jupiter di rumah " + jup.rumah, isi: "Keberuntungan tahun ini paling mudah datang lewat " + RUMAH[jup.rumah - 1] + "." });
-    tema.push({ judul: "Saturnus di rumah " + sat.rumah, isi: "Pelajaran dan kerja keras tahun ini ada pada " + RUMAH[sat.rumah - 1] + "." });
+    tema.push({ judul: F(S.diRumah, { p: jup.n, n: jup.rumah }), isi: F(S.srJup, { u: RUMAH[jup.rumah - 1] }) });
+    tema.push({ judul: F(S.diRumah, { p: sat.n, n: sat.rumah }), isi: F(S.srSat, { u: RUMAH[sat.rumah - 1] }) });
     return { chart: c, tema: tema };
   }
 
-  var api = { hitung: hitung, hitungUTC: hitungUTC, transit: transit, sinastri: sinastri, solarReturn: solarReturn, analisa: analisa, posisi: posisi, KOTA: KOTA, RASI: RASI, RASI_SYM: RASI_SYM, ASPEK: ASPEK, PLANETS: PLANETS, _sunLon: sunLon, _moonLon: moonLon, _planetLon: planetLon };
+  // ---------- Bahasa ----------
+  var TABEL = { RASI: RASI, PLANETS: PLANETS, ASPEK: ASPEK, GAYA: GAYA, BULAN_RASI: BULAN_RASI, ASC_RASI: ASC_RASI, PLANET_MAKNA: PLANET_MAKNA, RUMAH: RUMAH,
+    KATA: KATA, ASPEK_ARTI: ASPEK_ARTI, ELEMEN_ARTI: ELEMEN_ARTI, KUALITAS_ARTI: KUALITAS_ARTI, TR_TEMA: TR_TEMA, TR_LAMA: TR_LAMA, NADA: NADA,
+    PASANGAN: PASANGAN, SR_ASC: SR_ASC, S: S };
+  var ASLI = JSON.parse(JSON.stringify(TABEL));
+  function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
+  function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
+
+  var api = { setLang: setLang, S: S, hitung: hitung, hitungUTC: hitungUTC, transit: transit, sinastri: sinastri, solarReturn: solarReturn, analisa: analisa, posisi: posisi, KOTA: KOTA, RASI: RASI, RASI_SYM: RASI_SYM, ASPEK: ASPEK, PLANETS: PLANETS, _sunLon: sunLon, _moonLon: moonLon, _planetLon: planetLon };
   if (typeof module !== "undefined" && module.exports) module.exports = api; else root.Natal = api;
 })(this);

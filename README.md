@@ -5,6 +5,8 @@ Website ramalan nasib statis (HTML + CSS + JavaScript murni, tanpa build).
 - `index.html` – halaman siap hosting (GitHub Pages, Netlify, Vercel, cPanel).
 - `natal.js` – bagan kelahiran astrologi: posisi Matahari, Bulan, dan 8 planet (rumus Meeus + elemen Kepler JPL),
   ascendant/MC, rumah Whole Sign, aspek, dan teks analisa. Tanpa pustaka luar.
+- `en.js` – semua teks Bahasa Inggris (tampilan dan isi ramalan). Tombol ID/EN ada di pojok kanan atas;
+  bahasa awal mengikuti bahasa browser pengunjung dan pilihan terakhir disimpan di browser.
 - `ramalan.js` – mesin perhitungan: zodiak, angka jalan hidup, numerologi nama (Pythagoras),
   Ba Zi empat pilar, weton Jawa + cek jodoh, shio (tanggal Imlek dihitung dari fase bulan).
 - `page.html` – versi pratinjau untuk Artifact claude.ai (isi sama dengan index.html).
@@ -28,11 +30,11 @@ Jika pengunjung menutup iklan sebelum selesai, bacaan tetap terkunci.
 
 ## Langganan ramalan mingguan (email)
 
-Formulir langganan mengirim email, nama, tanggal lahir, serta kelompok ZODIAK, SHIO, WETON, dan ANGKA
+Formulir langganan mengirim email, nama, tanggal lahir, serta kelompok ZODIAK, SHIO, WETON, ANGKA, dan BAHASA (id/en)
 ke layanan newsletter, supaya pelanggan bisa dikirimi ramalan per kelompok. Selama belum tersambung, formulir berjalan dalam mode demo.
 
 Cara menyambungkan (contoh Brevo):
-1. Buat akun Brevo, lalu buat atribut kontak TGL_LAHIR, ZODIAK, SHIO, WETON, ANGKA (teks).
+1. Buat akun Brevo, lalu buat atribut kontak TGL_LAHIR, ZODIAK, SHIO, WETON, ANGKA, BAHASA (teks). Nilai ZODIAK/SHIO/WETON selalu memakai nama Indonesia (mis. Sagitarius, Kuda, Selasa Pon) walau pengunjung memakai Bahasa Inggris, jadi segmen tidak terpecah. Pakai BAHASA untuk mengirim edisi Inggris ke pelanggan `en`.
 2. Buat formulir pendaftaran (Contacts > Forms) dan salin URL `action` formulirnya (…sibforms.com/serve/…).
 3. Tambahkan di `index.html` sebelum `<script src="ramalan.js">`:
    `<script>window.SERAT_LANGGANAN = { provider: "brevo", actionUrl: "URL_ACTION_FORMULIR" };</script>`

@@ -18,21 +18,33 @@
     return n;
   }
 
+  // ---------- Kalimat yang diterjemahkan ----------
+  var S = {
+    el: { Kayu: "Kayu", Api: "Api", Tanah: "Tanah", Logam: "Logam", Air: "Air" },
+    pilar: { y: "Tahun", m: "Bulan", d: "Hari", h: "Jam" },
+    benMing: "Tahun shio Anda sendiri (Ben Ming Nian). Tradisi menganjurkan lebih berhati-hati dan memakai warna merah.",
+    selaras: "Tahun ini selaras dengan shio Anda. Saat yang baik untuk mengambil langkah penting.",
+    ciong: "Tahun ini berbenturan (ciong) dengan shio Anda. Hindari keputusan terburu-buru.",
+    netral: "Tahun ini netral untuk shio Anda. Hasil sangat bergantung pada usaha sendiri."
+  };
+  function elT(e) { return S.el[e] || e; }
+  function salin(o, ubah) { var r = {}; Object.keys(o).forEach(function (k) { r[k] = o[k]; }); Object.keys(ubah).forEach(function (k) { r[k] = ubah[k]; }); return r; }
+
   // ---------- 1. Zodiak barat ----------
   var ZODIAK = [
     // [nama, simbol, mulai bulan, mulai hari, elemen, planet, sifat, cinta, karier, angka keberuntungan, warna]
-    { n: "Capricorn", s: "♑", m: 12, d: 22, el: "Tanah", pl: "Saturnus", sifat: "Disiplin, sabar, dan ambisius. Anda membangun sesuatu pelan-pelan tapi kokoh, dan jarang menyerah sebelum tujuan tercapai.", cinta: "Setia dan serius. Butuh waktu untuk membuka diri, tetapi sekali berkomitmen Anda menjadi pasangan yang bisa diandalkan.", karier: "Cocok di manajemen, keuangan, hukum, atau bisnis keluarga. Kemajuan karier biasanya stabil dan menanjak seiring usia.", cocok: "Taurus, Virgo, Scorpio, Pisces", warna: "Cokelat tua, abu-abu" },
-    { n: "Aquarius", s: "♒", m: 1, d: 20, el: "Udara", pl: "Uranus", sifat: "Mandiri, orisinal, dan berpikiran maju. Anda suka ide baru dan peduli pada kepentingan banyak orang.", cinta: "Butuh pasangan yang juga sahabat dan memberi ruang kebebasan. Hubungan yang terlalu mengekang membuat Anda menjauh.", karier: "Cocok di teknologi, riset, kegiatan sosial, dan bidang kreatif yang tidak biasa.", cocok: "Gemini, Libra, Aries, Sagitarius", warna: "Biru elektrik, perak" },
-    { n: "Pisces", s: "♓", m: 2, d: 19, el: "Air", pl: "Neptunus", sifat: "Peka, imajinatif, dan penuh empati. Intuisi Anda kuat dan mudah merasakan suasana hati orang lain.", cinta: "Romantis dan rela berkorban. Perlu belajar menjaga batas agar tidak kehilangan diri sendiri.", karier: "Cocok di seni, musik, kesehatan, konseling, dan pekerjaan spiritual atau sosial.", cocok: "Cancer, Scorpio, Taurus, Capricorn", warna: "Hijau laut, ungu muda" },
-    { n: "Aries", s: "♈", m: 3, d: 21, el: "Api", pl: "Mars", sifat: "Berani, energik, dan suka memimpin. Anda cepat bertindak dan senang tantangan baru.", cinta: "Bergairah dan terus terang. Perlu pasangan yang bisa mengimbangi energi dan tidak mudah tersinggung.", karier: "Cocok sebagai wirausaha, pemimpin tim, atlet, atau pekerjaan yang menuntut keputusan cepat.", cocok: "Leo, Sagitarius, Gemini, Aquarius", warna: "Merah" },
-    { n: "Taurus", s: "♉", m: 4, d: 20, el: "Tanah", pl: "Venus", sifat: "Tenang, setia, dan menyukai kenyamanan. Anda praktis, tekun, dan tidak suka terburu-buru.", cinta: "Sangat setia dan penuh perhatian lewat tindakan nyata. Rasa aman adalah hal utama dalam hubungan.", karier: "Cocok di keuangan, properti, kuliner, pertanian, dan seni yang menghasilkan karya nyata.", cocok: "Virgo, Capricorn, Cancer, Pisces", warna: "Hijau, merah muda" },
-    { n: "Gemini", s: "♊", m: 5, d: 21, el: "Udara", pl: "Merkurius", sifat: "Cerdas, komunikatif, dan serba ingin tahu. Anda mudah beradaptasi dan pandai bergaul.", cinta: "Butuh pasangan yang enak diajak ngobrol dan tidak membosankan.", karier: "Cocok di media, pemasaran, penjualan, pendidikan, dan penulisan.", cocok: "Libra, Aquarius, Aries, Leo", warna: "Kuning" },
-    { n: "Cancer", s: "♋", m: 6, d: 21, el: "Air", pl: "Bulan", sifat: "Penyayang, protektif, dan sangat menghargai keluarga. Perasaan Anda dalam dan ingatan Anda kuat.", cinta: "Hangat dan mengayomi. Anda mencari hubungan yang terasa seperti rumah.", karier: "Cocok di bidang perawatan, pendidikan, kuliner, properti, dan layanan pelanggan.", cocok: "Scorpio, Pisces, Taurus, Virgo", warna: "Putih, perak" },
-    { n: "Leo", s: "♌", m: 7, d: 23, el: "Api", pl: "Matahari", sifat: "Percaya diri, murah hati, dan karismatik. Anda suka tampil dan memberi semangat pada orang lain.", cinta: "Setia dan dermawan. Anda ingin dihargai dan dibanggakan pasangan.", karier: "Cocok di hiburan, kepemimpinan, politik, dan pekerjaan yang membuat Anda tampil di depan.", cocok: "Aries, Sagitarius, Gemini, Libra", warna: "Emas, oranye" },
-    { n: "Virgo", s: "♍", m: 8, d: 23, el: "Tanah", pl: "Merkurius", sifat: "Teliti, analitis, dan suka membantu. Anda rapi, praktis, dan berstandar tinggi.", cinta: "Menunjukkan cinta lewat perhatian kecil dan bantuan nyata. Kadang terlalu kritis.", karier: "Cocok di kesehatan, analisis data, akuntansi, editing, dan riset.", cocok: "Taurus, Capricorn, Cancer, Scorpio", warna: "Hijau zaitun, krem" },
-    { n: "Libra", s: "♎", m: 9, d: 23, el: "Udara", pl: "Venus", sifat: "Adil, diplomatis, dan menyukai keindahan. Anda pandai menjaga harmoni.", cinta: "Romantis dan ingin hubungan yang seimbang. Sulit memutuskan sendiri tanpa pertimbangan pasangan.", karier: "Cocok di hukum, desain, diplomasi, HR, dan seni.", cocok: "Gemini, Aquarius, Leo, Sagitarius", warna: "Biru muda, merah muda" },
-    { n: "Scorpio", s: "♏", m: 10, d: 23, el: "Air", pl: "Pluto", sifat: "Intens, tegas, dan penuh rahasia. Anda punya tekad besar dan intuisi tajam.", cinta: "Sangat setia dan mendalam, tetapi bisa cemburu. Kepercayaan adalah segalanya.", karier: "Cocok di investigasi, psikologi, kedokteran, keuangan, dan riset.", cocok: "Cancer, Pisces, Virgo, Capricorn", warna: "Merah marun, hitam" },
-    { n: "Sagitarius", s: "♐", m: 11, d: 22, el: "Api", pl: "Jupiter", sifat: "Optimis, jujur, dan suka petualangan. Anda haus ilmu dan senang menjelajah.", cinta: "Butuh pasangan yang mau diajak berpetualang dan menghargai kebebasan.", karier: "Cocok di pendidikan, perjalanan, penerbitan, hukum, dan bisnis internasional.", cocok: "Aries, Leo, Libra, Aquarius", warna: "Ungu, biru tua" }
+    { id: "Capricorn", n: "Capricorn", s: "♑", m: 12, d: 22, el: "Tanah", pl: "Saturnus", sifat: "Disiplin, sabar, dan ambisius. Anda membangun sesuatu pelan-pelan tapi kokoh, dan jarang menyerah sebelum tujuan tercapai.", cinta: "Setia dan serius. Butuh waktu untuk membuka diri, tetapi sekali berkomitmen Anda menjadi pasangan yang bisa diandalkan.", karier: "Cocok di manajemen, keuangan, hukum, atau bisnis keluarga. Kemajuan karier biasanya stabil dan menanjak seiring usia.", cocok: "Taurus, Virgo, Scorpio, Pisces", warna: "Cokelat tua, abu-abu" },
+    { id: "Aquarius", n: "Aquarius", s: "♒", m: 1, d: 20, el: "Udara", pl: "Uranus", sifat: "Mandiri, orisinal, dan berpikiran maju. Anda suka ide baru dan peduli pada kepentingan banyak orang.", cinta: "Butuh pasangan yang juga sahabat dan memberi ruang kebebasan. Hubungan yang terlalu mengekang membuat Anda menjauh.", karier: "Cocok di teknologi, riset, kegiatan sosial, dan bidang kreatif yang tidak biasa.", cocok: "Gemini, Libra, Aries, Sagitarius", warna: "Biru elektrik, perak" },
+    { id: "Pisces", n: "Pisces", s: "♓", m: 2, d: 19, el: "Air", pl: "Neptunus", sifat: "Peka, imajinatif, dan penuh empati. Intuisi Anda kuat dan mudah merasakan suasana hati orang lain.", cinta: "Romantis dan rela berkorban. Perlu belajar menjaga batas agar tidak kehilangan diri sendiri.", karier: "Cocok di seni, musik, kesehatan, konseling, dan pekerjaan spiritual atau sosial.", cocok: "Cancer, Scorpio, Taurus, Capricorn", warna: "Hijau laut, ungu muda" },
+    { id: "Aries", n: "Aries", s: "♈", m: 3, d: 21, el: "Api", pl: "Mars", sifat: "Berani, energik, dan suka memimpin. Anda cepat bertindak dan senang tantangan baru.", cinta: "Bergairah dan terus terang. Perlu pasangan yang bisa mengimbangi energi dan tidak mudah tersinggung.", karier: "Cocok sebagai wirausaha, pemimpin tim, atlet, atau pekerjaan yang menuntut keputusan cepat.", cocok: "Leo, Sagitarius, Gemini, Aquarius", warna: "Merah" },
+    { id: "Taurus", n: "Taurus", s: "♉", m: 4, d: 20, el: "Tanah", pl: "Venus", sifat: "Tenang, setia, dan menyukai kenyamanan. Anda praktis, tekun, dan tidak suka terburu-buru.", cinta: "Sangat setia dan penuh perhatian lewat tindakan nyata. Rasa aman adalah hal utama dalam hubungan.", karier: "Cocok di keuangan, properti, kuliner, pertanian, dan seni yang menghasilkan karya nyata.", cocok: "Virgo, Capricorn, Cancer, Pisces", warna: "Hijau, merah muda" },
+    { id: "Gemini", n: "Gemini", s: "♊", m: 5, d: 21, el: "Udara", pl: "Merkurius", sifat: "Cerdas, komunikatif, dan serba ingin tahu. Anda mudah beradaptasi dan pandai bergaul.", cinta: "Butuh pasangan yang enak diajak ngobrol dan tidak membosankan.", karier: "Cocok di media, pemasaran, penjualan, pendidikan, dan penulisan.", cocok: "Libra, Aquarius, Aries, Leo", warna: "Kuning" },
+    { id: "Cancer", n: "Cancer", s: "♋", m: 6, d: 21, el: "Air", pl: "Bulan", sifat: "Penyayang, protektif, dan sangat menghargai keluarga. Perasaan Anda dalam dan ingatan Anda kuat.", cinta: "Hangat dan mengayomi. Anda mencari hubungan yang terasa seperti rumah.", karier: "Cocok di bidang perawatan, pendidikan, kuliner, properti, dan layanan pelanggan.", cocok: "Scorpio, Pisces, Taurus, Virgo", warna: "Putih, perak" },
+    { id: "Leo", n: "Leo", s: "♌", m: 7, d: 23, el: "Api", pl: "Matahari", sifat: "Percaya diri, murah hati, dan karismatik. Anda suka tampil dan memberi semangat pada orang lain.", cinta: "Setia dan dermawan. Anda ingin dihargai dan dibanggakan pasangan.", karier: "Cocok di hiburan, kepemimpinan, politik, dan pekerjaan yang membuat Anda tampil di depan.", cocok: "Aries, Sagitarius, Gemini, Libra", warna: "Emas, oranye" },
+    { id: "Virgo", n: "Virgo", s: "♍", m: 8, d: 23, el: "Tanah", pl: "Merkurius", sifat: "Teliti, analitis, dan suka membantu. Anda rapi, praktis, dan berstandar tinggi.", cinta: "Menunjukkan cinta lewat perhatian kecil dan bantuan nyata. Kadang terlalu kritis.", karier: "Cocok di kesehatan, analisis data, akuntansi, editing, dan riset.", cocok: "Taurus, Capricorn, Cancer, Scorpio", warna: "Hijau zaitun, krem" },
+    { id: "Libra", n: "Libra", s: "♎", m: 9, d: 23, el: "Udara", pl: "Venus", sifat: "Adil, diplomatis, dan menyukai keindahan. Anda pandai menjaga harmoni.", cinta: "Romantis dan ingin hubungan yang seimbang. Sulit memutuskan sendiri tanpa pertimbangan pasangan.", karier: "Cocok di hukum, desain, diplomasi, HR, dan seni.", cocok: "Gemini, Aquarius, Leo, Sagitarius", warna: "Biru muda, merah muda" },
+    { id: "Scorpio", n: "Scorpio", s: "♏", m: 10, d: 23, el: "Air", pl: "Pluto", sifat: "Intens, tegas, dan penuh rahasia. Anda punya tekad besar dan intuisi tajam.", cinta: "Sangat setia dan mendalam, tetapi bisa cemburu. Kepercayaan adalah segalanya.", karier: "Cocok di investigasi, psikologi, kedokteran, keuangan, dan riset.", cocok: "Cancer, Pisces, Virgo, Capricorn", warna: "Merah marun, hitam" },
+    { id: "Sagitarius", n: "Sagitarius", s: "♐", m: 11, d: 22, el: "Api", pl: "Jupiter", sifat: "Optimis, jujur, dan suka petualangan. Anda haus ilmu dan senang menjelajah.", cinta: "Butuh pasangan yang mau diajak berpetualang dan menghargai kebebasan.", karier: "Cocok di pendidikan, perjalanan, penerbitan, hukum, dan bisnis internasional.", cocok: "Aries, Leo, Libra, Aquarius", warna: "Ungu, biru tua" }
   ];
   function zodiak(dt) {
     var md = dt.m * 100 + dt.d, pick = ZODIAK[0];
@@ -202,28 +214,30 @@
     var dIdx = mod(jdn(dt.y, dt.m, dt.d) + 49, 60);
     var ds = dIdx % 10, db = dIdx % 12;
     var pillars = [
-      { label: "Tahun", g: GAN[ys], z: ZHI[yb] },
-      { label: "Bulan", g: GAN[ms], z: ZHI[mb] },
-      { label: "Hari", g: GAN[ds], z: ZHI[db] }
+      { key: "y", g: GAN[ys], z: ZHI[yb] },
+      { key: "m", g: GAN[ms], z: ZHI[mb] },
+      { key: "d", g: GAN[ds], z: ZHI[db] }
     ];
     if (jam !== null && jam !== undefined && jam !== "") {
       var hb = Math.floor(((+jam + 1) % 24) / 2);
       var hs = mod((ds % 5) * 2 + hb, 10);
-      pillars.push({ label: "Jam", g: GAN[hs], z: ZHI[hb] });
+      pillars.push({ key: "h", g: GAN[hs], z: ZHI[hb] });
     }
     var count = { Kayu: 0, Api: 0, Tanah: 0, Logam: 0, Air: 0 };
     pillars.forEach(function (p) { count[p.g.el]++; count[p.z.el]++; });
     var els = Object.keys(count);
     var lemah = els.filter(function (e) { return count[e] === Math.min.apply(null, els.map(function (k) { return count[k]; })); });
     var kuat = els.filter(function (e) { return count[e] === Math.max.apply(null, els.map(function (k) { return count[k]; })); });
-    var dm = GAN[ds];
-    return { pilar: pillars, dayMaster: dm, dmInfo: DAY_MASTER[dm.n], elemen: count, lemah: lemah, kuat: kuat, saran: lemah.map(function (e) { return e + ": " + EL_SARAN[e]; }) };
+    var dm = GAN[ds], hitungT = {};
+    els.forEach(function (e) { hitungT[elT(e)] = count[e]; });
+    var out = pillars.map(function (p) { return { key: p.key, label: S.pilar[p.key], g: salin(p.g, { el: elT(p.g.el) }), z: salin(p.z, { el: elT(p.z.el) }) }; });
+    return { pilar: out, dayMaster: salin(dm, { el: elT(dm.el) }), dmInfo: DAY_MASTER[dm.n], elemen: hitungT, lemah: lemah.map(elT), kuat: kuat.map(elT), saran: lemah.map(function (e) { return elT(e) + ": " + EL_SARAN[e]; }) };
   }
 
   // ---------- 5. Weton Jawa ----------
   var HARI = [ // index sesuai Date.getDay(): 0 = Minggu
-    { n: "Minggu", neptu: 5 }, { n: "Senin", neptu: 4 }, { n: "Selasa", neptu: 3 }, { n: "Rabu", neptu: 7 },
-    { n: "Kamis", neptu: 8 }, { n: "Jumat", neptu: 6 }, { n: "Sabtu", neptu: 9 }
+    { id: "Minggu", n: "Minggu", neptu: 5 }, { id: "Senin", n: "Senin", neptu: 4 }, { id: "Selasa", n: "Selasa", neptu: 3 }, { id: "Rabu", n: "Rabu", neptu: 7 },
+    { id: "Kamis", n: "Kamis", neptu: 8 }, { id: "Jumat", n: "Jumat", neptu: 6 }, { id: "Sabtu", n: "Sabtu", neptu: 9 }
   ];
   var PASARAN = [
     { n: "Legi", neptu: 5, watak: "Murah hati, suka menolong, dan pandai bergaul, tetapi kadang kurang hati-hati dalam berbicara." },
@@ -261,7 +275,7 @@
     var hari = HARI[mod(j + 1, 7)];
     var pas = PASARAN[mod(j, 5)]; // dikalibrasi: 17 Agustus 1945 = Jumat Legi
     var total = hari.neptu + pas.neptu;
-    return { hari: hari, pasaran: pas, neptu: total, wetonLabel: hari.n + " " + pas.n, watakHari: WATAK_HARI[hari.n], laku: LAKU[total] };
+    return { hari: hari, pasaran: pas, neptu: total, wetonLabel: hari.n + " " + pas.n, wetonId: hari.id + " " + ASLI.PASARAN[mod(j, 5)].n, watakHari: WATAK_HARI[hari.id], laku: LAKU[total] };
   }
   var JODOH = [ // sisa (neptu A + neptu B) mod 8, metode "Pegat-Ratu-Jodoh-Topo-Tinari-Padu-Sujanan-Pesthi"
     { k: "Pesthi", b: "Rukun, tenteram, dan damai sampai tua. Ujian datang tetapi tidak merusak hubungan.", skor: 5 },
@@ -318,18 +332,18 @@
     return jdToYMD(bjDay(newMoonJDE(c)));
   }
   var SHIO = [
-    { n: "Tikus", sifat: "Cerdik, hemat, dan pandai membaca peluang. Mudah beradaptasi di lingkungan baru.", cocok: "Naga, Monyet, Kerbau", hindari: "Kuda" },
-    { n: "Kerbau", sifat: "Rajin, sabar, dan dapat diandalkan. Bekerja tekun tanpa banyak bicara.", cocok: "Ular, Ayam, Tikus", hindari: "Kambing" },
-    { n: "Macan", sifat: "Berani, karismatik, dan penuh semangat. Suka tantangan dan melindungi yang lemah.", cocok: "Kuda, Anjing, Babi", hindari: "Monyet" },
-    { n: "Kelinci", sifat: "Lembut, sopan, dan berselera tinggi. Menghindari konflik dan pandai berdiplomasi.", cocok: "Kambing, Babi, Anjing", hindari: "Ayam" },
-    { n: "Naga", sifat: "Percaya diri, bersemangat, dan beruntung. Pemimpin alami yang berpikir besar.", cocok: "Tikus, Monyet, Ayam", hindari: "Anjing" },
-    { n: "Ular", sifat: "Bijak, tenang, dan intuitif. Pandai menyimpan rahasia dan berpikir strategis.", cocok: "Kerbau, Ayam, Monyet", hindari: "Babi" },
-    { n: "Kuda", sifat: "Energik, mandiri, dan suka kebebasan. Ceria dan pandai bergaul.", cocok: "Macan, Kambing, Anjing", hindari: "Tikus" },
-    { n: "Kambing", sifat: "Lembut, kreatif, dan penuh kasih. Menyukai keindahan dan suasana damai.", cocok: "Kelinci, Kuda, Babi", hindari: "Kerbau" },
-    { n: "Monyet", sifat: "Cerdas, jenaka, dan banyak akal. Cepat belajar dan pandai memecahkan masalah.", cocok: "Tikus, Naga, Ular", hindari: "Macan" },
-    { n: "Ayam", sifat: "Teliti, jujur, dan pekerja keras. Tampil rapi dan percaya diri.", cocok: "Kerbau, Ular, Naga", hindari: "Kelinci" },
-    { n: "Anjing", sifat: "Setia, jujur, dan adil. Teman yang bisa dipercaya dan suka melindungi.", cocok: "Macan, Kelinci, Kuda", hindari: "Naga" },
-    { n: "Babi", sifat: "Tulus, murah hati, dan menikmati hidup. Rezeki biasanya lancar.", cocok: "Kelinci, Kambing, Macan", hindari: "Ular" }
+    { id: "Tikus", n: "Tikus", sifat: "Cerdik, hemat, dan pandai membaca peluang. Mudah beradaptasi di lingkungan baru.", cocok: "Naga, Monyet, Kerbau", hindari: "Kuda" },
+    { id: "Kerbau", n: "Kerbau", sifat: "Rajin, sabar, dan dapat diandalkan. Bekerja tekun tanpa banyak bicara.", cocok: "Ular, Ayam, Tikus", hindari: "Kambing" },
+    { id: "Macan", n: "Macan", sifat: "Berani, karismatik, dan penuh semangat. Suka tantangan dan melindungi yang lemah.", cocok: "Kuda, Anjing, Babi", hindari: "Monyet" },
+    { id: "Kelinci", n: "Kelinci", sifat: "Lembut, sopan, dan berselera tinggi. Menghindari konflik dan pandai berdiplomasi.", cocok: "Kambing, Babi, Anjing", hindari: "Ayam" },
+    { id: "Naga", n: "Naga", sifat: "Percaya diri, bersemangat, dan beruntung. Pemimpin alami yang berpikir besar.", cocok: "Tikus, Monyet, Ayam", hindari: "Anjing" },
+    { id: "Ular", n: "Ular", sifat: "Bijak, tenang, dan intuitif. Pandai menyimpan rahasia dan berpikir strategis.", cocok: "Kerbau, Ayam, Monyet", hindari: "Babi" },
+    { id: "Kuda", n: "Kuda", sifat: "Energik, mandiri, dan suka kebebasan. Ceria dan pandai bergaul.", cocok: "Macan, Kambing, Anjing", hindari: "Tikus" },
+    { id: "Kambing", n: "Kambing", sifat: "Lembut, kreatif, dan penuh kasih. Menyukai keindahan dan suasana damai.", cocok: "Kelinci, Kuda, Babi", hindari: "Kerbau" },
+    { id: "Monyet", n: "Monyet", sifat: "Cerdas, jenaka, dan banyak akal. Cepat belajar dan pandai memecahkan masalah.", cocok: "Tikus, Naga, Ular", hindari: "Macan" },
+    { id: "Ayam", n: "Ayam", sifat: "Teliti, jujur, dan pekerja keras. Tampil rapi dan percaya diri.", cocok: "Kerbau, Ular, Naga", hindari: "Kelinci" },
+    { id: "Anjing", n: "Anjing", sifat: "Setia, jujur, dan adil. Teman yang bisa dipercaya dan suka melindungi.", cocok: "Macan, Kelinci, Kuda", hindari: "Naga" },
+    { id: "Babi", n: "Babi", sifat: "Tulus, murah hati, dan menikmati hidup. Rezeki biasanya lancar.", cocok: "Kelinci, Kambing, Macan", hindari: "Ular" }
   ];
   var EL_TAHUN = ["Logam", "Logam", "Air", "Air", "Kayu", "Kayu", "Api", "Api", "Tanah", "Tanah"]; // berdasar digit terakhir tahun
   function shio(dt) {
@@ -338,16 +352,23 @@
     if (before) y--;
     var idx = mod(y - 4, 12);
     var nowY = new Date().getFullYear(), nowIdx = mod(nowY - 4, 12);
-    var rel = "netral";
-    var s = SHIO[idx];
-    if (SHIO[nowIdx].n === s.n) rel = "Tahun shio Anda sendiri (Ben Ming Nian). Tradisi menganjurkan lebih berhati-hati dan memakai warna merah.";
-    else if (s.cocok.indexOf(SHIO[nowIdx].n) >= 0) rel = "Tahun ini selaras dengan shio Anda. Saat yang baik untuk mengambil langkah penting.";
-    else if (s.hindari === SHIO[nowIdx].n) rel = "Tahun ini berbenturan (ciong) dengan shio Anda. Hindari keputusan terburu-buru.";
-    else rel = "Tahun ini netral untuk shio Anda. Hasil sangat bergantung pada usaha sendiri.";
+    var rel, s = SHIO[idx], a = ASLI.SHIO[idx], kini = ASLI.SHIO[nowIdx].n;
+    if (nowIdx === idx) rel = S.benMing;
+    else if (a.cocok.indexOf(kini) >= 0) rel = S.selaras;
+    else if (a.hindari === kini) rel = S.ciong;
+    else rel = S.netral;
     return { shio: s, tahunImlek: y, elemen: EL_TAHUN[mod(y, 10)], imlekTanggal: imlek(dt.y), sebelumImlek: before, tahunIni: nowY, shioTahunIni: SHIO[nowIdx].n, ramalanTahunIni: rel };
   }
 
-  var api = {
+  // ---------- Bahasa ----------
+  var TABEL = { ZODIAK: ZODIAK, ANGKA: ANGKA, TAHUN_PERSONAL: TAHUN_PERSONAL, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN,
+    GAN: GAN, ZHI: ZHI, DAY_MASTER: DAY_MASTER, EL_SARAN: EL_SARAN, HARI: HARI, PASARAN: PASARAN, WATAK_HARI: WATAK_HARI, LAKU: LAKU,
+    JODOH: JODOH, SHIO: SHIO, EL_TAHUN: EL_TAHUN, S: S };
+  var ASLI = JSON.parse(JSON.stringify(TABEL));
+  function tumpang(t, src) { Object.keys(src).forEach(function (k) { var v = src[k]; if (v && typeof v === "object" && t[k] && typeof t[k] === "object") tumpang(t[k], v); else t[k] = v; }); }
+  function setLang(lang, en) { tumpang(TABEL, JSON.parse(JSON.stringify(ASLI))); if (lang === "en" && en) tumpang(TABEL, en); }
+
+  var api = { setLang: setLang,
     jdn: jdn, reduceNum: reduceNum, zodiak: zodiak, lifePath: lifePath, TAHUN_PERSONAL: TAHUN_PERSONAL,
     namaNumerologi: namaNumerologi, EKSPRESI_BAKAT: EKSPRESI_BAKAT, JIWA: JIWA, KEPRIBADIAN: KEPRIBADIAN, ANGKA: ANGKA,
     bazi: bazi, weton: weton, jodohWeton: jodohWeton, imlek: imlek, shio: shio, EL_SARAN: EL_SARAN
