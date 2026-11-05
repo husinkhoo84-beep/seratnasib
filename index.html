@@ -149,6 +149,43 @@ button.ghost:hover { background: var(--nila-soft) }
 .choose-list b { font-family: var(--f-display); font-weight: 400; font-size: 19px }
 .choose-list span { font-size: 13px; color: var(--muted) }
 
+/* Bagan kelahiran */
+:root { --el-api: #c2410c; --el-tanah: #4d7c0f; --el-udara: #0e7490; --el-air: #4338ca }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) { --el-api: #fb923c; --el-tanah: #a3e635; --el-udara: #67e8f9; --el-air: #a5b4fc } }
+:root[data-theme="dark"] { --el-api: #fb923c; --el-tanah: #a3e635; --el-udara: #67e8f9; --el-air: #a5b4fc }
+.natal { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 24px; align-items: start; margin-bottom: 8px }
+.wheel-wrap { min-width: 0 }
+.roda { width: 100%; max-width: 520px; height: auto; display: block; margin: 0 auto; font-family: var(--f-body) }
+.roda .r-bg { fill: var(--nila-soft); stroke: var(--line) }
+.roda .r-in, .roda .r-in2 { fill: var(--surface); stroke: var(--line) }
+.roda .r-asp { fill: var(--bg); stroke: var(--line) }
+.roda .r-div { stroke: var(--line) }
+.roda .r-tick { stroke: var(--muted); stroke-width: .8 }
+.roda .r-sign { font-size: 24px; font-family: "Segoe UI Symbol", "Noto Sans Symbols", "DejaVu Sans", sans-serif; text-anchor: middle; dominant-baseline: central }
+.roda .el-api { fill: var(--el-api) } .roda .el-tanah { fill: var(--el-tanah) } .roda .el-udara { fill: var(--el-udara) } .roda .el-air { fill: var(--el-air) }
+.roda .r-house { font-size: 12px; fill: var(--muted); text-anchor: middle; dominant-baseline: central; font-family: var(--f-mono) }
+.roda .r-a { stroke-width: 1.3 } .roda .r-a.harmonis { stroke: var(--good) } .roda .r-a.tegang { stroke: var(--bad) }
+.roda .r-axis { stroke: var(--ink); stroke-width: 1.6 }
+.roda .r-ang { font-size: 11px; font-weight: 700; fill: var(--ink); font-family: var(--f-mono) }
+.roda .r-ptick { stroke: var(--ink); stroke-width: 1.4 }
+.roda .r-dot { fill: var(--ink) }
+.roda .r-planet { font-size: 27px; font-family: "Segoe UI Symbol", "Noto Sans Symbols", "DejaVu Sans", sans-serif; fill: var(--nila); text-anchor: middle; dominant-baseline: central }
+.roda .r-deg { font-size: 10px; fill: var(--muted); text-anchor: middle; dominant-baseline: central; font-family: var(--f-mono) }
+.legend { display: flex; gap: 16px; justify-content: center; font-size: 12px; color: var(--muted); margin-top: 6px }
+.legend span::before { content: ""; display: inline-block; width: 16px; height: 2px; vertical-align: middle; margin-right: 6px }
+.legend .lg-h::before { background: var(--good) } .legend .lg-t::before { background: var(--bad) }
+.ptable-wrap { overflow-x: auto; min-width: 0 }
+.ptable { width: 100%; border-collapse: collapse; font-size: 14px }
+.ptable th { text-align: left; font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); font-weight: 600; padding: 6px 8px; border-bottom: 1px solid var(--line) }
+.ptable td { padding: 7px 8px; border-bottom: 1px solid var(--line); white-space: nowrap }
+.ptable tr.ang td { background: var(--nila-soft) }
+.ptable .pg { display: inline-block; width: 20px; color: var(--nila); font-size: 16px }
+.retro { font-size: 11px; font-weight: 700; color: var(--bad); border: 1px solid var(--bad); border-radius: 4px; padding: 0 4px }
+h3.sec { font-family: var(--f-display); font-size: 24px; margin: 26px 0 12px }
+.block.asp { border-left: 3px solid var(--line); padding-left: 12px }
+.block.asp.harmonis { border-color: var(--good) } .block.asp.tegang { border-color: var(--bad) }
+@media (max-width: 820px) { .natal { grid-template-columns: 1fr } }
+
 /* Langganan */
 .langganan { margin-top: 28px; display: grid; grid-template-columns: 1.2fr 1fr; gap: 28px; align-items: start; padding: 26px; border-radius: var(--r); background: var(--nila-soft); border: 1px solid var(--line) }
 .lg-copy { display: grid; gap: 10px; min-width: 0 }
@@ -215,9 +252,14 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         </div>
         <div class="field">
           <label for="jam">Jam lahir</label>
-          <select id="jam" name="jam"></select>
-          <small>Opsional, untuk pilar jam Ba Zi</small>
+          <input id="jam" name="jam" type="time">
+          <small>Opsional. Dibutuhkan untuk ascendant, rumah, dan pilar jam Ba Zi</small>
         </div>
+      </div>
+      <div class="field">
+        <label for="kota">Kota lahir</label>
+        <select id="kota" name="kota"></select>
+        <small>Untuk zona waktu dan posisi ascendant</small>
       </div>
       <p class="note" id="err" role="alert" hidden></p>
       <button class="primary" type="submit">Baca ramalan saya</button>
@@ -256,6 +298,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
 </div>
 
 <script src="ramalan.js"></script>
+<script src="natal.js"></script>
 <script>
 (function () {
   "use strict";
@@ -266,16 +309,14 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var fmt = function (d) { return d.d + " " + BULAN[d.m - 1] + " " + d.y; };
   var parse = function (v) { var p = v.split("-"); return p.length === 3 ? { y: +p[0], m: +p[1], d: +p[2] } : null; };
 
-  // isi pilihan jam
-  var jamSel = $("jam");
-  var SHICHEN = ["Zi","Chou","Chou","Yin","Yin","Mao","Mao","Chen","Chen","Si","Si","Wu","Wu","Wei","Wei","Shen","Shen","You","You","Xu","Xu","Hai","Hai","Zi"];
-  jamSel.innerHTML = '<option value="">Tidak tahu</option>' + Array.from({ length: 24 }, function (_, h) {
-    var hh = String(h).padStart(2, "0");
-    return '<option value="' + h + '">' + hh + ':00 – ' + hh + ':59</option>';
+  var N = window.Natal;
+  // isi pilihan kota lahir
+  $("kota").innerHTML = N.KOTA.map(function (k, i) {
+    return '<option value="' + i + '">' + k.n + ' (' + (i >= 43 ? "GMT+" + k.tz : { 7: "WIB", 8: "WITA", 9: "WIT" }[k.tz]) + ')</option>';
   }).join("");
 
   var METHODS = [
-    { id: "zodiak", k: "Zodiak", d: "Watak, cinta, dan karier dari rasi bintang kelahiran Anda." },
+    { id: "zodiak", k: "Astrologi", d: "Bagan kelahiran: posisi planet, ascendant, rumah, dan aspek, lengkap dengan analisanya." },
     { id: "angka", k: "Angka kelahiran", d: "Power of number: angka jalan hidup dan tahun personal Anda." },
     { id: "nama", k: "Nama lengkap", d: "Getaran setiap huruf nama: angka ekspresi, jiwa, dan kepribadian." },
     { id: "bazi", k: "Ba Zi", d: "Empat pilar Tiongkok, elemen diri, dan keseimbangan lima elemen." },
@@ -285,9 +326,11 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var state = { aktif: null, data: null, buka: {}, iklan: null };
   if (location.hash && METHODS.some(function (m) { return "#" + m.id === location.hash; })) state.aktif = location.hash.slice(1);
 
-  function hitung(nama, dt, jam) {
+  function hitung(nama, dt, jam, menit, kotaIdx) {
+    var kota = N.KOTA[kotaIdx] || N.KOTA[0];
+    var nc = N.hitung({ y: dt.y, m: dt.m, d: dt.d, jam: jam, menit: menit, tz: kota.tz, lat: kota.lat, lon: kota.lon });
     return {
-      nama: nama, dt: dt, jam: jam,
+      nama: nama, dt: dt, jam: jam, menit: menit, kota: kota, nc: nc, na: N.analisa(nc),
       z: R.zodiak(dt), lp: R.lifePath(dt), nm: R.namaNumerologi(nama),
       bz: R.bazi(dt, jam), wt: R.weton(dt), sh: R.shio(dt)
     };
@@ -295,7 +338,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
 
   function ringkasan(d) {
     return {
-      zodiak: { v: d.z.s + "\uFE0E " + d.z.n, s: "Elemen " + d.z.el },
+      zodiak: { v: d.z.s + "\uFE0E " + d.z.n, s: d.nc.angles ? "Asc " + N.posisi(d.nc.angles.asc).nama + " · Bulan " + d.nc.planets[1].pos.nama : "Bulan " + d.nc.planets[1].pos.nama },
       angka: { v: String(d.lp.angka), s: d.lp.info.judul.replace(/^Angka Master \d+ · /, "") },
       nama: { v: String(d.nm.ekspresi), s: "Angka ekspresi" },
       bazi: { v: d.bz.dayMaster.h + " " + d.bz.dayMaster.n, s: d.bz.dayMaster.el + " " + d.bz.dayMaster.yy },
@@ -319,12 +362,29 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
 
   var PANELS = {
     zodiak: function (d) {
-      var z = d.z;
-      return head(z.s + "\uFE0E", "Zodiak " + z.n, "Lahir " + fmt(d.dt)) +
-        '<div class="facts"><div>Elemen <b>' + z.el + '</b></div><div>Planet penguasa <b>' + z.pl + '</b></div><div>Warna keberuntungan <b>' + z.warna + '</b></div><div>Cocok dengan <b>' + z.cocok + '</b></div></div>' +
-        '<div class="grid2">' + blk("Watak", z.sifat) + blk("Cinta", z.cinta) + blk("Karier dan rezeki", z.karier) +
-        blk("Pesan untuk Anda", "Kekuatan elemen " + z.el.toLowerCase() + " Anda paling terasa saat Anda bertindak sesuai sifat asli. Gunakan " + z.pl + " sebagai pengingat: " + (z.el === "Api" ? "salurkan semangat ke satu tujuan." : z.el === "Air" ? "dengarkan intuisi, tetapi jaga batas." : z.el === "Udara" ? "wujudkan ide menjadi langkah nyata." : "tetap tekun, hasil datang pada waktunya.")) + '</div>' +
-        note("Zodiak di sini adalah zodiak matahari (tropikal) berdasarkan tanggal lahir. Bila lahir tepat di tanggal pergantian, tanda Anda bisa berbeda tergantung jam lahir.");
+      var z = d.z, c = d.nc, an = d.na;
+      var waktu = d.jam === null ? "jam tidak diketahui" : String(d.jam).padStart(2, "0") + ":" + String(d.menit).padStart(2, "0");
+      var rows = c.planets.map(function (p) {
+        return '<tr><td><span class="pg">' + p.s + '\uFE0E</span> ' + p.n + '</td><td class="mono">' + p.pos.derajat + '°' + String(p.pos.menit).padStart(2, "0") + '′</td><td>' + p.pos.sym + '\uFE0E ' + p.pos.nama + '</td><td class="mono">' + (p.rumah || "–") + '</td><td>' + (p.retro ? '<span class="retro">R</span>' : "") + '</td></tr>';
+      }).join("");
+      if (c.angles) {
+        var A = N.posisi(c.angles.asc), M = N.posisi(c.angles.mc);
+        rows = '<tr class="ang"><td><b>ASC</b> Ascendant</td><td class="mono">' + A.derajat + '°' + String(A.menit).padStart(2, "0") + '′</td><td>' + A.sym + '\uFE0E ' + A.nama + '</td><td class="mono">1</td><td></td></tr>' +
+          '<tr class="ang"><td><b>MC</b> Puncak langit</td><td class="mono">' + M.derajat + '°' + String(M.menit).padStart(2, "0") + '′</td><td>' + M.sym + '\uFE0E ' + M.nama + '</td><td class="mono">' + (((Math.floor(c.angles.mc / 30) - c.ascRasi + 12) % 12) + 1) + '</td><td></td></tr>' + rows;
+      }
+      var list = function (arr) { return arr.map(function (x) { return '<div class="block"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join(""); };
+      var asp = an.aspek.map(function (x) { return '<div class="block asp ' + x.sifat + '"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join("");
+      return head(z.s + "\uFE0E", "Bagan kelahiran", fmt(d.dt) + " · " + waktu + " · " + d.kota.n) +
+        '<div class="natal">' +
+          '<div class="wheel-wrap">' + roda(c) + '<div class="legend"><span class="lg-h">Harmonis</span><span class="lg-t">Tegang</span></div></div>' +
+          '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Titik</th><th>Derajat</th><th>Rasi</th><th>Rumah</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
+        '</div>' +
+        '<h3 class="sec">Inti kepribadian</h3><div class="grid2">' + list(an.inti) + blk("Watak " + z.n, z.sifat) + '</div>' +
+        '<h3 class="sec">Planet pribadi</h3><div class="grid2">' + list(an.planet) + '</div>' +
+        (asp ? '<h3 class="sec">Aspek utama</h3><div class="grid2">' + asp + '</div>' : "") +
+        '<h3 class="sec">Keseimbangan</h3><div class="grid2">' + blk("Elemen dan kualitas", an.keseimbangan.join(" ")) + blk("Cinta", z.cinta) + blk("Karier dan rezeki", z.karier) + '</div>' +
+        note("Posisi planet dihitung dengan rumus astronomi (zodiak tropikal) untuk waktu lahir di zona waktu " + d.kota.n + ". Rumah memakai sistem Whole Sign. " +
+          (d.jam === null ? "Karena jam lahir tidak diisi, posisi Bulan memakai pukul 12.00 dan ascendant serta rumah tidak ditampilkan." : "Ketelitian ascendant bergantung pada jam lahir yang tepat sampai menit."));
     },
     angka: function (d) {
       var lp = d.lp;
@@ -395,6 +455,57 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   function head(g, t, sub) { return '<div class="panel-head"><div class="glyph" aria-hidden="true">' + g + '</div><div><h2>' + t + '</h2><p class="sub">' + sub + '</p></div></div>'; }
   function blk(t, p) { return '<div class="block"><h3>' + t + '</h3><p>' + p + '</p></div>'; }
   function note(t) { return '<p class="method-note">' + t + '</p>'; }
+
+  // Roda bagan kelahiran (SVG). Ascendant di kiri; tanpa jam lahir, 0° Aries di kiri.
+  function roda(c) {
+    var S = 520, C = S / 2, R1 = 250, R2 = 208, R3 = 180, RP = 150, RA = 112;
+    var base = c.angles ? c.angles.asc : 0;
+    var pt = function (lon, r) { var t = (180 + lon - base) * Math.PI / 180; return [C + r * Math.cos(t), C - r * Math.sin(t)]; };
+    var f = function (n) { return n.toFixed(1); };
+    var EL = ["api", "tanah", "udara", "air"];
+    var g = '<svg class="roda" viewBox="0 0 ' + S + ' ' + S + '" role="img" aria-label="Roda bagan kelahiran">';
+    g += '<circle cx="' + C + '" cy="' + C + '" r="' + R1 + '" class="r-bg"/><circle cx="' + C + '" cy="' + C + '" r="' + R2 + '" class="r-in"/><circle cx="' + C + '" cy="' + C + '" r="' + RA + '" class="r-asp"/>';
+    for (var i = 0; i < 12; i++) {
+      var a = pt(i * 30, R1), b = pt(i * 30, c.angles ? R3 * 0.6 : R2);
+      g += '<line x1="' + f(a[0]) + '" y1="' + f(a[1]) + '" x2="' + f(b[0]) + '" y2="' + f(b[1]) + '" class="r-div"/>';
+      var m = pt(i * 30 + 15, (R1 + R2) / 2);
+      g += '<text x="' + f(m[0]) + '" y="' + f(m[1]) + '" class="r-sign el-' + EL[i % 4] + '">' + N.RASI_SYM[i] + '\uFE0E</text>';
+      for (var dgr = 5; dgr < 30; dgr += 5) { var t1 = pt(i * 30 + dgr, R2), t2 = pt(i * 30 + dgr, R2 - (dgr === 15 ? 7 : 4)); g += '<line x1="' + f(t1[0]) + '" y1="' + f(t1[1]) + '" x2="' + f(t2[0]) + '" y2="' + f(t2[1]) + '" class="r-tick"/>'; }
+      if (c.angles) { var h = ((i - c.ascRasi + 12) % 12) + 1, hp = pt(i * 30 + 15, R3 - 14); g += '<text x="' + f(hp[0]) + '" y="' + f(hp[1]) + '" class="r-house">' + h + '</text>'; }
+    }
+    if (c.angles) g += '<circle cx="' + C + '" cy="' + C + '" r="' + R3 + '" class="r-in2"/>';
+    // garis aspek
+    c.aspek.forEach(function (x) {
+      if (x.jenis.a === 0) return;
+      var p1 = pt(x.p1.lon, RA), p2 = pt(x.p2.lon, RA);
+      g += '<line x1="' + f(p1[0]) + '" y1="' + f(p1[1]) + '" x2="' + f(p2[0]) + '" y2="' + f(p2[1]) + '" class="r-a ' + x.jenis.sifat + '" style="opacity:' + Math.max(0.35, 1 - x.orb / 8).toFixed(2) + '"/>';
+    });
+    // sumbu ASC-DSC dan MC-IC
+    if (c.angles) {
+      var a1 = pt(c.angles.asc, R1 + 2), a2 = pt(c.angles.asc + 180, R1 + 2), m1 = pt(c.angles.mc, R1 + 2), m2 = pt(c.angles.mc + 180, R1 + 2);
+      g += '<line x1="' + f(a1[0]) + '" y1="' + f(a1[1]) + '" x2="' + f(a2[0]) + '" y2="' + f(a2[1]) + '" class="r-axis"/><line x1="' + f(m1[0]) + '" y1="' + f(m1[1]) + '" x2="' + f(m2[0]) + '" y2="' + f(m2[1]) + '" class="r-axis"/>';
+      var al = pt(c.angles.asc, R1 - 12), ml = pt(c.angles.mc, R1 - 12);
+      g += '<text x="' + f(al[0] + 4) + '" y="' + f(al[1] - 12) + '" class="r-ang">ASC</text><text x="' + f(ml[0] + 12) + '" y="' + f(ml[1] + 4) + '" class="r-ang">MC</text>';
+    }
+    // planet: sebar agar tidak bertumpuk (jarak minimum 8°)
+    var ps = c.planets.slice().sort(function (a, b) { return a.lon - b.lon; }).map(function (p) { return { p: p, d: p.lon }; });
+    for (var it = 0; it < 30; it++) {
+      var moved = false;
+      for (var k = 0; k < ps.length; k++) {
+        var nx = ps[(k + 1) % ps.length], gap = ((nx.d - ps[k].d) + 360) % 360;
+        if (ps.length > 1 && gap < 8) { var push = (8 - gap) / 2; ps[k].d -= push; nx.d += push; moved = true; }
+      }
+      if (!moved) break;
+    }
+    ps.forEach(function (o) {
+      var tick1 = pt(o.p.lon, R2), tick2 = pt(o.p.lon, R2 - 10), gp = pt(o.d, RP), dp = pt(o.d, RP - 27), lp = pt(o.p.lon, RA);
+      g += '<line x1="' + f(tick1[0]) + '" y1="' + f(tick1[1]) + '" x2="' + f(tick2[0]) + '" y2="' + f(tick2[1]) + '" class="r-ptick"/>';
+      g += '<circle cx="' + f(lp[0]) + '" cy="' + f(lp[1]) + '" r="2.5" class="r-dot"/>';
+      g += '<text x="' + f(gp[0]) + '" y="' + f(gp[1]) + '" class="r-planet"><title>' + o.p.n + ' ' + o.p.pos.teks + '</title>' + o.p.s + '\uFE0E</text>';
+      g += '<text x="' + f(dp[0]) + '" y="' + f(dp[1]) + '" class="r-deg">' + o.p.pos.derajat + '°' + (o.p.retro ? "R" : "") + '</text>';
+    });
+    return g + '</svg>';
+  }
 
   function methodById(id) { return METHODS.filter(function (m) { return m.id === id; })[0]; }
 
@@ -565,8 +676,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     if (!dt || dt.y < 1900 || dt.y > 2100) { err.textContent = "Pilih tanggal lahir antara tahun 1900 dan 2100."; err.hidden = false; $("tgl").focus(); return; }
     err.hidden = true;
     $("contoh-badge").hidden = true;
-    var jam = $("jam").value === "" ? null : +$("jam").value;
-    state.data = hitung(nama, dt, jam);
+    var tv = $("jam").value, jam = tv ? +tv.split(":")[0] : null, menit = tv ? +tv.split(":")[1] : 0;
+    state.data = hitung(nama, dt, jam, menit, +$("kota").value);
     state.buka = {}; Iklan.batal(); state.aktif = null;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (er) {}
     render();
@@ -616,8 +727,9 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   // contoh awal agar halaman langsung menunjukkan hasil
   $("nama").value = "Ayu Lestari Wulandari";
   $("tgl").value = "1990-05-15";
-  $("jam").value = "8";
-  state.data = hitung("Ayu Lestari Wulandari", { y: 1990, m: 5, d: 15 }, 8);
+  $("jam").value = "08:30";
+  $("kota").value = "0";
+  state.data = hitung("Ayu Lestari Wulandari", { y: 1990, m: 5, d: 15 }, 8, 30, 0);
   render();
 })();
 </script>

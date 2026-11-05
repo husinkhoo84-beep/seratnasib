@@ -3,6 +3,8 @@
 Website ramalan nasib statis (HTML + CSS + JavaScript murni, tanpa build).
 
 - `index.html` – halaman siap hosting (GitHub Pages, Netlify, Vercel, cPanel).
+- `natal.js` – bagan kelahiran astrologi: posisi Matahari, Bulan, dan 8 planet (rumus Meeus + elemen Kepler JPL),
+  ascendant/MC, rumah Whole Sign, aspek, dan teks analisa. Tanpa pustaka luar.
 - `ramalan.js` – mesin perhitungan: zodiak, angka jalan hidup, numerologi nama (Pythagoras),
   Ba Zi empat pilar, weton Jawa + cek jodoh, shio (tanggal Imlek dihitung dari fase bulan).
 - `page.html` – versi pratinjau untuk Artifact claude.ai (isi sama dengan index.html).
