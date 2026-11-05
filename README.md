@@ -45,3 +45,10 @@ Untuk MailerLite pakai `provider: "mailerlite"` dengan URL `…/jsonp/<akun>/for
 3. Setelah tayang, pasang domain sendiri di Settings > Domains, lalu daftarkan domain itu di Google Ad Manager.
 
 Bahan newsletter mingguan ada di folder `konten/`.
+
+## Kota lahir & zona waktu
+
+Kotak "Kota lahir" mencari kota di seluruh dunia lewat Open-Meteo Geocoding API (gratis, tanpa kunci).
+Bila layanan tidak bisa diakses, dipakai daftar cadangan ±130 kota di `natal.js`.
+Selisih waktu dihitung oleh browser dari zona waktu IANA, jadi musim panas (DST) dan perubahan zona historis
+(mis. Jakarta GMT+7:30 sebelum 1964) ikut diperhitungkan.

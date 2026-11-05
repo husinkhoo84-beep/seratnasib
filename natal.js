@@ -264,19 +264,58 @@
     return out;
   }
 
-  // ---------- Kota lahir ----------
+  // ---------- Kota lahir (daftar cadangan; pencarian seluruh dunia ada di halaman) ----------
+  // [nama, wilayah, negara, lintang, bujur, zona waktu IANA]
+  var J = "Asia/Jakarta", M = "Asia/Makassar", P = "Asia/Jayapura";
   var KOTA = [
-    ["Jakarta", -6.2, 106.82, 7], ["Bandung", -6.91, 107.61, 7], ["Bekasi", -6.24, 106.99, 7], ["Bogor", -6.6, 106.8, 7], ["Tangerang", -6.18, 106.63, 7],
-    ["Serang", -6.12, 106.15, 7], ["Cirebon", -6.71, 108.56, 7], ["Semarang", -6.97, 110.42, 7], ["Solo (Surakarta)", -7.57, 110.82, 7], ["Yogyakarta", -7.8, 110.36, 7],
-    ["Purwokerto", -7.42, 109.23, 7], ["Surabaya", -7.25, 112.75, 7], ["Malang", -7.98, 112.63, 7], ["Kediri", -7.82, 112.01, 7], ["Jember", -8.17, 113.7, 7],
-    ["Banda Aceh", 5.55, 95.32, 7], ["Medan", 3.59, 98.67, 7], ["Pekanbaru", 0.51, 101.45, 7], ["Padang", -0.95, 100.35, 7], ["Batam", 1.13, 104.05, 7],
-    ["Jambi", -1.61, 103.61, 7], ["Palembang", -2.98, 104.76, 7], ["Bengkulu", -3.8, 102.27, 7], ["Bandar Lampung", -5.43, 105.26, 7], ["Pangkal Pinang", -2.13, 106.11, 7],
-    ["Pontianak", -0.03, 109.33, 7], ["Palangka Raya", -2.21, 113.92, 7],
-    ["Denpasar", -8.65, 115.22, 8], ["Mataram", -8.58, 116.12, 8], ["Kupang", -10.18, 123.6, 8], ["Banjarmasin", -3.32, 114.59, 8], ["Balikpapan", -1.27, 116.83, 8],
-    ["Samarinda", -0.5, 117.15, 8], ["Makassar", -5.14, 119.42, 8], ["Manado", 1.47, 124.84, 8], ["Palu", -0.9, 119.87, 8], ["Kendari", -3.97, 122.51, 8], ["Gorontalo", 0.54, 123.06, 8],
-    ["Ambon", -3.7, 128.18, 9], ["Ternate", 0.79, 127.38, 9], ["Sorong", -0.88, 131.25, 9], ["Jayapura", -2.53, 140.72, 9], ["Merauke", -8.49, 140.4, 9],
-    ["Singapura", 1.35, 103.82, 8], ["Kuala Lumpur", 3.14, 101.69, 8], ["Hong Kong", 22.32, 114.17, 8], ["Taipei", 25.03, 121.57, 8], ["Tokyo", 35.68, 139.69, 9]
-  ].map(function (k) { return { n: k[0], lat: k[1], lon: k[2], tz: k[3] }; });
+    ["Jakarta", "DKI Jakarta", "Indonesia", -6.2, 106.82, J], ["Bandung", "Jawa Barat", "Indonesia", -6.91, 107.61, J], ["Bekasi", "Jawa Barat", "Indonesia", -6.24, 106.99, J],
+    ["Bogor", "Jawa Barat", "Indonesia", -6.6, 106.8, J], ["Depok", "Jawa Barat", "Indonesia", -6.4, 106.82, J], ["Cirebon", "Jawa Barat", "Indonesia", -6.71, 108.56, J],
+    ["Sukabumi", "Jawa Barat", "Indonesia", -6.92, 106.93, J], ["Tasikmalaya", "Jawa Barat", "Indonesia", -7.33, 108.22, J], ["Karawang", "Jawa Barat", "Indonesia", -6.31, 107.3, J],
+    ["Tangerang", "Banten", "Indonesia", -6.18, 106.63, J], ["Serang", "Banten", "Indonesia", -6.12, 106.15, J], ["Cilegon", "Banten", "Indonesia", -6.02, 106.06, J],
+    ["Semarang", "Jawa Tengah", "Indonesia", -6.97, 110.42, J], ["Surakarta (Solo)", "Jawa Tengah", "Indonesia", -7.57, 110.82, J], ["Magelang", "Jawa Tengah", "Indonesia", -7.47, 110.22, J],
+    ["Purwokerto", "Jawa Tengah", "Indonesia", -7.42, 109.23, J], ["Tegal", "Jawa Tengah", "Indonesia", -6.87, 109.14, J], ["Pekalongan", "Jawa Tengah", "Indonesia", -6.89, 109.67, J],
+    ["Kudus", "Jawa Tengah", "Indonesia", -6.8, 110.84, J], ["Salatiga", "Jawa Tengah", "Indonesia", -7.33, 110.5, J], ["Yogyakarta", "DI Yogyakarta", "Indonesia", -7.8, 110.36, J],
+    ["Surabaya", "Jawa Timur", "Indonesia", -7.25, 112.75, J], ["Malang", "Jawa Timur", "Indonesia", -7.98, 112.63, J], ["Kediri", "Jawa Timur", "Indonesia", -7.82, 112.01, J],
+    ["Madiun", "Jawa Timur", "Indonesia", -7.63, 111.52, J], ["Jember", "Jawa Timur", "Indonesia", -8.17, 113.7, J], ["Sidoarjo", "Jawa Timur", "Indonesia", -7.45, 112.72, J],
+    ["Blitar", "Jawa Timur", "Indonesia", -8.1, 112.17, J], ["Probolinggo", "Jawa Timur", "Indonesia", -7.75, 113.22, J], ["Banyuwangi", "Jawa Timur", "Indonesia", -8.22, 114.37, J],
+    ["Banda Aceh", "Aceh", "Indonesia", 5.55, 95.32, J], ["Lhokseumawe", "Aceh", "Indonesia", 5.18, 97.15, J], ["Medan", "Sumatera Utara", "Indonesia", 3.59, 98.67, J],
+    ["Pematangsiantar", "Sumatera Utara", "Indonesia", 2.96, 99.06, J], ["Binjai", "Sumatera Utara", "Indonesia", 3.6, 98.49, J], ["Padang", "Sumatera Barat", "Indonesia", -0.95, 100.35, J],
+    ["Bukittinggi", "Sumatera Barat", "Indonesia", -0.31, 100.37, J], ["Pekanbaru", "Riau", "Indonesia", 0.51, 101.45, J], ["Dumai", "Riau", "Indonesia", 1.67, 101.45, J],
+    ["Batam", "Kepulauan Riau", "Indonesia", 1.13, 104.05, J], ["Tanjung Pinang", "Kepulauan Riau", "Indonesia", 0.92, 104.45, J], ["Jambi", "Jambi", "Indonesia", -1.61, 103.61, J],
+    ["Palembang", "Sumatera Selatan", "Indonesia", -2.98, 104.76, J], ["Bengkulu", "Bengkulu", "Indonesia", -3.8, 102.27, J], ["Bandar Lampung", "Lampung", "Indonesia", -5.43, 105.26, J],
+    ["Pangkal Pinang", "Bangka Belitung", "Indonesia", -2.13, 106.11, J], ["Pontianak", "Kalimantan Barat", "Indonesia", -0.03, 109.33, J], ["Singkawang", "Kalimantan Barat", "Indonesia", 0.91, 108.98, J],
+    ["Palangka Raya", "Kalimantan Tengah", "Indonesia", -2.21, 113.92, J], ["Sampit", "Kalimantan Tengah", "Indonesia", -2.54, 112.95, J],
+    ["Denpasar", "Bali", "Indonesia", -8.65, 115.22, M], ["Singaraja", "Bali", "Indonesia", -8.11, 115.09, M], ["Mataram", "NTB", "Indonesia", -8.58, 116.12, M],
+    ["Bima", "NTB", "Indonesia", -8.46, 118.73, M], ["Kupang", "NTT", "Indonesia", -10.18, 123.6, M], ["Maumere", "NTT", "Indonesia", -8.62, 122.21, M],
+    ["Banjarmasin", "Kalimantan Selatan", "Indonesia", -3.32, 114.59, M], ["Balikpapan", "Kalimantan Timur", "Indonesia", -1.27, 116.83, M], ["Samarinda", "Kalimantan Timur", "Indonesia", -0.5, 117.15, M],
+    ["Tarakan", "Kalimantan Utara", "Indonesia", 3.3, 117.63, M], ["Makassar", "Sulawesi Selatan", "Indonesia", -5.14, 119.42, M], ["Parepare", "Sulawesi Selatan", "Indonesia", -4.01, 119.62, M],
+    ["Manado", "Sulawesi Utara", "Indonesia", 1.47, 124.84, M], ["Bitung", "Sulawesi Utara", "Indonesia", 1.44, 125.19, M], ["Palu", "Sulawesi Tengah", "Indonesia", -0.9, 119.87, M],
+    ["Kendari", "Sulawesi Tenggara", "Indonesia", -3.97, 122.51, M], ["Gorontalo", "Gorontalo", "Indonesia", 0.54, 123.06, M], ["Mamuju", "Sulawesi Barat", "Indonesia", -2.68, 118.89, M],
+    ["Ambon", "Maluku", "Indonesia", -3.7, 128.18, P], ["Ternate", "Maluku Utara", "Indonesia", 0.79, 127.38, P], ["Sorong", "Papua Barat Daya", "Indonesia", -0.88, 131.25, P],
+    ["Manokwari", "Papua Barat", "Indonesia", -0.86, 134.06, P], ["Jayapura", "Papua", "Indonesia", -2.53, 140.72, P], ["Merauke", "Papua Selatan", "Indonesia", -8.49, 140.4, P],
+    ["Timika", "Papua Tengah", "Indonesia", -4.55, 136.89, P],
+    ["Singapura", "", "Singapura", 1.35, 103.82, "Asia/Singapore"], ["Kuala Lumpur", "", "Malaysia", 3.14, 101.69, "Asia/Kuala_Lumpur"], ["Johor Bahru", "Johor", "Malaysia", 1.49, 103.74, "Asia/Kuala_Lumpur"],
+    ["Penang", "Pulau Pinang", "Malaysia", 5.41, 100.33, "Asia/Kuala_Lumpur"], ["Kuching", "Sarawak", "Malaysia", 1.55, 110.35, "Asia/Kuching"], ["Bandar Seri Begawan", "", "Brunei", 4.9, 114.94, "Asia/Brunei"],
+    ["Dili", "", "Timor Leste", -8.56, 125.57, "Asia/Dili"], ["Bangkok", "", "Thailand", 13.76, 100.5, "Asia/Bangkok"], ["Manila", "", "Filipina", 14.6, 120.98, "Asia/Manila"],
+    ["Ho Chi Minh", "", "Vietnam", 10.82, 106.63, "Asia/Ho_Chi_Minh"], ["Hanoi", "", "Vietnam", 21.03, 105.85, "Asia/Bangkok"], ["Phnom Penh", "", "Kamboja", 11.56, 104.92, "Asia/Phnom_Penh"],
+    ["Yangon", "", "Myanmar", 16.87, 96.2, "Asia/Yangon"], ["Hong Kong", "", "Hong Kong", 22.32, 114.17, "Asia/Hong_Kong"], ["Taipei", "", "Taiwan", 25.03, 121.57, "Asia/Taipei"],
+    ["Beijing", "", "Tiongkok", 39.9, 116.4, "Asia/Shanghai"], ["Shanghai", "", "Tiongkok", 31.23, 121.47, "Asia/Shanghai"], ["Guangzhou", "", "Tiongkok", 23.13, 113.26, "Asia/Shanghai"],
+    ["Xiamen", "Fujian", "Tiongkok", 24.48, 118.09, "Asia/Shanghai"], ["Tokyo", "", "Jepang", 35.68, 139.69, "Asia/Tokyo"], ["Osaka", "", "Jepang", 34.69, 135.5, "Asia/Tokyo"],
+    ["Seoul", "", "Korea Selatan", 37.57, 126.98, "Asia/Seoul"], ["New Delhi", "", "India", 28.61, 77.21, "Asia/Kolkata"], ["Mumbai", "", "India", 19.08, 72.88, "Asia/Kolkata"],
+    ["Dubai", "", "Uni Emirat Arab", 25.2, 55.27, "Asia/Dubai"], ["Riyadh", "", "Arab Saudi", 24.71, 46.68, "Asia/Riyadh"], ["Mekkah", "", "Arab Saudi", 21.39, 39.86, "Asia/Riyadh"],
+    ["Jeddah", "", "Arab Saudi", 21.49, 39.19, "Asia/Riyadh"], ["Doha", "", "Qatar", 25.29, 51.53, "Asia/Qatar"], ["Istanbul", "", "Turki", 41.01, 28.98, "Europe/Istanbul"],
+    ["Kairo", "", "Mesir", 30.04, 31.24, "Africa/Cairo"], ["Sydney", "NSW", "Australia", -33.87, 151.21, "Australia/Sydney"], ["Melbourne", "Victoria", "Australia", -37.81, 144.96, "Australia/Melbourne"],
+    ["Perth", "WA", "Australia", -31.95, 115.86, "Australia/Perth"], ["Brisbane", "Queensland", "Australia", -27.47, 153.03, "Australia/Brisbane"], ["Darwin", "NT", "Australia", -12.46, 130.84, "Australia/Darwin"],
+    ["Auckland", "", "Selandia Baru", -36.85, 174.76, "Pacific/Auckland"], ["London", "Inggris", "Britania Raya", 51.51, -0.13, "Europe/London"], ["Amsterdam", "", "Belanda", 52.37, 4.9, "Europe/Amsterdam"],
+    ["Den Haag", "", "Belanda", 52.08, 4.3, "Europe/Amsterdam"], ["Paris", "", "Prancis", 48.86, 2.35, "Europe/Paris"], ["Berlin", "", "Jerman", 52.52, 13.4, "Europe/Berlin"],
+    ["Frankfurt", "", "Jerman", 50.11, 8.68, "Europe/Berlin"], ["Madrid", "", "Spanyol", 40.42, -3.7, "Europe/Madrid"], ["Roma", "", "Italia", 41.9, 12.5, "Europe/Rome"],
+    ["Zurich", "", "Swiss", 47.38, 8.54, "Europe/Zurich"], ["Moskwa", "", "Rusia", 55.76, 37.62, "Europe/Moscow"], ["New York", "New York", "Amerika Serikat", 40.71, -74.01, "America/New_York"],
+    ["Los Angeles", "California", "Amerika Serikat", 34.05, -118.24, "America/Los_Angeles"], ["San Francisco", "California", "Amerika Serikat", 37.77, -122.42, "America/Los_Angeles"],
+    ["Chicago", "Illinois", "Amerika Serikat", 41.88, -87.63, "America/Chicago"], ["Houston", "Texas", "Amerika Serikat", 29.76, -95.37, "America/Chicago"],
+    ["Toronto", "Ontario", "Kanada", 43.65, -79.38, "America/Toronto"], ["Vancouver", "British Columbia", "Kanada", 49.28, -123.12, "America/Vancouver"],
+    ["Mexico City", "", "Meksiko", 19.43, -99.13, "America/Mexico_City"], ["Sao Paulo", "", "Brasil", -23.55, -46.63, "America/Sao_Paulo"], ["Buenos Aires", "", "Argentina", -34.6, -58.38, "America/Argentina/Buenos_Aires"],
+    ["Johannesburg", "", "Afrika Selatan", -26.2, 28.05, "Africa/Johannesburg"], ["Lagos", "", "Nigeria", 6.52, 3.38, "Africa/Lagos"]
+  ].map(function (k) { return { n: k[0], wil: k[1], neg: k[2], lat: k[3], lon: k[4], zona: k[5] }; });
 
   function bedaSudut(a, b) { var d = Math.abs(a - b) % 360; return d > 180 ? 360 - d : d; }
   function cariAspek(l1, l2, orbMax) {

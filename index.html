@@ -181,6 +181,14 @@ button.ghost:hover { background: var(--nila-soft) }
 .ptable tr.ang td { background: var(--nila-soft) }
 .ptable .pg { display: inline-block; width: 20px; color: var(--nila); font-size: 16px }
 .retro { font-size: 11px; font-weight: 700; color: var(--bad); border: 1px solid var(--bad); border-radius: 4px; padding: 0 4px }
+.cari { position: relative }
+.cari-list { position: absolute; z-index: 20; left: 0; right: 0; top: calc(100% + 4px); margin: 0; padding: 4px; list-style: none; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 24px rgba(20, 24, 60, .14); max-height: 300px; overflow-y: auto }
+.cari-list li { padding: 8px 10px; border-radius: 6px; cursor: pointer; display: grid; gap: 1px }
+.cari-list li b { font-weight: 600 }
+.cari-list li span { font-size: 12px; color: var(--muted) }
+.cari-list li:hover, .cari-list li.on { background: var(--nila-soft) }
+.cari-list li.info { cursor: default; font-size: 13px; color: var(--muted) }
+.cari-list li.info:hover { background: none }
 .subnav { display: flex; gap: 4px; flex-wrap: wrap; border-bottom: 1px solid var(--line); margin: 4px 0 20px }
 .subnav button { font: inherit; font-weight: 600; font-size: 14px; background: none; border: 0; border-bottom: 3px solid transparent; padding: 10px 14px; color: var(--muted); cursor: pointer; margin-bottom: -1px }
 .subnav button[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent) }
@@ -269,8 +277,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       </div>
       <div class="field">
         <label for="kota">Kota lahir</label>
-        <select id="kota" name="kota"></select>
-        <small>Untuk zona waktu dan posisi ascendant</small>
+        <div class="cari"><input id="kota" name="kota" autocomplete="off" placeholder="Ketik nama kota, mis. Medan atau London" role="combobox" aria-expanded="false" aria-autocomplete="list"></div>
+        <small>Kota mana pun di dunia. Zona waktu, termasuk musim panas, diatur otomatis.</small>
       </div>
       <p class="note" id="err" role="alert" hidden></p>
       <button class="primary" type="submit">Baca ramalan saya</button>
@@ -321,10 +329,72 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var parse = function (v) { var p = v.split("-"); return p.length === 3 ? { y: +p[0], m: +p[1], d: +p[2] } : null; };
 
   var N = window.Natal;
-  // isi pilihan kota lahir
-  $("kota").innerHTML = N.KOTA.map(function (k, i) {
-    return '<option value="' + i + '">' + k.n + ' (' + (i >= 43 ? "GMT+" + k.tz : { 7: "WIB", 8: "WITA", 9: "WIT" }[k.tz]) + ')</option>';
-  }).join("");
+  /* ===== Kota & zona waktu =====
+     Pencarian kota seluruh dunia memakai Open-Meteo Geocoding (gratis, tanpa kunci).
+     Bila tidak tersedia, dipakai daftar cadangan di natal.js. Zona waktu historis & DST dihitung oleh browser (Intl). */
+  function offsetAt(zona, ms) { // jam, mis. 7 untuk WIB
+    try {
+      var f = new Intl.DateTimeFormat("en-US", { timeZone: zona, hourCycle: "h23", year: "numeric", month: "2-digit", day: "2-digit", hour: "2-digit", minute: "2-digit", second: "2-digit" });
+      var o = {}; f.formatToParts(new Date(ms)).forEach(function (x) { o[x.type] = +x.value; });
+      return (Date.UTC(o.year, o.month - 1, o.day, o.hour % 24, o.minute, o.second) - Math.floor(ms / 1000) * 1000) / 3600000;
+    } catch (e) { return 0; }
+  }
+  function offsetLokal(zona, y, m, d, h, mi) { // offset yang berlaku untuk waktu lokal tertentu
+    var lokal = Date.UTC(y, m - 1, d, h, mi), off = offsetAt(zona, lokal);
+    off = offsetAt(zona, lokal - off * 3600000);
+    return offsetAt(zona, lokal - off * 3600000);
+  }
+  function labelKota(k) { return k.n + (k.wil ? ", " + k.wil : "") + (k.neg ? ", " + k.neg : ""); }
+  function fmtOff(h) { var sgn = h < 0 ? "−" : "+", a = Math.abs(h), j = Math.floor(a), mm = Math.round((a - j) * 60); return "GMT" + sgn + j + (mm ? ":" + String(mm).padStart(2, "0") : ""); }
+  var normal = function (t) { return t.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, ""); };
+  var cacheCari = {};
+  function cariKota(q, cb) {
+    var nq = normal(q), lokal = N.KOTA.filter(function (k) { return normal(k.n).indexOf(nq) === 0 || normal(k.n + " " + k.neg).indexOf(nq) >= 0; }).slice(0, 6);
+    cb(lokal, true);
+    if (nq.length < 2) return;
+    if (cacheCari[nq]) return cb(gabung(lokal, cacheCari[nq]), false);
+    fetch("https://geocoding-api.open-meteo.com/v1/search?count=8&language=id&format=json&name=" + encodeURIComponent(q.trim()))
+      .then(function (r) { return r.json(); })
+      .then(function (j) {
+        var hasil = (j.results || []).filter(function (r) { return r.timezone; }).map(function (r) {
+          return { n: r.name, wil: r.admin1 || "", neg: r.country || "", lat: r.latitude, lon: r.longitude, zona: r.timezone };
+        });
+        cacheCari[nq] = hasil; cb(gabung(lokal, hasil), false);
+      }).catch(function () { cb(lokal, false); });
+  }
+  function gabung(a, b) {
+    var out = a.slice();
+    b.forEach(function (x) { if (!out.some(function (y) { return Math.abs(y.lat - x.lat) < 0.15 && Math.abs(y.lon - x.lon) < 0.15; })) out.push(x); });
+    return out.slice(0, 9);
+  }
+  // pasang kotak pencarian kota pada sebuah input
+  function pasangCari(input, getP, setP) {
+    var wrap = input.parentNode, list = document.createElement("ul"), items = [], aktif = -1, timer = null;
+    list.className = "cari-list"; list.setAttribute("role", "listbox"); list.hidden = true; wrap.appendChild(list);
+    input.value = labelKota(getP());
+    function tutup() { list.hidden = true; input.setAttribute("aria-expanded", "false"); aktif = -1; }
+    function tampil(arr, memuat) {
+      items = arr;
+      list.innerHTML = arr.map(function (k, i) { return '<li role="option" data-i="' + i + '"' + (i === aktif ? ' class="on"' : "") + '><b>' + esc(k.n) + '</b><span>' + esc([k.wil, k.neg].filter(Boolean).join(", ")) + '</span></li>'; }).join("") +
+        (memuat ? '<li class="info">Mencari kota lain…</li>' : (!arr.length ? '<li class="info">Kota tidak ditemukan. Coba ejaan lain atau kota terdekat.</li>' : ""));
+      list.hidden = false; input.setAttribute("aria-expanded", "true");
+    }
+    function pilih(i) { var k = items[i]; if (!k) return; setP(k); input.value = labelKota(k); tutup(); }
+    input.addEventListener("input", function () {
+      clearTimeout(timer); var q = input.value;
+      if (q.trim().length < 2) { tutup(); return; }
+      timer = setTimeout(function () { cariKota(q, tampil); }, 250);
+    });
+    input.addEventListener("focus", function () { input.select(); });
+    input.addEventListener("keydown", function (e) {
+      if (list.hidden) return;
+      if (e.key === "ArrowDown" || e.key === "ArrowUp") { e.preventDefault(); aktif = (aktif + (e.key === "ArrowDown" ? 1 : items.length - 1)) % Math.max(items.length, 1); tampil(items, false); }
+      else if (e.key === "Enter") { e.preventDefault(); pilih(aktif < 0 ? 0 : aktif); }
+      else if (e.key === "Escape") tutup();
+    });
+    list.addEventListener("mousedown", function (e) { var li = e.target.closest("li[data-i]"); if (li) { e.preventDefault(); pilih(+li.dataset.i); } });
+    input.addEventListener("blur", function () { setTimeout(function () { tutup(); input.value = labelKota(getP()); }, 150); });
+  }
 
   var METHODS = [
     { id: "zodiak", k: "Astrologi", d: "Bagan kelahiran: posisi planet, ascendant, rumah, dan aspek, lengkap dengan analisanya." },
@@ -337,12 +407,16 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var hariIni = new Date();
   var state = { aktif: null, data: null, buka: {}, iklan: null, astro: "natal",
     tr: hariIni.getFullYear() + "-" + String(hariIni.getMonth() + 1).padStart(2, "0") + "-" + String(hariIni.getDate()).padStart(2, "0"),
-    pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", kota: 11 }, srTahun: hariIni.getFullYear(), srKota: null };
+    tempat: N.KOTA[0], pas: { nama: "Bima", tgl: "1992-03-09", jam: "19:00", tempat: N.KOTA[21] }, srTahun: hariIni.getFullYear(), srTempat: null };
   if (location.hash && METHODS.some(function (m) { return "#" + m.id === location.hash; })) state.aktif = location.hash.slice(1);
 
-  function hitung(nama, dt, jam, menit, kotaIdx) {
-    var kota = N.KOTA[kotaIdx] || N.KOTA[0];
-    var nc = N.hitung({ y: dt.y, m: dt.m, d: dt.d, jam: jam, menit: menit, tz: kota.tz, lat: kota.lat, lon: kota.lon });
+  function bagan(dt, jam, menit, k) {
+    var tz = offsetLokal(k.zona, dt.y, dt.m, dt.d, jam === null ? 12 : jam, jam === null ? 0 : menit);
+    var c = N.hitung({ y: dt.y, m: dt.m, d: dt.d, jam: jam, menit: menit, tz: tz, lat: k.lat, lon: k.lon });
+    c.tzJam = tz; return c;
+  }
+  function hitung(nama, dt, jam, menit, kota) {
+    var nc = bagan(dt, jam, menit, kota);
     return {
       nama: nama, dt: dt, jam: jam, menit: menit, kota: kota, nc: nc, na: N.analisa(nc),
       z: R.zodiak(dt), lp: R.lifePath(dt), nm: R.namaNumerologi(nama),
@@ -388,7 +462,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       }
       var list = function (arr) { return arr.map(function (x) { return '<div class="block"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join(""); };
       var asp = an.aspek.map(function (x) { return '<div class="block asp ' + x.sifat + '"><h3>' + x.judul + '</h3><p>' + x.isi + '</p></div>'; }).join("");
-      return head(z.s + "\uFE0E", "Astrologi", fmt(d.dt) + " · " + waktu + " · " + d.kota.n) + subAstro() +
+      return head(z.s + "\uFE0E", "Astrologi", fmt(d.dt) + " · " + waktu + (d.jam === null ? "" : " " + fmtOff(d.nc.tzJam)) + " · " + d.kota.n) + subAstro() +
         (state.astro !== "natal" ? ASTRO[state.astro](d) : '<div class="natal">' +
           '<div class="wheel-wrap">' + roda(c) + '<div class="legend"><span class="lg-h">Harmonis</span><span class="lg-t">Tegang</span></div></div>' +
           '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Titik</th><th>Derajat</th><th>Rasi</th><th>Rumah</th><th></th></tr></thead><tbody>' + rows + '</tbody></table></div>' +
@@ -528,7 +602,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
       return '<button type="button" role="tab" data-astro="' + t[0] + '" aria-selected="' + (state.astro === t[0]) + '">' + t[1] + '</button>';
     }).join("") + '</div>';
   }
-  function kotaOpt(sel) { return N.KOTA.map(function (k, i) { return '<option value="' + i + '"' + (i === sel ? " selected" : "") + '>' + k.n + '</option>'; }).join(""); }
+  function kotaField(id, label) { return '<div class="field"><label for="' + id + '">' + label + '</label><div class="cari"><input id="' + id + '" autocomplete="off" role="combobox" aria-expanded="false" aria-autocomplete="list" placeholder="Ketik nama kota"></div></div>'; }
   function ptable(planets, kolomRumah, labelRumah) {
     return '<div class="ptable-wrap"><table class="ptable"><thead><tr><th>Planet</th><th>Derajat</th><th>Rasi</th>' + (kolomRumah ? '<th>' + labelRumah + '</th>' : "") + '<th></th></tr></thead><tbody>' +
       planets.map(function (p) {
@@ -540,7 +614,7 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   var ASTRO = {
     transit: function (d) {
       var tg = parse(state.tr) || { y: hariIni.getFullYear(), m: hariIni.getMonth() + 1, d: hariIni.getDate() };
-      var ms = Date.UTC(tg.y, tg.m - 1, tg.d, 12) - d.kota.tz * 3600000;
+      var ms = Date.UTC(tg.y, tg.m - 1, tg.d, 12) - offsetLokal(d.kota.zona, tg.y, tg.m, tg.d, 12, 0) * 3600000;
       var t = N.transit(d.nc, ms, d.kota.lat, d.kota.lon);
       var utama = t.aspek.filter(function (a) { return a.t.id !== "moon"; }).slice(0, 8);
       var bulan = t.aspek.filter(function (a) { return a.t.id === "moon"; }).slice(0, 2);
@@ -555,14 +629,14 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
         note("Transit dihitung untuk pukul 12.00 waktu " + d.kota.n + ". Orb yang dipakai 1,5–3°, jadi yang tampil hanya pengaruh yang sedang kuat.");
     },
     sinastri: function (d) {
-      var P = state.pas, tg = parse(P.tgl), jm = P.jam ? P.jam.split(":") : null, k = N.KOTA[P.kota] || N.KOTA[0];
+      var P = state.pas, tg = parse(P.tgl), jm = P.jam ? P.jam.split(":") : null, k = P.tempat;
       var form = '<form class="sub-form" id="f-sin"><div class="field"><label for="ps-nama">Nama pasangan</label><input id="ps-nama" value="' + esc(P.nama) + '"></div>' +
         '<div class="field"><label for="ps-tgl">Tanggal lahir</label><input id="ps-tgl" type="date" min="1900-01-01" max="2100-12-31" value="' + P.tgl + '"></div>' +
         '<div class="field"><label for="ps-jam">Jam lahir</label><input id="ps-jam" type="time" value="' + P.jam + '"></div>' +
-        '<div class="field"><label for="ps-kota">Kota lahir</label><select id="ps-kota">' + kotaOpt(+P.kota) + '</select></div>' +
+        kotaField("ps-kota", "Kota lahir") +
         '<button class="primary" type="submit">Bandingkan</button></form>';
       if (!tg) return form + '<p class="note">Isi tanggal lahir pasangan.</p>';
-      var b = N.hitung({ y: tg.y, m: tg.m, d: tg.d, jam: jm ? +jm[0] : null, menit: jm ? +jm[1] : 0, tz: k.tz, lat: k.lat, lon: k.lon });
+      var b = bagan(tg, jm ? +jm[0] : null, jm ? +jm[1] : 0, k);
       var s = N.sinastri(d.nc, b), nm = esc(P.nama || "Pasangan");
       var tingkat = s.persen >= 75 ? "Sangat cocok" : s.persen >= 60 ? "Cocok" : s.persen >= 45 ? "Cukup cocok, perlu usaha" : "Banyak tantangan";
       var cards = s.aspek.slice(0, 8).map(function (a) { return '<div class="block asp ' + (a.baik ? "harmonis" : "tegang") + '"><h3>' + a.p.n + ' Anda ' + a.jenis.n.toLowerCase() + ' ' + a.q.n + ' ' + nm + '</h3><p>' + a.isi + '</p></div>'; }).join("");
@@ -574,12 +648,12 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     },
     sr: function (d) {
       if (!d.nc.adaJam) return '<p class="sub-lead">Solar return membutuhkan jam lahir. Isi jam lahir di formulir atas, lalu tekan "Baca ramalan saya" lagi.</p>';
-      var kIdx = state.srKota === null ? N.KOTA.indexOf(d.kota) : state.srKota, k = N.KOTA[kIdx] || d.kota;
+      var k = state.srTempat || d.kota;
       var sr = N.solarReturn(d.nc, state.srTahun, k.lat, k.lon);
       var thn = ""; for (var y = hariIni.getFullYear() - 1; y <= hariIni.getFullYear() + 2; y++) thn += '<option' + (y === state.srTahun ? " selected" : "") + '>' + y + '</option>';
       return '<form class="sub-form" id="f-sr"><div class="field"><label for="sr-thn">Tahun</label><select id="sr-thn">' + thn + '</select></div>' +
-        '<div class="field"><label for="sr-kota">Kota tempat Anda berulang tahun</label><select id="sr-kota">' + kotaOpt(kIdx) + '</select></div><button class="primary" type="submit">Hitung</button></form>' +
-        '<p class="sub-lead">Matahari kembali ke posisi lahir Anda pada <b>' + fmtTgl(sr.chart.ms, k.tz) + '</b> waktu ' + k.n + '. Bagan saat itu menggambarkan tema satu tahun ke depan.</p>' +
+        kotaField("sr-kota", "Kota tempat Anda berulang tahun") + '<button class="primary" type="submit">Hitung</button></form>' +
+        '<p class="sub-lead">Matahari kembali ke posisi lahir Anda pada <b>' + fmtTgl(sr.chart.ms, offsetAt(k.zona, sr.chart.ms)) + '</b> waktu ' + k.n + '. Bagan saat itu menggambarkan tema satu tahun ke depan.</p>' +
         '<div class="natal"><div class="wheel-wrap">' + roda(sr.chart) + '</div>' + ptable(sr.chart.planets, "rumah", "Rumah") + '</div>' +
         '<h3 class="sec">Tema tahun ' + state.srTahun + '–' + (state.srTahun + 1) + '</h3><div class="grid2">' + sr.tema.map(function (x) { return blk(x.judul, x.isi); }).join("") + '</div>' +
         note("Solar return berlaku dari ulang tahun ini sampai ulang tahun berikutnya. Kota tempat Anda berada saat ulang tahun mengubah ascendant tahunan.");
@@ -587,8 +661,15 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   };
   function bindAstro() {
     var ft = $("f-transit"); if (ft) ft.addEventListener("submit", function (e) { e.preventDefault(); state.tr = $("tr-tgl").value || state.tr; renderPanel(); });
-    var fs = $("f-sin"); if (fs) fs.addEventListener("submit", function (e) { e.preventDefault(); state.pas = { nama: $("ps-nama").value.trim(), tgl: $("ps-tgl").value, jam: $("ps-jam").value, kota: +$("ps-kota").value }; renderPanel(); });
-    var fr = $("f-sr"); if (fr) fr.addEventListener("submit", function (e) { e.preventDefault(); state.srTahun = +$("sr-thn").value; state.srKota = +$("sr-kota").value; renderPanel(); });
+    var fs = $("f-sin"); if (fs) {
+      pasangCari($("ps-kota"), function () { return state.pas.tempat; }, function (k) { state.pas.tempat = k; });
+      fs.addEventListener("submit", function (e) { e.preventDefault(); state.pas = { nama: $("ps-nama").value.trim(), tgl: $("ps-tgl").value, jam: $("ps-jam").value, tempat: state.pas.tempat }; renderPanel(); });
+    }
+    var fr = $("f-sr"); if (fr) {
+      var srBaru = state.srTempat;
+      pasangCari($("sr-kota"), function () { return srBaru || state.data.kota; }, function (k) { srBaru = k; });
+      fr.addEventListener("submit", function (e) { e.preventDefault(); state.srTahun = +$("sr-thn").value; state.srTempat = srBaru; renderPanel(); });
+    }
   }
 
   function methodById(id) { return METHODS.filter(function (m) { return m.id === id; })[0]; }
@@ -764,8 +845,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
     err.hidden = true;
     $("contoh-badge").hidden = true;
     var tv = $("jam").value, jam = tv ? +tv.split(":")[0] : null, menit = tv ? +tv.split(":")[1] : 0;
-    state.data = hitung(nama, dt, jam, menit, +$("kota").value);
-    state.buka = {}; Iklan.batal(); state.aktif = null; state.astro = "natal"; state.srKota = null;
+    state.data = hitung(nama, dt, jam, menit, state.tempat);
+    state.buka = {}; Iklan.batal(); state.aktif = null; state.astro = "natal"; state.srTempat = null;
     try { history.replaceState(null, "", location.pathname + location.search); } catch (er) {}
     render();
     $("hasil").scrollIntoView({ behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth", block: "start" });
@@ -815,8 +896,8 @@ footer { margin-top: 36px; color: var(--muted); font-size: 13px; display: grid; 
   $("nama").value = "Ayu Lestari Wulandari";
   $("tgl").value = "1990-05-15";
   $("jam").value = "08:30";
-  $("kota").value = "0";
-  state.data = hitung("Ayu Lestari Wulandari", { y: 1990, m: 5, d: 15 }, 8, 30, 0);
+  pasangCari($("kota"), function () { return state.tempat; }, function (k) { state.tempat = k; });
+  state.data = hitung("Ayu Lestari Wulandari", { y: 1990, m: 5, d: 15 }, 8, 30, state.tempat);
   render();
 })();
 </script>
