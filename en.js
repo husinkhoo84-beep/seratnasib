@@ -845,6 +845,7 @@ window.SERAT_EN = {
     "ad.ulang": "Try again", "ad.demo": "Demo mode: on the live site, a Google video ad plays here.",
     "ad.siap": "The ad is ready. Watch it to the end to unlock the reading.", "ad.putar": "Play ad",
     "ad.tutup": "The ad was closed before it finished, so the reading is still locked.", "ad.muat": "Loading ad…",
+    "f.tentang": "About", "f.privasi": "Privacy Policy", "f.kontak": "Contact",
     "bahasa": "Bahasa Indonesia", "bahasa.label": "Language"
   }
 };
